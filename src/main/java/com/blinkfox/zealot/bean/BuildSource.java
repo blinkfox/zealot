@@ -3,12 +3,12 @@ package com.blinkfox.zealot.bean;
 import org.dom4j.Node;
 
 /**
- * 构建动态sql和参数相关的bean
+ * 构建动态sql和参数相关的参数封装bean
  * Created by blinkfox on 2016/10/30.
  */
 public class BuildSource {
-
-    // sql拼接信息
+	
+	// sql拼接信息
     private SqlInfo sqlInfo;
 
     // xml节点
@@ -19,13 +19,6 @@ public class BuildSource {
 
     // 前缀，默认空字符串
     private String prefix = "";
-
-    /**
-     * 空构造方法
-     */
-    public BuildSource() {
-
-    }
 
     /**
      * 全构造方法
@@ -69,5 +62,5 @@ public class BuildSource {
         this.prefix = prefix;
         return this;
     }
-
+	
 }

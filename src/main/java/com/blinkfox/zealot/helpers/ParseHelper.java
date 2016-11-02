@@ -1,15 +1,22 @@
 package com.blinkfox.zealot.helpers;
 
-import com.blinkfox.zealot.bean.BuildSource;
 import org.mvel2.MVEL;
+import com.blinkfox.zealot.bean.BuildSource;
 
 /**
  * OGNL表达式相关的工具类
  * Created by blinkfox on 2016/10/30.
  */
 public class ParseHelper {
+	
+	/**
+	 * 私有构造方法
+	 */
+	private ParseHelper() {
+		super();
+	}
 
-    /**
+	/**
      * 通过MVEL来解析表达式的值
      * @param exp
      * @param source
@@ -25,5 +32,5 @@ public class ParseHelper {
         }
         return obj;
     }
-
+	
 }

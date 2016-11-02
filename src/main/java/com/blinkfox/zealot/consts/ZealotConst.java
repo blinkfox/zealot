@@ -4,9 +4,9 @@ package com.blinkfox.zealot.consts;
  * 常量接口
  * Created by blinkfox on 2016/10/30.
  */
-public class ZealotConst {
-
-    /* 节点类型 */
+public interface ZealotConst {
+	
+	/* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点
 
@@ -25,6 +25,7 @@ public class ZealotConst {
     public static final String OR_IN = "orIn";
 
     /* 属性节点类型 */
+    public static final String ATTR_CHILD = "child::node()";
     public static final String ATTR_MATCH = "attribute::match";
     public static final String ATTR_FIELD = "attribute::field";
     public static final String ATTR_VALUE = "attribute::value";
@@ -42,4 +43,5 @@ public class ZealotConst {
     public static final String LT_SUFFIX = " <= ? ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " in ";
+
 }

@@ -1,21 +1,27 @@
 package com.blinkfox.zealot.helpers;
 
+import java.util.Collection;
+import java.util.List;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * 构建sql查询相关的帮助类
  * Created by blinkfox on 2016/10/30.
  */
 public class BuildSqlInfoHelper {
-
-    private static SqlInfo sqlInfo = null; // sqlInfo对象
-    private static StringBuffer join = null; // sql拼接器
-    private static ArrayList<Object> params = null; // 有序的参数结合
+	
+	private static SqlInfo sqlInfo = null; // sqlInfo对象
+    private static StringBuilder join = null; // sql拼接器
+    private static List<Object> params = null; // 有序的参数结合
+    
+    /**
+     * 私有构造方法
+     */
+    private BuildSqlInfoHelper() {
+    	super();
+    }
 
     /**
      * 根据构建的资源参数初始化数据
@@ -98,7 +104,8 @@ public class BuildSqlInfoHelper {
      * @param valueText
      * @return
      */
-    public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
+    @SuppressWarnings("rawtypes")
+	public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
         init(source);
 
         Object[] values = new Object[] {};
@@ -125,5 +132,5 @@ public class BuildSqlInfoHelper {
 
         return sqlInfo.setJoin(join).setParams(params);
     }
-
+	
 }

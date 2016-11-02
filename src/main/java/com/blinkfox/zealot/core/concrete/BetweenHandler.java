@@ -1,23 +1,23 @@
 package com.blinkfox.zealot.core.concrete;
 
+import org.dom4j.Node;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.helpers.BuildSqlInfoHelper;
+import com.blinkfox.zealot.helpers.Dom4jHelper;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
-import com.blinkfox.zealot.helpers.ZealotHelper;
-import org.dom4j.Node;
 
 /**
- * like查询动态sql生成的实现类
+ * 数字查询动态sql生成的实现类
  * Created by blinkfox on 2016/10/30.
  */
-public class LikeHandler implements IConditHandler {
+public class BetweenHandler implements IConditHandler {
 
-    /**
-     * 构建等值查询的动态条件sql
+	/**
+     * 构建数字区间查询的动态条件sql
      * @param source
      * @return
      */
@@ -28,23 +28,23 @@ public class LikeHandler implements IConditHandler {
         Node node = source.getNode();
 
 		/* 判断必填的参数是否为空 */
-        String fieldText = ZealotHelper.getAndCheckNodeText(node, ZealotConst.ATTR_FIELD);
-        String valueText = ZealotHelper.getAndCheckNodeText(node, ZealotConst.ATTR_VALUE);
+        String fieldText = Dom4jHelper.getAndCheckNodeText(node, ZealotConst.ATTR_FIELD);
+        String[] valueTextArr = Dom4jHelper.getBothNodeText(node);
 
 		/* 如果匹配中字符没有，则认为是必然生成项 */
-        Node matchNode = (Node) node.selectSingleNode(ZealotConst.ATTR_MATCH);
-        String matchText = ZealotHelper.getNodeText(matchNode);
+        Node matchNode = node.selectSingleNode(ZealotConst.ATTR_MATCH);
+        String matchText = Dom4jHelper.getNodeText(matchNode);
         if (StringHelper.isBlank(matchText)) {
-            sqlInfo = BuildSqlInfoHelper.buildLikeSql(source, fieldText, valueText);
+            sqlInfo = BuildSqlInfoHelper.buildBetweenSql(source, fieldText, valueTextArr[0], valueTextArr[1]);
         } else {
 			/* 如果match匹配成功，则生成数据库sql条件和参数 */
             Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source);
             if (isTrue) {
-                sqlInfo = BuildSqlInfoHelper.buildLikeSql(source, fieldText, valueText);
+                sqlInfo = BuildSqlInfoHelper.buildBetweenSql(source, fieldText, valueTextArr[0], valueTextArr[1]);
             }
         }
 
         return sqlInfo;
     }
-
+	
 }

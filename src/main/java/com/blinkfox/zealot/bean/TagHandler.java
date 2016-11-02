@@ -1,14 +1,12 @@
 package com.blinkfox.zealot.bean;
 
-import com.blinkfox.zealot.helpers.StringHelper;
-
 /**
- * 标签动态处理的饿汉式单例类
+ * 标签和对应的动态sql生成的处理类
  * Created by blinkfox on 2016-11-01.
  */
 public class TagHandler {
-
-    // 标签名称
+	
+	// 标签名称
     private String tagName;
 
     // 生成sql的前缀,如:and, or 等
@@ -24,7 +22,7 @@ public class TagHandler {
      */
     public TagHandler(String tagName, Class<?> handlerCls) {
         this.tagName = tagName;
-        this.prefix = StringHelper.EMPTY;
+        this.prefix = "";
         this.handlerCls = handlerCls;
     }
 
@@ -50,5 +48,5 @@ public class TagHandler {
     public Class<?> getHandlerCls() {
         return handlerCls;
     }
-
+	
 }

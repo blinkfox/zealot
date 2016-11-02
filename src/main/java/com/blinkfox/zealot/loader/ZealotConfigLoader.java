@@ -1,23 +1,22 @@
-package com.blinkfox.zealot.listener;
+package com.blinkfox.zealot.loader;
 
-import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.config.ZealotConfig;
-import com.blinkfox.zealot.helpers.Dom4jHelper;
-import org.dom4j.Document;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import java.util.Iterator;
 import java.util.Map;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import org.dom4j.Document;
+import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.helpers.Dom4jHelper;
 
 /**
  * Zealot配置的servlet监听器的初始化加载类
  * Created by blinkfox on 2016/10/30.
  */
 public class ZealotConfigLoader implements ServletContextListener {
-
-    // zealot配置类对象
-    private ZealotConfig zealotConfig;
+	
+	// zealot配置类对象
+    private AbstractZealotConfig zealotConfig;
 
     // zealotConfig对应的类全路径常量字符串
     private static final String CONFIG_CLASS = "zealotConfigClass";
@@ -28,7 +27,7 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
-
+    	zealotConfig = null;
     }
 
     /**
@@ -66,8 +65,8 @@ public class ZealotConfigLoader implements ServletContextListener {
             throw new RuntimeException("不能创建zealotConfig实例: " + configClass, e);
         }
 
-        if (temp instanceof ZealotConfig) {
-            zealotConfig = (ZealotConfig) temp;
+        if (temp instanceof AbstractZealotConfig) {
+            zealotConfig = (AbstractZealotConfig) temp;
             zealotConfig.configXml(xmlContext);
             zealotConfig.configTagHandler();
         }
@@ -82,12 +81,11 @@ public class ZealotConfigLoader implements ServletContextListener {
             Map.Entry<String, String> entry = it.next();
             String key = entry.getKey();
             String value = entry.getValue();
-            System.out.println("-----key:" + key + ",value:" + value);
             Document document = Dom4jHelper.getDocument(value);
             if (document != null) {
-                ZealotConfig.getZealots().put(key, document);
+            	AbstractZealotConfig.getZealots().put(key, document);
             }
         }
     }
-
+	
 }

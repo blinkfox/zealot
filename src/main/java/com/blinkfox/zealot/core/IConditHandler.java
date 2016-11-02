@@ -8,8 +8,8 @@ import com.blinkfox.zealot.bean.SqlInfo;
  * Created by blinkfox on 2016/10/30.
  */
 public interface IConditHandler {
-
-    /**
+	
+	/**
      * 构建sqlInfo信息
      * @param source
      * @return

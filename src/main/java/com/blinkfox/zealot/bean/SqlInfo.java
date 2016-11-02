@@ -1,26 +1,25 @@
 package com.blinkfox.zealot.bean;
 
+import java.util.List;
 import com.blinkfox.zealot.helpers.StringHelper;
-
-import java.util.ArrayList;
 
 /**
  * 构造sql查询信息的拼接和参数对象
  * Created by blinkfox on 2016/10/30.
  */
 public class SqlInfo {
-
-    // 拼接sql的StringBuffer对象
-    private StringBuffer join;
+	
+	// 拼接sql的StringBuffer对象
+    private StringBuilder join;
 
     // sql语句对应的有序参数
-    private ArrayList<Object> params;
+    private List<Object> params;
 
     /**
      * 构造方法
      * @param join
      */
-    public SqlInfo(StringBuffer join) {
+    public SqlInfo(StringBuilder join) {
         this.join = join;
     }
 
@@ -29,7 +28,7 @@ public class SqlInfo {
      * @param join
      * @param params
      */
-    public SqlInfo(StringBuffer join, ArrayList<Object> params) {
+    public SqlInfo(StringBuilder join, List<Object> params) {
         super();
         this.join = join;
         this.params = params;
@@ -51,20 +50,20 @@ public class SqlInfo {
         return params == null ? new Object[]{} : this.params.toArray();
     }
 
-    /*getter和setter方法*/
-    public StringBuffer getJoin() {
+    /* getter 和 setter 方法*/
+    public StringBuilder getJoin() {
         return join;
     }
-    public SqlInfo setJoin(StringBuffer join) {
+    public SqlInfo setJoin(StringBuilder join) {
         this.join = join;
         return this;
     }
-    public ArrayList<Object> getParams() {
+    public List<Object> getParams() {
         return params;
     }
-    public SqlInfo setParams(ArrayList<Object> params) {
+    public SqlInfo setParams(List<Object> params) {
         this.params = params;
         return this;
     }
-
+	
 }

@@ -8,11 +8,13 @@ import java.util.regex.Pattern;
  * Created by blinkfox on 2016/10/30.
  */
 public class StringHelper {
-
-    /**
-     * 空字符串的静态常量
-     */
-    public static final String EMPTY = "";
+	
+	/**
+	 * 私有的构造方法
+	 */
+	private StringHelper() {
+		
+	}
 
     /**
      * 将字符串中的“空格（包括换行、回车、制表符）”等转成空格来处理，最后去掉所有多余空格
@@ -22,7 +24,7 @@ public class StringHelper {
     public static String replaceBlank(String str) {
         Pattern p = Pattern.compile("\\|\t|\r|\n");
         Matcher m = p.matcher(str);
-        return m.replaceAll(EMPTY).replaceAll("\\s{2,}", " ").trim();
+        return m.replaceAll("").replaceAll("\\s{2,}", " ").trim();
     }
 
     /**
@@ -53,5 +55,5 @@ public class StringHelper {
     public static boolean isNotBlank(String str) {
         return !isBlank(str);
     }
-
+	
 }

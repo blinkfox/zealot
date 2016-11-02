@@ -1,21 +1,28 @@
 package com.blinkfox.zealot.core;
 
-import com.blinkfox.zealot.bean.BuildSource;
-import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.config.ZealotConfig;
-import com.blinkfox.zealot.consts.ZealotConst;
-import org.dom4j.Document;
-import org.dom4j.Node;
 import java.util.ArrayList;
 import java.util.List;
+import org.dom4j.Document;
+import org.dom4j.Node;
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.consts.ZealotConst;
 
 /**
- * Zealot的核心解析类
+ * Zealot的核心解析和生成调用类
  * Created by blinkfox on 2016/10/30.
  */
 public class Zealot {
+	
+	/**
+	 * 私有构造方法
+	 */
+	private Zealot() {
+		super();
+	}
 
-    /**
+	/**
      * 获取sqlInfo信息
      * @param nameSpace
      * @param zealotId
@@ -23,14 +30,14 @@ public class Zealot {
      * @return
      */
     public static SqlInfo getSqlInfo(String nameSpace, String zealotId, Object paramObj) {
-        Document doc = ZealotConfig.getZealots().get(nameSpace);
+        Document doc = AbstractZealotConfig.getZealots().get(nameSpace);
         if (doc == null) {
             throw new RuntimeException("未获取到xml文档,nameSpace 为：" + nameSpace);
         }
 
         // 获取文档的指定sql的zealotId的节点
-        String XPath = "//zealot[@id='" + zealotId +"']";
-        Node node = doc.selectSingleNode(XPath);
+        String xPath = "//zealot[@id='" + zealotId +"']";
+        Node node = doc.selectSingleNode(xPath);
         if (node == null) {
             throw new RuntimeException("未获取到zealot节点,zealotId为：" + zealotId);
         }
@@ -44,12 +51,12 @@ public class Zealot {
      * @param paramObj
      * @return
      */
-    private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
-        SqlInfo sqlInfo = new SqlInfo(new StringBuffer(""), new ArrayList<Object>());
-        List<Object> params = sqlInfo.getParams();
-        StringBuffer join = sqlInfo.getJoin();
+    @SuppressWarnings("unchecked")
+	private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
+        SqlInfo sqlInfo = new SqlInfo(new StringBuilder(""), new ArrayList<Object>());
+        StringBuilder join = sqlInfo.getJoin();
 
-        List<Node> nodes = node.selectNodes("child::node()");
+        List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
         for (int i = 0; i < nodes.size(); i++) {
             Node n = nodes.get(i);
             if (ZealotConst.NODETYPE_TEXT.equals(n.getNodeTypeName())) {
@@ -64,5 +71,5 @@ public class Zealot {
 
         return sqlInfo;
     }
-
+	
 }
