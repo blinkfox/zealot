@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
     <name>zealot</name>
     <url>http://blinkfox.com</url>
 
