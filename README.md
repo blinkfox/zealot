@@ -1,2 +1,2 @@
 # zealot
-This is a dynamic sql contact tools
+This is a sql and parameters dynamically generated tool

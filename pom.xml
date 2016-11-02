@@ -6,7 +6,26 @@
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>zealot</name>
+	<description>This is a sql and parameters dynamically generated tool.</description>
     <url>http://blinkfox.com</url>
+	
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>blinkfox</name>
+            <email>chenjiayin1990@163.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/blinkfox/zealot.git</connection>
+        <developerConnection>scm:git:https://github.com/blinkfox</developerConnection>
+        <url>https://github.com/blinkfox/zealot.git</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -42,6 +61,7 @@
         <finalName>zealot</finalName>
         <defaultGoal>compile</defaultGoal>
         <plugins>
+			<!-- Compile -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -51,6 +71,34 @@
                     <target>1.6</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <!-- Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
