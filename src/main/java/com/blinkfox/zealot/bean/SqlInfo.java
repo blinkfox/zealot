@@ -9,7 +9,7 @@ import com.blinkfox.zealot.helpers.StringHelper;
  */
 public class SqlInfo {
 	
-	// 拼接sql的StringBuffer对象
+	// 拼接sql的StringBuilder对象
     private StringBuilder join;
 
     // sql语句对应的有序参数
@@ -17,7 +17,7 @@ public class SqlInfo {
 
     /**
      * 构造方法
-     * @param join
+     * @param join 拼接sql的StringBuilder对象
      */
     public SqlInfo(StringBuilder join) {
         this.join = join;
@@ -25,8 +25,8 @@ public class SqlInfo {
 
     /**
      * 全构造方法
-     * @param join
-     * @param params
+     * @param join 拼接sql的StringBuilder对象
+     * @param params 有序的参数集合
      */
     public SqlInfo(StringBuilder join, List<Object> params) {
         super();
@@ -36,7 +36,7 @@ public class SqlInfo {
 
     /**
      * 获取最后拼接完成的sql
-     * @return
+     * @return 返回拼接的sql
      */
     public String getSql() {
         return join == null ? "" : StringHelper.replaceBlank(join.toString());
@@ -44,7 +44,7 @@ public class SqlInfo {
 
     /**
      * 得到参数的对象数组
-     * @return
+     * @return 返回参数的对象数组
      */
     public Object[] getParamsArr() {
         return params == null ? new Object[]{} : this.params.toArray();

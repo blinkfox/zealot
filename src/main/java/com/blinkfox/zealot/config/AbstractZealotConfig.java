@@ -43,7 +43,7 @@ public abstract class AbstractZealotConfig {
 
     /**
      * 获取全局的Zealots文档缓存数据
-     * @return
+     * @return 返回xml命名空间和dom4j文件的缓存map
      */
     public static Map<String, Document> getZealots() {
         return zealots;
@@ -51,7 +51,7 @@ public abstract class AbstractZealotConfig {
 
     /**
      * 获取全局的tagHandlers集合对象
-     * @return
+     * @return 返回标签和其Handler的对象
      */
     public static Set<TagHandler> getTagHandlers() {
         return tagHandlers;
@@ -59,8 +59,8 @@ public abstract class AbstractZealotConfig {
 
     /**
      * 添加自定义标签和其对应的Handler.class
-     * @param tagName
-     * @param handlerCls
+     * @param tagName 标签名称
+     * @param handlerCls 动态处理类的反射类型
      */
     protected static void add(String tagName, Class<?> handlerCls) {
         tagHandlers.add(new TagHandler(tagName, handlerCls));
@@ -68,9 +68,9 @@ public abstract class AbstractZealotConfig {
 
     /**
      * 添加自定义标签和其对应的Handler.class
-     * @param tagName
-     * @param prefix
-     * @param handlerCls
+     * @param tagName 标签名称
+     * @param prefix 前缀
+     * @param handlerCls 动态处理类的反射类型
      */
     protected static void add(String tagName, String prefix,Class<?> handlerCls) {
         tagHandlers.add(new TagHandler(tagName, prefix, handlerCls));
@@ -78,7 +78,7 @@ public abstract class AbstractZealotConfig {
 
     /**
      * 配置xml文件的标识和资源路径
-     * @param ctx
+     * @param ctx xmlContext对象
      */
     public abstract void configXml(XmlContext ctx);
 

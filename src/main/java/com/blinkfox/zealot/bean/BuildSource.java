@@ -22,9 +22,9 @@ public class BuildSource {
 
     /**
      * 全构造方法
-     * @param sqlInfo
-     * @param node
-     * @param paramObj
+     * @param sqlInfo SQL拼接和参数对象
+     * @param node 某查询zealot的dom4j的节点
+     * @param paramObj 参数对象
      */
     public BuildSource(SqlInfo sqlInfo, Node node, Object paramObj) {
         super();

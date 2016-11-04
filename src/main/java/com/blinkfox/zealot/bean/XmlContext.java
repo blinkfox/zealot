@@ -11,7 +11,8 @@ public class XmlContext {
 	
     // 所有zealots XML文档的缓存上下文的map,key是文件命名空间标识，value是资源路径
     private static Map<String, String> xmlMap = new ConcurrentHashMap<String, String>();
-    
+
+    // 生成全局的xmlContext单例对象
     private static final XmlContext xmlContext = new XmlContext();
 
     /**
@@ -23,7 +24,7 @@ public class XmlContext {
 
     /**
      * 获取该对象实例
-     * @return
+     * @return 返回xmlContext实例
      */
     public static XmlContext getInstance() {
         return xmlContext;
@@ -31,8 +32,8 @@ public class XmlContext {
 
     /**
      * xml上下文的构造方式
-     * @param nameSpace
-     * @param filePath
+     * @param nameSpace xml文件命名空间
+     * @param filePath xml文件资源路径
      */
     public void add(String nameSpace, String filePath) {
         xmlMap.put(nameSpace, filePath);
@@ -40,7 +41,7 @@ public class XmlContext {
 
     /**
      * 获取配置的xmlMap
-     * @return
+     * @return 返回xml文档的命名空间、路径缓存上下文的map
      */
     public static Map<String, String> getXmlMap() {
         return xmlMap;
