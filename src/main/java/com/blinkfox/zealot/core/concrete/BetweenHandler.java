@@ -18,8 +18,8 @@ public class BetweenHandler implements IConditHandler {
 
 	/**
      * 构建数字区间查询的动态条件sql
-     * @param source
-     * @return
+     * @param source 构建所需的资源对象
+     * @return 返回SqlInfo对象
      */
     @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
@@ -38,7 +38,7 @@ public class BetweenHandler implements IConditHandler {
             sqlInfo = BuildSqlInfoHelper.buildBetweenSql(source, fieldText, valueTextArr[0], valueTextArr[1]);
         } else {
 			/* 如果match匹配成功，则生成数据库sql条件和参数 */
-            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source);
+            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = BuildSqlInfoHelper.buildBetweenSql(source, fieldText, valueTextArr[0], valueTextArr[1]);
             }

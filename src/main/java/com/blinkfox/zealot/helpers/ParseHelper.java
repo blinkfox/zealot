@@ -18,14 +18,14 @@ public class ParseHelper {
 
 	/**
      * 通过MVEL来解析表达式的值
-     * @param exp
-     * @param source
-     * @return
+     * @param exp 待解析表达式
+     * @param paramObj 参数对象
+     * @return 返回解析后的值
      */
-    public static Object parseWithMvel(String exp, BuildSource source) {
+    public static Object parseWithMvel(String exp, Object paramObj) {
         Object obj = false;
         try {
-            obj = MVEL.eval(exp, source.getParamObj());
+            obj = MVEL.eval(exp, paramObj);
         } catch (Exception e) {
             System.out.println("-------MVEL表达式执行出错:" + exp);
             e.printStackTrace();

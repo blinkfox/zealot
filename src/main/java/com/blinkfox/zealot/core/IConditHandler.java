@@ -11,8 +11,8 @@ public interface IConditHandler {
 	
 	/**
      * 构建sqlInfo信息
-     * @param source
-     * @return
+     * @param source 构建所需的资源对象
+     * @return 返回SqlInfo对象
      */
     SqlInfo buildSqlInfo(BuildSource source);
 

@@ -18,8 +18,8 @@ public class EqualHandler implements IConditHandler {
 
 	/**
      * 构建等值查询的动态条件sql
-     * @param source
-     * @return
+     * @param source 构建所需的资源对象
+     * @return 返回SqlInfo对象
      */
     @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
@@ -38,7 +38,7 @@ public class EqualHandler implements IConditHandler {
             sqlInfo = BuildSqlInfoHelper.buildEqualSql(source, fieldText, valueText);
         } else {
 			/* 如果match匹配成功，则生成数据库sql条件和参数 */
-            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source);
+            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = BuildSqlInfoHelper.buildEqualSql(source, fieldText, valueText);
             }

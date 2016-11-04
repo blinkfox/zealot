@@ -23,7 +23,7 @@ public class Dom4jHelper {
 	/**
      * 读取xml文档
      * @param xmlPath 定位xml文件的路径，如：com/blinkfox/test.xml
-     * @return
+     * @return 返回dom4j文档
      */
     public static Document getDocument(String xmlPath) {
         SAXReader reader = new SAXReader();
@@ -42,8 +42,8 @@ public class Dom4jHelper {
     
     /**
      * 获取xml节点的文本值，如果是对象是空的，则转为空字符串
-     * @param node
-     * @return
+     * @param node dom4j节点
+     * @return 返回节点文本值
      */
     public static String getNodeText(Node node) {
         return node == null ? "": node.getText();
@@ -51,8 +51,8 @@ public class Dom4jHelper {
 
     /**
      * 检查节点是否为空
-     * @param node
-     * @return
+     * @param node dom4j节点
+     * @return 返回节点文本值
      */
     public static String getAndCheckNodeText(Node node, String nodeName) {
 		/* 判断必填的参数是否为空 */
@@ -66,8 +66,8 @@ public class Dom4jHelper {
 
     /**
      * 检查和获取开始和结束文本的内容，返回一个数组
-     * @param node
-     * @return
+     * @param node dom4j节点
+     * @return 返回开始和结束文本的二元数组
      */
     public static String[] getBothNodeText(Node node) {
         Node startNode = node.selectSingleNode(ZealotConst.ATTR_START);

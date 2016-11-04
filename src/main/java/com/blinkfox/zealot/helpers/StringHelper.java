@@ -18,8 +18,8 @@ public class StringHelper {
 
     /**
      * 将字符串中的“空格（包括换行、回车、制表符）”等转成空格来处理，最后去掉所有多余空格
-     * @param str
-     * @return
+     * @param str 待判断字符串
+     * @return 替换后的字符串
      */
     public static String replaceBlank(String str) {
         Pattern p = Pattern.compile("\\|\t|\r|\n");
@@ -29,8 +29,8 @@ public class StringHelper {
 
     /**
      * 判断是否为空字符串，包括空格也算
-     * @param str
-     * @return
+     * @param str 待判断字符串
+     * @return 是否的布尔结果
      */
     public static boolean isBlank(String str) {
         int strLen;
@@ -49,8 +49,8 @@ public class StringHelper {
 
     /**
      * 判断字符串是否为空
-     * @param str
-     * @return
+     * @param str 待判断字符串
+     * @return 是否的布尔结果
      */
     public static boolean isNotBlank(String str) {
         return !isBlank(str);

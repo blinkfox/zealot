@@ -23,7 +23,7 @@ public class ZealotConfigLoader implements ServletContextListener {
 
     /**
      * ZealotConfig销毁时执行的方法
-     * @param arg0
+     * @param arg0 上下文事件对象
      */
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
@@ -32,7 +32,7 @@ public class ZealotConfigLoader implements ServletContextListener {
 
     /**
      * 应用服务器启动时执行
-     * @param event
+     * @param event 上下文事件对象
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {
@@ -48,8 +48,8 @@ public class ZealotConfigLoader implements ServletContextListener {
 
     /**
      * 初始化zealotConfig的之类，并执行初始化mapper到缓存中
-     * @param event
-     * @param xmlContext
+     * @param event 上下文事件对象
+     * @param xmlContext xmlContext实例
      */
     private void createZealotConfig(ServletContextEvent event, XmlContext xmlContext) {
         String configClass = event.getServletContext().getInitParameter(CONFIG_CLASS);

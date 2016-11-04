@@ -25,7 +25,7 @@ public class BuildSqlInfoHelper {
 
     /**
      * 根据构建的资源参数初始化数据
-     * @param source
+     * @param source 构建所需的资源对象
      */
     private static void init(BuildSource source) {
         sqlInfo = source.getSqlInfo();
@@ -35,32 +35,32 @@ public class BuildSqlInfoHelper {
 
     /**
      * 构建普通的sql信息
-     * @param source
-     * @param fieldText
-     * @param valueText
+     * @param source 构建所需的资源对象
+     * @param fieldText 字段文本值
+     * @param valueText 参数值
      * @return
      */
     public static SqlInfo buildEqualSql(BuildSource source, String fieldText, String valueText) {
         init(source);
 
         join.append(source.getPrefix()).append(fieldText).append(ZealotConst.EQUAL_SUFFIX);
-        params.add(ParseHelper.parseWithMvel(valueText, source));
+        params.add(ParseHelper.parseWithMvel(valueText, source.getParamObj()));
 
         return sqlInfo.setJoin(join).setParams(params);
     }
 
     /**
      * 构建Like模糊查询的sql信息
-     * @param source
-     * @param fieldText
-     * @param valueText
+     * @param source 构建所需的资源对象
+     * @param fieldText 字段文本值
+     * @param valueText 参数值
      * @return
      */
     public static SqlInfo buildLikeSql(BuildSource source, String fieldText, String valueText) {
         init(source);
 
         join.append(source.getPrefix()).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
-        Object obj = ParseHelper.parseWithMvel(valueText, source);
+        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
         params.add("%" + obj + "%");
 
         return sqlInfo.setJoin(join).setParams(params);
@@ -68,10 +68,10 @@ public class BuildSqlInfoHelper {
 
     /**
      * 构建数字查询的sql信息
-     * @param source
-     * @param fieldText
-     * @param startText
-     * @param endText
+     * @param source 构建所需的资源对象
+     * @param fieldText 字段文本值
+     * @param startText 参数开始值
+     * @param endText 参数结束值
      * @return
      */
     public static SqlInfo buildBetweenSql(BuildSource source, String fieldText,
@@ -82,16 +82,16 @@ public class BuildSqlInfoHelper {
         if (StringHelper.isNotBlank(startText) &&
                 StringHelper.isBlank(endText)) { // 开始不为空，结束为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.GT_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(startText, source));
+            params.add(ParseHelper.parseWithMvel(startText, source.getParamObj()));
         } else if (StringHelper.isBlank(startText) &&
                 StringHelper.isNotBlank(endText)) { // 开始为空，结束不为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.LT_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(endText, source));
+            params.add(ParseHelper.parseWithMvel(endText, source.getParamObj()));
         } else if (StringHelper.isNotBlank(startText) &&
                 StringHelper.isNotBlank(endText)) { // 开始、结束均不为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(startText, source));
-            params.add(ParseHelper.parseWithMvel(endText, source));
+            params.add(ParseHelper.parseWithMvel(startText, source.getParamObj()));
+            params.add(ParseHelper.parseWithMvel(endText, source.getParamObj()));
         }
 
         return sqlInfo.setJoin(join).setParams(params);
@@ -99,9 +99,9 @@ public class BuildSqlInfoHelper {
 
     /**
      * 构建Like模糊查询的sql信息
-     * @param source
-     * @param fieldText
-     * @param valueText
+     * @param source 构建所需的资源对象
+     * @param fieldText 字段文本值
+     * @param valueText 参数值
      * @return
      */
     @SuppressWarnings("rawtypes")
@@ -112,7 +112,7 @@ public class BuildSqlInfoHelper {
         join.append(source.getPrefix()).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
 
         // 获取参数的集合信息，并转换成数组
-        Object obj = ParseHelper.parseWithMvel(valueText, source);
+        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
         if (obj instanceof Collection) {
             values = ((Collection) obj).toArray();
         } else if (obj.getClass().isArray()) {

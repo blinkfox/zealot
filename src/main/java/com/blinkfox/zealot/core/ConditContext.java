@@ -22,9 +22,9 @@ public class ConditContext {
 
 	/**
      * 根据标签名称和对应的构建参数构造出对应标签的sql和参数
-     * @param source
-     * @param tag
-     * @return
+     * @param source 构建所需的资源对象
+     * @param tag 标签名称
+     * @return 返回SqlInfo对象
      */
     public static SqlInfo buildSqlInfo(BuildSource source, String tag) {
         // 获取所有配置的标签处理对象，并遍历判断当前类型是否符合该type标签

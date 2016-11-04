@@ -24,10 +24,10 @@ public class Zealot {
 
 	/**
      * 获取sqlInfo信息
-     * @param nameSpace
-     * @param zealotId
-     * @param paramObj
-     * @return
+     * @param nameSpace xml命名空间
+     * @param zealotId xml中的zealot id
+     * @param paramObj 参数对象
+     * @return 返回SqlInfo对象
      */
     public static SqlInfo getSqlInfo(String nameSpace, String zealotId, Object paramObj) {
         Document doc = AbstractZealotConfig.getZealots().get(nameSpace);
@@ -47,9 +47,9 @@ public class Zealot {
 
     /**
      * 构建完整的SqlInfo对象
-     * @param node
-     * @param paramObj
-     * @return
+     * @param node dom4j对象节点
+     * @param paramObj 参数对象
+     * @return 返回SqlInfo对象
      */
     @SuppressWarnings("unchecked")
 	private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
