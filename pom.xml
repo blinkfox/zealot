@@ -4,7 +4,7 @@
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>zealot</name>
     <description>This is a sql and parameters dynamically generated tool.</description>
     <url>http://blinkfox.com</url>
@@ -56,13 +56,28 @@
             <version>2.2.8.Final</version>
         </dependency>
     </dependencies>
+	
+    <build>
+        <finalName>zealot</finalName>
+        <defaultGoal>compile</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
             <id>release</id>
             <build>
-                <finalName>zealot</finalName>
-                <defaultGoal>compile</defaultGoal>
                 <plugins>
                     <!-- Source -->
                     <plugin>
