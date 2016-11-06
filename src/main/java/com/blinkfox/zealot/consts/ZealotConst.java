@@ -5,7 +5,7 @@ package com.blinkfox.zealot.consts;
  * Created by blinkfox on 2016/10/30.
  */
 public interface ZealotConst {
-	
+
 	/* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点

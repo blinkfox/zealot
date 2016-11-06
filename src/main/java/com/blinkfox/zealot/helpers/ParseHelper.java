@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.helpers;
 
+import com.blinkfox.zealot.log.Log;
 import org.mvel2.MVEL;
 import com.blinkfox.zealot.bean.BuildSource;
 
@@ -8,6 +9,9 @@ import com.blinkfox.zealot.bean.BuildSource;
  * Created by blinkfox on 2016/10/30.
  */
 public class ParseHelper {
+
+    // 得到 log 实例
+    private static final Log log = Log.get(ParseHelper.class);
 	
 	/**
 	 * 私有构造方法
@@ -27,8 +31,7 @@ public class ParseHelper {
         try {
             obj = MVEL.eval(exp, paramObj);
         } catch (Exception e) {
-            System.out.println("-------MVEL表达式执行出错:" + exp);
-            e.printStackTrace();
+            log.error("MVEL表达式执行出错:" + exp, e);
         }
         return obj;
     }

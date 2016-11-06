@@ -1,6 +1,8 @@
 package com.blinkfox.zealot.helpers;
 
 import java.io.InputStream;
+
+import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -12,6 +14,9 @@ import com.blinkfox.zealot.consts.ZealotConst;
  * Created by blinkfox on 2016/10/30.
  */
 public class Dom4jHelper {
+
+    // 得到log实例
+    private static final Log log = Log.get(Dom4jHelper.class);
 	
 	/**
 	 * 私有构造方法
@@ -30,12 +35,9 @@ public class Dom4jHelper {
         Document document = null;
         try {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlPath);
-            if (is != null) {
-                document = reader.read(is);
-            }
+            document = reader.read(is);
         } catch (DocumentException e) {
-            System.err.println("-----读取xml文件失败，xmlPath是：" + xmlPath);
-            e.printStackTrace();
+            log.error("读取xml文件失败，xmlPath是：" + xmlPath, e);
         }
         return document;
     }

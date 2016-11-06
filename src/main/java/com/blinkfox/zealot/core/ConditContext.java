@@ -6,12 +6,16 @@ import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.log.Log;
 
 /**
  * 构建动态条件查询的上下文协调类
  * Created by blinkfox on 2016/10/30.
  */
 public class ConditContext {
+
+    // 得到日志对象
+    private static final Log log = Log.get(ConditContext.class);
 	
 	/**
 	 * 私有构造方法
@@ -41,11 +45,9 @@ public class ConditContext {
                     IConditHandler handler = (IConditHandler) th.getHandlerCls().newInstance();
                     return handler.buildSqlInfo(source);
                 } catch (InstantiationException e) {
-                    System.out.println("-------实例化IConditHandler的实现类出错!");
-                    e.printStackTrace();
+                    log.error("实例化IConditHandler的实现类出错!", e);
                 } catch (IllegalAccessException e) {
-                    System.out.println("-------访问Handler的实现类出错!");
-                    e.printStackTrace();
+                    log.error("访问Handler的实现类出错!", e);
                 }
             }
         }

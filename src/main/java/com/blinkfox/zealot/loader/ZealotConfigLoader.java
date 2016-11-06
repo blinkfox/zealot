@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
@@ -14,6 +16,9 @@ import com.blinkfox.zealot.helpers.Dom4jHelper;
  * Created by blinkfox on 2016/10/30.
  */
 public class ZealotConfigLoader implements ServletContextListener {
+
+    // 得到 log 实例
+    private static final Log log = Log.get(ZealotConfigLoader.class);
 	
 	// zealot配置类对象
     private AbstractZealotConfig zealotConfig;
@@ -36,7 +41,7 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        System.out.println("----------Zealot应用程序监听器开始启动");
+        log.info("Zealot应用程序监听器开始启动");
 
         // 创建XmlContext对象和创建执行ZealotConfig中的配置
         XmlContext xmlContext = XmlContext.getInstance();
@@ -53,7 +58,7 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     private void createZealotConfig(ServletContextEvent event, XmlContext xmlContext) {
         String configClass = event.getServletContext().getInitParameter(CONFIG_CLASS);
-        System.out.println("----------启动得到的参数name:" + configClass);
+        log.info("----------启动得到的参数name:" + configClass);
         if (configClass == null) {
             throw new RuntimeException("请在web.xml设置zealotConfigClass参数");
         }
