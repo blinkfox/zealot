@@ -27,18 +27,18 @@ public abstract class AbstractZealotConfig {
     
 	// 添加默认的标签和对应的handler处理器
     static {
-    	tagHandlers.add(new TagHandler(ZealotConst.EQUAL, EqualHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.AND_EQUAL, ZealotConst.AND_PREFIX, EqualHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.OR_EQUAL, ZealotConst.OR_PREFIX, EqualHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.LIKE, LikeHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.AND_LIKE, ZealotConst.AND_PREFIX, LikeHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.OR_LIKE, ZealotConst.OR_PREFIX, LikeHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.BETWEEN, BetweenHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.AND_BETWEEN, ZealotConst.AND_PREFIX, BetweenHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.OR_BETWEEN, ZealotConst.OR_PREFIX, BetweenHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.IN, InHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.AND_IN, ZealotConst.AND_PREFIX, InHandler.class));
-    	tagHandlers.add(new TagHandler(ZealotConst.OR_IN, ZealotConst.OR_PREFIX, InHandler.class));
+        add(ZealotConst.EQUAL, EqualHandler.class);
+        add(ZealotConst.AND_EQUAL, ZealotConst.AND_PREFIX, EqualHandler.class);
+        add(ZealotConst.OR_EQUAL, ZealotConst.OR_PREFIX, EqualHandler.class);
+        add(ZealotConst.LIKE, LikeHandler.class);
+        add(ZealotConst.AND_LIKE, ZealotConst.AND_PREFIX, LikeHandler.class);
+        add(ZealotConst.OR_LIKE, ZealotConst.OR_PREFIX, LikeHandler.class);
+        add(ZealotConst.BETWEEN, BetweenHandler.class);
+        add(ZealotConst.AND_BETWEEN, ZealotConst.AND_PREFIX, BetweenHandler.class);
+        add(ZealotConst.OR_BETWEEN, ZealotConst.OR_PREFIX, BetweenHandler.class);
+        add(ZealotConst.IN, InHandler.class);
+        add(ZealotConst.AND_IN, ZealotConst.AND_PREFIX, InHandler.class);
+        add(ZealotConst.OR_IN, ZealotConst.OR_PREFIX, InHandler.class);
     }
 
     /**
