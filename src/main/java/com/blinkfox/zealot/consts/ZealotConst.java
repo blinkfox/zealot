@@ -4,7 +4,7 @@ package com.blinkfox.zealot.consts;
  * 常量接口
  * Created by blinkfox on 2016/10/30.
  */
-public interface ZealotConst {
+public final class ZealotConst {
 
 	/* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
@@ -43,5 +43,12 @@ public interface ZealotConst {
     public static final String LT_SUFFIX = " <= ? ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " in ";
+
+    /**
+     * 私有构造方法
+     */
+    private ZealotConst() {
+
+    }
 
 }
