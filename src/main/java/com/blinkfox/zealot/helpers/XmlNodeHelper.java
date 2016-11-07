@@ -2,6 +2,7 @@ package com.blinkfox.zealot.helpers;
 
 import java.io.InputStream;
 
+import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -13,15 +14,15 @@ import com.blinkfox.zealot.consts.ZealotConst;
  * dom4j相关的工具类
  * Created by blinkfox on 2016/10/30.
  */
-public class Dom4jHelper {
+public class XmlNodeHelper {
 
     // 得到log实例
-    private static final Log log = Log.get(Dom4jHelper.class);
+    private static final Log log = Log.get(XmlNodeHelper.class);
 	
 	/**
 	 * 私有构造方法
 	 */
-	private Dom4jHelper() {
+	private XmlNodeHelper() {
 		super();
 	}
 
@@ -59,9 +60,9 @@ public class Dom4jHelper {
     public static String getAndCheckNodeText(Node node, String nodeName) {
 		/* 判断必填的参数是否为空 */
         Node fieldNode = node.selectSingleNode(nodeName);
-        String fieldText = Dom4jHelper.getNodeText(fieldNode);
+        String fieldText = XmlNodeHelper.getNodeText(fieldNode);
         if (StringHelper.isBlank(fieldText)) {
-            throw new RuntimeException("填写的字段值是空的");
+            throw new FieldEmptyException("填写的字段值是空的");
         }
         return fieldText;
     }
@@ -71,13 +72,13 @@ public class Dom4jHelper {
      * @param node dom4j节点
      * @return 返回开始和结束文本的二元数组
      */
-    public static String[] getBothNodeText(Node node) {
+    public static String[] getBothCheckNodeText(Node node) {
         Node startNode = node.selectSingleNode(ZealotConst.ATTR_START);
         Node endNode = node.selectSingleNode(ZealotConst.ATTR_ENT);
-        String startText = Dom4jHelper.getNodeText(startNode);
-        String endText = Dom4jHelper.getNodeText(endNode);
+        String startText = XmlNodeHelper.getNodeText(startNode);
+        String endText = XmlNodeHelper.getNodeText(endNode);
         if (StringHelper.isBlank(startText) && StringHelper.isBlank(endText)) {
-            throw new RuntimeException("填写的开始和结束字段值是空的");
+            throw new FieldEmptyException("填写的开始和结束字段值是空的");
         }
         return new String[] {startText, endText};
     }

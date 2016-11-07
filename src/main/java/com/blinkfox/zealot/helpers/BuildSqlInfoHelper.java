@@ -38,7 +38,7 @@ public class BuildSqlInfoHelper {
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
-     * @return
+     * @return 返回SqlInfo信息
      */
     public static SqlInfo buildEqualSql(BuildSource source, String fieldText, String valueText) {
         init(source);
@@ -54,7 +54,7 @@ public class BuildSqlInfoHelper {
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
-     * @return
+     * @return 返回SqlInfo信息
      */
     public static SqlInfo buildLikeSql(BuildSource source, String fieldText, String valueText) {
         init(source);
@@ -72,7 +72,7 @@ public class BuildSqlInfoHelper {
      * @param fieldText 字段文本值
      * @param startText 参数开始值
      * @param endText 参数结束值
-     * @return
+     * @return 返回SqlInfo信息
      */
     public static SqlInfo buildBetweenSql(BuildSource source, String fieldText,
                                           String startText, String endText) {
@@ -102,7 +102,7 @@ public class BuildSqlInfoHelper {
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
-     * @return
+     * @return 返回SqlInfo信息
      */
     @SuppressWarnings("rawtypes")
 	public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {

@@ -10,7 +10,7 @@ import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
-import com.blinkfox.zealot.helpers.Dom4jHelper;
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 /**
  * Zealot配置的servlet监听器的初始化加载类
@@ -88,7 +88,7 @@ public class ZealotConfigLoader implements ServletContextListener {
             Map.Entry<String, String> entry = it.next();
             String key = entry.getKey();
             String value = entry.getValue();
-            Document document = Dom4jHelper.getDocument(value);
+            Document document = XmlNodeHelper.getDocument(value);
             if (document != null) {
             	AbstractZealotConfig.getZealots().put(key, document);
             }
