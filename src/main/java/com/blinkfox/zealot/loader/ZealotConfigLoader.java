@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import com.blinkfox.zealot.bean.XmlContext;
@@ -58,16 +59,17 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     private void createZealotConfig(ServletContextEvent event, XmlContext xmlContext) {
         String configClass = event.getServletContext().getInitParameter(CONFIG_CLASS);
-        log.info("----------启动得到的参数name:" + configClass);
+        log.info("----zealot加载器开始加载，得到的 zealotConfigClass 参数值:" + configClass);
         if (configClass == null) {
-            throw new RuntimeException("请在web.xml设置zealotConfigClass参数");
+            throw new ConfigNotFoundException("在 web.xml 中未设置 zealotConfigClass 参数");
         }
 
         Object temp;
         try {
             temp = Class.forName(configClass).newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("不能创建zealotConfig实例: " + configClass, e);
+            //throw new RuntimeException("不能创建zealotConfig实例: " + configClass, e);
+            throw new ConfigNotFoundException("初始化zealotConfig实例失败,配置名称为:" + configClass, e);
         }
 
         if (temp instanceof AbstractZealotConfig) {
