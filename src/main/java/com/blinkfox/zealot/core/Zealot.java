@@ -2,6 +2,9 @@ package com.blinkfox.zealot.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.blinkfox.zealot.exception.ConfigNotFoundException;
+import com.blinkfox.zealot.exception.NodeNotFoundException;
 import org.dom4j.Document;
 import org.dom4j.Node;
 import com.blinkfox.zealot.bean.BuildSource;
@@ -32,14 +35,14 @@ public class Zealot {
     public static SqlInfo getSqlInfo(String nameSpace, String zealotId, Object paramObj) {
         Document doc = AbstractZealotConfig.getZealots().get(nameSpace);
         if (doc == null) {
-            throw new RuntimeException("未获取到xml文档,nameSpace 为：" + nameSpace);
+            throw new ConfigNotFoundException("未找到的zealot xml的配置文件，nameSpace为:" + nameSpace);
         }
 
         // 获取文档的指定sql的zealotId的节点
         String xPath = "//zealot[@id='" + zealotId +"']";
         Node node = doc.selectSingleNode(xPath);
         if (node == null) {
-            throw new RuntimeException("未获取到zealot节点,zealotId为：" + zealotId);
+            throw new NodeNotFoundException("未获取到zealot节点,zealotId为:" + zealotId);
         }
 
         return buildSqlInfo(node, paramObj);

@@ -34,7 +34,7 @@ public class ConditContext {
         // 获取所有配置的标签处理对象，并遍历判断当前类型是否符合该type标签
         // 如果符合就执行该标签中对应handler对象的方法
         Set<TagHandler> tagHandlers = AbstractZealotConfig.getTagHandlers();
-        for(Iterator<TagHandler> it = tagHandlers.iterator(); it.hasNext();) {
+        for (Iterator<TagHandler> it = tagHandlers.iterator(); it.hasNext();) {
             TagHandler th = it.next();
 
             // 如果从全局的set中获取到了该标签，则将其前缀和handler对象的方法执行来获取sql和参数

@@ -14,7 +14,7 @@ public class ConfigNotFoundException extends RuntimeException {
     }
 
     /**
-     * 使用日志消息组成的构造方法
+     * 附带日志消息组成的构造方法
      * @param msg 日志消息
      */
     public ConfigNotFoundException(String msg) {
@@ -22,11 +22,11 @@ public class ConfigNotFoundException extends RuntimeException {
     }
 
     /**
-     * 使用日志消息和异常信息组成的构造方法
-     * @param message
-     * @param cause
+     * 附带日志消息和异常信息组成的构造方法
+     * @param msg 日志消息
+     * @param t Throwable对象
      */
-    public ConfigNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public ConfigNotFoundException(String msg, Throwable t) {
+        super(msg, t);
     }
 }
