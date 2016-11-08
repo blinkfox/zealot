@@ -12,7 +12,7 @@ public class ConfigNotFoundException extends RuntimeException {
      * 默认构造方法
      */
     public ConfigNotFoundException() {
-
+        super();
     }
 
     /**

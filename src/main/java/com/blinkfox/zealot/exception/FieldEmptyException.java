@@ -12,7 +12,7 @@ public class FieldEmptyException extends RuntimeException {
      * 默认无参构造方法
      */
     public FieldEmptyException() {
-
+        super();
     }
 
     /**

@@ -68,7 +68,6 @@ public class ZealotConfigLoader implements ServletContextListener {
         try {
             temp = Class.forName(configClass).newInstance();
         } catch (Exception e) {
-            //throw new RuntimeException("不能创建zealotConfig实例: " + configClass, e);
             throw new ConfigNotFoundException("初始化zealotConfig实例失败,配置名称为:" + configClass, e);
         }
 
