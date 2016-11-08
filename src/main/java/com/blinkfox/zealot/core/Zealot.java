@@ -1,6 +1,5 @@
 package com.blinkfox.zealot.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
@@ -56,15 +55,15 @@ public class Zealot {
      */
     @SuppressWarnings("unchecked")
 	private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
-        SqlInfo sqlInfo = new SqlInfo(new StringBuilder(""), new ArrayList<Object>());
-        StringBuilder join = sqlInfo.getJoin();
+        SqlInfo sqlInfo = SqlInfo.getNewInstance();
 
+        // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
         for (int i = 0; i < nodes.size(); i++) {
             Node n = nodes.get(i);
             if (ZealotConst.NODETYPE_TEXT.equals(n.getNodeTypeName())) {
                 // 如果子节点node 是文本节点，则直接获取其文本
-                join.append(n.getText());
+                sqlInfo.getJoin().append(n.getText());
             } else if (ZealotConst.NODETYPE_ELEMENT.equals(n.getNodeTypeName())) {
                 BuildSource source = new BuildSource(sqlInfo, n, paramObj);
                 // 如果子节点node 是元素节点，则再判断其是什么元素，动态判断条件和参数

@@ -11,7 +11,7 @@ import org.dom4j.io.SAXReader;
 import com.blinkfox.zealot.consts.ZealotConst;
 
 /**
- * dom4j相关的工具类
+ * xml和xml节点相关的工具类
  * Created by blinkfox on 2016/10/30.
  */
 public class XmlNodeHelper {
