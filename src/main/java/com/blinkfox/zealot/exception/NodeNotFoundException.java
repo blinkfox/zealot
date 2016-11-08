@@ -6,7 +6,9 @@ package com.blinkfox.zealot.exception;
  */
 public class NodeNotFoundException extends RuntimeException {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 默认无参构造方法
      */
     public NodeNotFoundException() {

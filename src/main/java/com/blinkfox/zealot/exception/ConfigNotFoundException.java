@@ -6,7 +6,9 @@ package com.blinkfox.zealot.exception;
  */
 public class ConfigNotFoundException extends RuntimeException {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 默认构造方法
      */
     public ConfigNotFoundException() {

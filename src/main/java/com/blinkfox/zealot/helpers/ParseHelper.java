@@ -2,7 +2,6 @@ package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.log.Log;
 import org.mvel2.MVEL;
-import com.blinkfox.zealot.bean.BuildSource;
 
 /**
  * OGNL表达式相关的工具类

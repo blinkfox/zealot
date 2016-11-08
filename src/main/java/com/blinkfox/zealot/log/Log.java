@@ -25,7 +25,7 @@ public class Log {
      * @param cls 记录日志的类Class
      * @return 返回自身的实例
      */
-    public static Log get(Class cls) {
+    public static <T> Log get(Class<T> cls) {
         return new Log(Logger.getLogger(cls.getName()));
     }
 

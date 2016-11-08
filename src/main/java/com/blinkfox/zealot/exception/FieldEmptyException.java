@@ -6,7 +6,9 @@ package com.blinkfox.zealot.exception;
  */
 public class FieldEmptyException extends RuntimeException {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 默认无参构造方法
      */
     public FieldEmptyException() {
