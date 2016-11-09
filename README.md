@@ -67,8 +67,10 @@ public class MyZealotConfig extends AbstractZealotConfig {
 ```
 
 > **代码解释**：
+
 > (1). configXml()方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
-(2). configTagHandler()方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
+
+> (2). configTagHandler()方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
 然后，在你的web.xml中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
 
@@ -112,10 +114,15 @@ public class MyZealotConfig extends AbstractZealotConfig {
 ```
 
 > **代码解释**：
+
 > (1). `zealots`代表根节点，其下每个`zealot`表示你业务中需要书写的一个完整SQL。
+
 > (2). 其中的`like`、`andLike`、`andBetween`、`andIn`等标签及属性表示要动态生成的sql类型，如：等值查询、模糊查询、In查询、区间查询等；
+
 > (3). 标签中的属性match表示匹配到的条件，如果满足条件就生成该类型的SQL，不匹配就不生成，从而达到了动态生成SQL的需求，如果不写match，则表示必然生成；
+
 > (4). field表示对应的数据库字段；
+
 > (5). value、start、end则表示对应的参数。
 
 回到你的Zealot核心配置类中，配置你Java代码中需要识别这个XML的标识和XML路径，我这里的示例如下：
@@ -148,6 +155,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 ```
 
 > **代码解释**：
+
 > (1). `ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");`代码中第一个参数`USER_ZEALOT`表示的是对XML做唯一标识的自定义静态常量，第二个参数就是你创建的对应的XML的资源路径。
 
 最后，就是一个UserController的调用测试类，这里的目的用来调用执行，测试我们前面配置书写的SQL和参数，参考代码如下：
@@ -196,12 +204,15 @@ public class UserController extends Controller {
 ```
 
 > **代码解释**：
+
 > (1). 说明一下，我测试项目中采用的框架是[JFinal][2]，你自己具体的项目中有自己的SQL调用方式，而Zealot的目的只是生成SQL和对应的有序参数而已。
+
 > (2). Zealot.getSqlInfo()方法有三个参数，第一个参数表示前面所写的XML的标识名称，第二个表示你XML中具体想生成的SQL的zealot id,第三个表示生成动态SQL的参数对象，该对象可以是一个普通的Java对象，也可以是Map等。
 
 结果，第二个方法userZealot()中生成的SQL和参数打印如下：
 
 > **生成SQL结果**：
+
 > ----生成sql的为:select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND ? AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc
 
 > ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
