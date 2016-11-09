@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.blinkfox.zealot.helpers.StringHelper;
 
@@ -16,22 +17,22 @@ public class SqlInfo {
     private List<Object> params;
 
     /**
-     * 构造方法
-     * @param join 拼接sql的StringBuilder对象
-     */
-    public SqlInfo(StringBuilder join) {
-        this.join = join;
-    }
-
-    /**
      * 全构造方法
      * @param join 拼接sql的StringBuilder对象
      * @param params 有序的参数集合
      */
-    public SqlInfo(StringBuilder join, List<Object> params) {
+    private SqlInfo(StringBuilder join, List<Object> params) {
         super();
         this.join = join;
         this.params = params;
+    }
+
+    /**
+     * 获取一个新的SqlInfo实例
+     * @return 返回SqlInfo实例
+     */
+    public static SqlInfo getNewInstance() {
+        return new SqlInfo(new StringBuilder(""), new ArrayList<Object>());
     }
 
     /**

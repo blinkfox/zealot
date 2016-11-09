@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
@@ -83,13 +82,13 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     private void cachingXmlZealots() {
         Map<String, String> xmlMaps = XmlContext.getXmlMap();
+
         for (Iterator<Map.Entry<String, String>> it = xmlMaps.entrySet().iterator(); it.hasNext();) {
             Map.Entry<String, String> entry = it.next();
-            String key = entry.getKey();
             String value = entry.getValue();
             Document document = XmlNodeHelper.getDocument(value);
             if (document != null) {
-            	AbstractZealotConfig.getZealots().put(key, document);
+            	AbstractZealotConfig.getZealots().put(entry.getKey(), document);
             }
         }
     }
