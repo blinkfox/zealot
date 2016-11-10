@@ -1,6 +1,6 @@
 # Zealot
 
-一个SQL和对应参数动态生成的工具库
+一个轻量级的SQL和参数动态生成工具库
 
 > My life for Auir!
 
@@ -15,6 +15,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 ## 主要特性
 
 - 轻量级，jar包仅仅27k大小，集成和使用简单
+- 让SQL和Java代码解耦和，易于维护
 - SQL采用XML集中管理，同时方便程序开发
 - 具有动态性、可复用逻辑和可半调试性的优点
 - 具有可扩展性，可自定义标签和处理器来完成自定义逻辑的SQL和参数生成
@@ -217,14 +218,95 @@ public class UserController extends Controller {
 
 > ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
 
-## 详细文档
+## Zealot SQL配置
 
-暂无，努力抽时间更新中...
+Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
+
+Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、`between`、`in`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件以及范围匹配条件；四类条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形，这两者更为常用，目前还未加入`非`的情形。所以，zealot中总共带有12个条件标签，各标签的属性和生成SQL的示例如下：
+
+### 1. equal、andEqual、orEqual 标签介绍
+
+#### (1). 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。匹配规则使用`MVEL2`表达式，关于[MVEL的语法文档][3]参考这里。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+- **value**，表示参数值，对应Java中的名称。必要（填）属性，值也是使用`MVEL2`做解析。
+
+#### (2). 生成示例
+
+```
+标签:<equal field="nickname" value="nickName"></equal>
+SQL片段的生成结果：nickname = ?
+解释：必然生成此条SQL片段和参数
+
+<andEqual match="email != empty" field="email" value="email"></andEqual>
+SQL片段的生成结果：AND email = ?
+解释：如果email不等于空时，才生成此条SQL片段和参数
+```
+
+### 2. like、andLike、orLike 标签介绍
+
+#### (1). 属性介绍
+
+- **match**，同上。
+- **field**，同上。
+- **value**，同上。
+
+#### (2). 生成示例
+
+```
+<andLike match="email != empty" field="email" value="email"></andLike>
+SQL片段的生成结果：AND email LIKE ?
+解释：如果email不等于空时，才生成此条SQL片段和参数
+```
+
+### 3. between、andBetween、orBetween 标签介绍
+
+#### (1). 属性介绍
+
+- **match**，同上。
+- **field**，同上。
+- **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
+- **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
+
+> **解释**：如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
+
+#### (2). 生成示例
+
+```
+<andBetween match="startAge != empty || endAge != empty" field="age" start="startAge" end="endAge"></andBetween>
+start为空,end不为空，则SQL片段的生成结果：AND age >= ?
+start不为空,end为空，则SQL片段的生成结果：AND age <= ?
+start不为空,end不为空，则SQL片段的生成结果：AND age BETWEEN ? AND ?
+start为空,end为空，则不生成SQL片段
+```
+
+### 4. in、andIn、orIn 标签介绍
+
+#### (1). 属性介绍
+
+- **match**，同上。
+- **field**，同上。
+- **value**，表示参数的集合，值可以是数组，也可以是Collection集合。必填
+
+#### (2). 使用生成示例
+
+```
+<andIn match="sexs != empty" field="sex" value="sexs"></andIn>
+SQL片段的生成结果：AND sex in (?, ?)
+解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
+```
+
+## 自定义标签和处理器
+
+待续...
 
 ## 许可证
 
-Zealot类库遵守[Apache License 2.0][3] 许可证
+Zealot类库遵守[Apache License 2.0][4] 许可证
 
-[1]: https://github.com/blinkfox/zealot
-[2]: http://www.jfinal.com/
-[3]: http://www.apache.org/licenses/LICENSE-2.0
+
+  [1]: https://github.com/blinkfox/zealot
+  [2]: http://www.jfinal.com/
+  [3]: http://mvel.documentnode.com/
+  [4]: http://www.apache.org/licenses/LICENSE-2.0
