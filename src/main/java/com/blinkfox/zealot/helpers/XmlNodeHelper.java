@@ -44,7 +44,7 @@ public class XmlNodeHelper {
     }
     
     /**
-     * 获取xml节点的文本值，如果是对象是空的，则转为空字符串
+     * 获取xml节点的文本值，如果对象是空的，则转为空字符串
      * @param node dom4j节点
      * @return 返回节点文本值
      */
@@ -53,7 +53,18 @@ public class XmlNodeHelper {
     }
 
     /**
-     * 检查节点是否为空
+     * 获取节点文本
+     * @param node dom4j节点
+     * @param attrName 节点属性
+     * @return 返回节点文本值
+     */
+    public static String getNodeAttrText(Node node, String attrName) {
+        Node fieldNode = node.selectSingleNode(attrName);
+        return XmlNodeHelper.getNodeText(fieldNode);
+    }
+
+    /**
+     * 检查和获取节点文本，会检查节点是否为空，如果节点为空，则抛出异常
      * @param node dom4j节点
      * @return 返回节点文本值
      */
@@ -68,7 +79,7 @@ public class XmlNodeHelper {
     }
 
     /**
-     * 检查和获取开始和结束文本的内容，返回一个数组
+     * 检查和获取开始和结束文本的内容，返回一个数组，会检查两个节点是否为空，如果都为空，则抛出异常
      * @param node dom4j节点
      * @return 返回开始和结束文本的二元数组
      */
