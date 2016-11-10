@@ -1,7 +1,6 @@
 package com.blinkfox.zealot.helpers;
 
 import java.io.InputStream;
-
 import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
