@@ -46,8 +46,6 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        log.info("Zealot应用程序监听器开始启动");
-
         // 创建XmlContext对象和创建执行ZealotConfig中的配置
         XmlContext xmlContext = XmlContext.getInstance();
         createZealotConfig(event, xmlContext);
