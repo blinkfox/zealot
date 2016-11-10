@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import org.dom4j.Document;
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
@@ -12,6 +11,7 @@ import com.blinkfox.zealot.core.concrete.BetweenHandler;
 import com.blinkfox.zealot.core.concrete.EqualHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
 import com.blinkfox.zealot.core.concrete.LikeHandler;
+import org.dom4j.Node;
 
 /**
  * Zealot主配置类
@@ -20,7 +20,7 @@ import com.blinkfox.zealot.core.concrete.LikeHandler;
 public abstract class AbstractZealotConfig {
 	
 	// 所有zealots XML文档的缓存map，key是资源的路径（转换成下划线分割），value是dom4j文档
-    private static Map<String, Document> zealots = new ConcurrentHashMap<String, Document>();
+    private static Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
 
     // 初始化默认的一些tagHandlers到HashSet集合中
 	private static Set<TagHandler> tagHandlers = new HashSet<TagHandler>();
@@ -45,7 +45,7 @@ public abstract class AbstractZealotConfig {
      * 获取全局的Zealots文档缓存数据
      * @return 返回xml命名空间和dom4j文件的缓存map
      */
-    public static Map<String, Document> getZealots() {
+    public static Map<String, Node> getZealots() {
         return zealots;
     }
 

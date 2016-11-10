@@ -1,15 +1,20 @@
 package com.blinkfox.zealot.loader;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
+import com.blinkfox.zealot.exception.NodeNotFoundException;
+import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.log.Log;
 import org.dom4j.Document;
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
+import org.dom4j.Node;
 
 /**
  * Zealot配置的servlet监听器的初始化加载类
@@ -70,6 +75,7 @@ public class ZealotConfigLoader implements ServletContextListener {
             throw new ConfigNotFoundException("初始化zealotConfig实例失败,配置名称为:" + configClass, e);
         }
 
+        // 判断获取到的类是否是AbstractZealotConfig的子类
         if (temp instanceof AbstractZealotConfig) {
             zealotConfig = (AbstractZealotConfig) temp;
             zealotConfig.configXml(xmlContext);
@@ -83,12 +89,28 @@ public class ZealotConfigLoader implements ServletContextListener {
     private void cachingXmlZealots() {
         Map<String, String> xmlMaps = XmlContext.getXmlMap();
 
+        // 遍历所有的xml文档，将每个zealot节点缓存到ConcurrentHashMap内存缓存中
         for (Iterator<Map.Entry<String, String>> it = xmlMaps.entrySet().iterator(); it.hasNext();) {
             Map.Entry<String, String> entry = it.next();
+            String nameSpace = entry.getKey();
             String value = entry.getValue();
             Document document = XmlNodeHelper.getDocument(value);
-            if (document != null) {
-            	AbstractZealotConfig.getZealots().put(entry.getKey(), document);
+            if (document == null) {
+                throw new ConfigNotFoundException("未找到zealot xml的配置文件，nameSpace为:" + nameSpace);
+            }
+
+            // 获取该文档下所有的zealot元素,
+            List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
+            for (Node zealotNode: zealotNodes) {
+                Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
+                String zealotId = XmlNodeHelper.getNodeText(idNode);
+                if (StringHelper.isBlank(zealotId)) {
+                    throw new NodeNotFoundException("未获取到zealot节点,zealotId为:" + zealotId);
+                }
+
+                // zealot节点缓存到Map中，key是由nameSpace和zealot id组成,用"@"符号分隔,value是zealotNode
+                String zealotKey = StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId);
+                AbstractZealotConfig.getZealots().put(zealotKey, zealotNode);
             }
         }
     }
