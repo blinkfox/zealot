@@ -6,13 +6,13 @@
 
 ![Zealot](http://static.blinkfox.com/zealot.jpg)
 
-## 创建初衷
+## 一、创建初衷
 
 SQL对开发人员来说是核心的资产之一，在开发中经常需要书写冗长、动态的SQL，许多项目中仅仅采用Java来书写动态SQL，会导致SQL分散、不易调试和阅读。所谓易于维护的SQL应该兼有动态性和可调试性的双重特性。在Java中书写冗长的SQL，虽然能很好的做到动态性，缺大大降低了SQL本身的可调试性，开发人员必须运行项目调试打印出SQL才能知道最终的SQL长什么样。所以为了做到可调试性，开发人员开始将SQL单独提取出来存放到配置文件中来维护，这样方便开发人员复制出来粘贴到SQL工具中来直接运行，但无逻辑功能的配置文件虽然解决了可调试性的问题，却又丧失了动态SQL的能力。所以，才不得不诞生出类似于mybatis这样灵活的半ORM工具来解决这两个的问题，但众多的项目却并未集成mybaits这样的工具。
 
 [Zealot][1]是基于Java语言开发的SQL及对应参数动态拼接生成的工具包，其核心设计目标是帮助开发人员书写和生成出具有动态的、可复用逻辑的且易于维护的SQL及其对应的参数。为了做到可调试性，就必须将SQL提取到配置文件中来单独维护；为了保证SQL根据某些条件，某些逻辑来动态生成，就必须引入表达式语法或者标签语法来达到动态生成SQL的能力。因此，两者结合才诞生了Zealot。
 
-## 主要特性
+## 二、主要特性
 
 - 轻量级，jar包仅仅27k大小，集成和使用简单
 - 让SQL和Java代码解耦和，易于维护
@@ -20,7 +20,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 - 具有动态性、可复用逻辑和可半调试性的优点
 - 具有可扩展性，可自定义标签和处理器来完成自定义逻辑的SQL和参数生成
 
-## 集成使用
+## 三、集成使用
 
 ### 1. 支持场景
 
@@ -34,7 +34,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -218,7 +218,7 @@ public class UserController extends Controller {
 
 > ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
 
-## Zealot SQL配置
+## 四、Zealot SQL配置
 
 Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
 
@@ -256,7 +256,9 @@ SQL片段的生成结果：AND email = ?
 
 ```
 <andLike match="email != empty" field="email" value="email"></andLike>
+
 SQL片段的生成结果：AND email LIKE ?
+
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
 
@@ -269,16 +271,19 @@ SQL片段的生成结果：AND email LIKE ?
 - **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
 - **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
 
-> **解释**：如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
+> 
 
 #### (2). 生成示例
 
 ```
 <andBetween match="startAge != empty || endAge != empty" field="age" start="startAge" end="endAge"></andBetween>
+
 start为空,end不为空，则SQL片段的生成结果：AND age >= ?
 start不为空,end为空，则SQL片段的生成结果：AND age <= ?
 start不为空,end不为空，则SQL片段的生成结果：AND age BETWEEN ? AND ?
 start为空,end为空，则不生成SQL片段
+
+**解释**：match标签是非必填的，区间查询中，靠start和end两种条件也可以组成一个简单的动态情形。如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 ```
 
 ### 4. in、andIn、orIn 标签介绍
@@ -293,15 +298,19 @@ start为空,end为空，则不生成SQL片段
 
 ```
 <andIn match="sexs != empty" field="sex" value="sexs"></andIn>
+
 SQL片段的生成结果：AND sex in (?, ?)
+
 解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
 ```
 
-## 自定义标签和处理器
+## 五、自定义标签和处理器
+
+从前面所知,条件标签是生成动态SQL和参数的核心，但是项目开发的过程中往往有更多多复杂的逻辑来生成某些SQL，甚至那些逻辑还要被多处使用到，默认的一些标签不能够满足开发需求，那么自定义自己的动态条件标签来实现就显得很重要了。所谓自定义标签和处理器就是设置自定义的标签名称、匹配条件、参数和数据库字段等,再通过自定义的处理器来控制生成SQL的逻辑，这样就可以达到生成我们需要的SQL的功能，这样的标签重大的意义在于能够最大化简化sql的书写和功能的复用。
 
 待续...
 
-## 许可证
+## 六、许可证
 
 Zealot类库遵守[Apache License 2.0][4] 许可证
 
