@@ -75,23 +75,24 @@ public class BuildSqlInfoHelper {
      * @return 返回SqlInfo信息
      */
     public static SqlInfo buildBetweenSql(BuildSource source, String fieldText,
-                                          String startText, String endText) {
+            String startText, String endText) {
         init(source);
 
+        // 获取开始属性值和结束属性值
+        Object startValue = ParseHelper.parseWithMvel(startText, source.getParamObj());
+        Object endValue = ParseHelper.parseWithMvel(endText, source.getParamObj());
+
         /* 根据开始文本和结束文本判断执行是大于、小于还是区间的查询sql和参数的生成 */
-        if (StringHelper.isNotBlank(startText) &&
-                StringHelper.isBlank(endText)) { // 开始不为空，结束为空的情况
+        if (startValue != null && endValue == null) { // 开始不为空，结束为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.GT_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(startText, source.getParamObj()));
-        } else if (StringHelper.isBlank(startText) &&
-                StringHelper.isNotBlank(endText)) { // 开始为空，结束不为空的情况
+            params.add(startValue);
+        } else if (startValue == null && endValue != null) { // 开始为空，结束不为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.LT_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(endText, source.getParamObj()));
-        } else if (StringHelper.isNotBlank(startText) &&
-                StringHelper.isNotBlank(endText)) { // 开始、结束均不为空的情况
+            params.add(endValue);
+        } else { // 开始、结束均不为空的情况
             join.append(source.getPrefix()).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
-            params.add(ParseHelper.parseWithMvel(startText, source.getParamObj()));
-            params.add(ParseHelper.parseWithMvel(endText, source.getParamObj()));
+            params.add(startValue);
+            params.add(endValue);
         }
 
         return sqlInfo.setJoin(join).setParams(params);
@@ -108,18 +109,26 @@ public class BuildSqlInfoHelper {
 	public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
         init(source);
 
-        Object[] values = new Object[] {};
-        join.append(source.getPrefix()).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
+        // 获取value值，判断是否为空，若为空，则直接退出本方法
+        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
+        if (obj == null) {
+            return sqlInfo;
+        }
 
         // 获取参数的集合信息，并转换成数组
-        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
+        Object[] values = new Object[] {};
         if (obj instanceof Collection) {
             values = ((Collection) obj).toArray();
         } else if (obj.getClass().isArray()) {
             values = (Object[]) obj;
         }
 
+        if (values.length == 0) {
+            return sqlInfo;
+        }
+
         // 遍历数组，并遍历添加in查询的替换符和参数
+        join.append(source.getPrefix()).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
         int len = values.length;
         for (int i = 0; i < len; i++) {
             if (i == (len - 1)) {
