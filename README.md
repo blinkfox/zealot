@@ -34,7 +34,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -313,7 +313,6 @@ SQL片段的生成结果：AND sex in (?, ?)
 ## 六、许可证
 
 Zealot类库遵守[Apache License 2.0][4] 许可证
-
 
   [1]: https://github.com/blinkfox/zealot
   [2]: http://www.jfinal.com/
