@@ -34,7 +34,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -234,7 +234,7 @@ Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、
 
 #### (2). 生成示例
 
-```
+```markup
 标签:<equal field="nickname" value="nickName"></equal>
 SQL片段的生成结果：nickname = ?
 解释：必然生成此条SQL片段和参数
@@ -254,7 +254,7 @@ SQL片段的生成结果：AND email = ?
 
 #### (2). 生成示例
 
-```
+```markup
 <andLike match="email != empty" field="email" value="email"></andLike>
 
 SQL片段的生成结果：AND email LIKE ?
@@ -271,17 +271,17 @@ SQL片段的生成结果：AND email LIKE ?
 - **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
 - **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
 
-> 
+> **注意**：Zealot中对start和end的空判断是检测是否是null,而不是空字符串，0等情况。所以，对start和end的空处理应该是null。
 
 #### (2). 生成示例
 
-```
-<andBetween match="startAge != empty || endAge != empty" field="age" start="startAge" end="endAge"></andBetween>
+```markup
+<andBetween match="startAge != null || endAge != null" field="age" start="startAge" end="endAge"></andBetween>
 
-start为空,end不为空，则SQL片段的生成结果：AND age >= ?
-start不为空,end为空，则SQL片段的生成结果：AND age <= ?
-start不为空,end不为空，则SQL片段的生成结果：AND age BETWEEN ? AND ?
-start为空,end为空，则不生成SQL片段
+start为null,end不为null，则SQL片段的生成结果：AND age >= ?
+start不为null,end为null，则SQL片段的生成结果：AND age <= ?
+start不为null,end不为null，则SQL片段的生成结果：AND age BETWEEN ? AND ?
+start为null,end为null，则不生成SQL片段
 
 **解释**：match标签是非必填的，区间查询中，靠start和end两种条件也可以组成一个简单的动态情形。如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 ```
@@ -296,7 +296,7 @@ start为空,end为空，则不生成SQL片段
 
 #### (2). 使用生成示例
 
-```
+```markup
 <andIn match="sexs != empty" field="sex" value="sexs"></andIn>
 
 SQL片段的生成结果：AND sex in (?, ?)
@@ -308,12 +308,195 @@ SQL片段的生成结果：AND sex in (?, ?)
 
 从前面所知,条件标签是生成动态SQL和参数的核心，但是项目开发的过程中往往有更多多复杂的逻辑来生成某些SQL，甚至那些逻辑还要被多处使用到，默认的一些标签不能够满足开发需求，那么自定义自己的动态条件标签来实现就显得很重要了。所谓自定义标签和处理器就是设置自定义的标签名称、匹配条件、参数和数据库字段等,再通过自定义的处理器来控制生成SQL的逻辑，这样就可以达到生成我们需要的SQL的功能，这样的标签重大的意义在于能够最大化简化sql的书写和功能的复用。
 
-待续...
+### 1. 假设查询需求
+
+假设user表中有id、email两个字段，后台封装了一个User的参数，其中包含userId和usermail的属性。如果userId不为空时，则根据id来等值查询；如果userId为空,usermail不为空时，则根据email来做模糊查询；此处也隐含的说明了如果userId和usermail均不为空时，仍然以id来做等值查询。对此需求查询我们仍然可以用前面的标签组合来实现。假如很多地方都需要这种逻辑的查询，那我们可以使用自定义的标签来实现和复用这种查询逻辑。
+
+### 2. 使用方式示例
+
+#### (1). 在XML中定义标签及属性
+
+根据上面的查询需求，可以分析出标签属性具有有`id`、`email`两个数据库字段，userId和userEmail的两个Java参数值，可设置其标签属性分别为`idValue`和`emailValue`，因此标签为：
+
+```markup
+<zealot id="queryUserWithIdEmail">
+    select * from user where
+    <userIdEmail match="userId != empty || userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"></userIdEmail>
+</zealot>
+```
+
+#### (2). 自定义标签处理器
+
+在你项目的某个package中，新建一个`UserIdEmailHandler.java`的文件，并让它实现`IConditHandler`接口，细节的代码处理逻辑和注释说明如下：
+
+```java
+package com.blinkfox.handler;
+
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.core.IConditHandler;
+import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
+import org.dom4j.Node;
+import java.util.List;
+
+/**
+ * 自定义的ID和Email条件查询的SQL处理器
+ * Created by blinkfox on 2016/11/11.
+ */
+public class UserIdEmailHandler implements IConditHandler {
+
+    @Override
+    public SqlInfo buildSqlInfo(BuildSource source) {
+        /* 获取拼接的参数和Zealot节点 */
+        SqlInfo sqlInfo = source.getSqlInfo();
+        Node node = source.getNode();
+
+        // 获取配置的属性值,getAndCheckNodeText()方法会检测属性值是否为空，如果为空，会抛出运行时异常
+        String idField = XmlNodeHelper.getAndCheckNodeText(node, "attribute::idField");
+        String emailField = XmlNodeHelper.getAndCheckNodeText(node, "attribute::emailField");
+        // getAndCheckNodeText()方法仅仅只获取属性的值，即使未配置或书写值，也会返回空字符串
+        String idValue = XmlNodeHelper.getNodeAttrText(node, "attribute::idValue");
+        String emailValue = XmlNodeHelper.getNodeAttrText(node, "attribute::emailValue");
+
+        /* 获取match属性值,如果匹配中 字符值没有，则认为是必然生成项 */
+        String matchText = XmlNodeHelper.getNodeAttrText(node, ZealotConst.ATTR_MATCH);
+        if (StringHelper.isBlank(matchText)) {
+            sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
+        } else {
+			/* 如果match匹配成功，则生成数据库sql条件和参数 */
+            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
+            if (isTrue) {
+                sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
+            }
+        }
+
+        return sqlInfo;
+    }
+
+    /**
+     * 构建自定义的SqlInfo信息，区分是根据id做等值查询，还是根据email做模糊查询的情况
+     * @param source
+     * @param idField
+     * @param emailField
+     * @param idValue
+     * @param emailValue
+     */
+    private SqlInfo buildIdEmailSqlInfo(BuildSource source, String idField, String emailField,
+            String idValue, String emailValue) {
+        SqlInfo sqlInfo = source.getSqlInfo();
+        StringBuilder join = sqlInfo.getJoin();
+        List<Object> params = sqlInfo.getParams();
+
+        // 如果userId不为空，则根据id来做等值查询
+        Integer idText = (Integer) ParseHelper.parseWithMvel(idValue, source.getParamObj());
+        if (idText != null) {
+            // prefix是前缀，如"and","or"之类，没有则默认为空字符串""
+            join.append(source.getPrefix()).append(idField).append(ZealotConst.EQUAL_SUFFIX);
+            params.add(idText);
+            return sqlInfo.setJoin(join).setParams(params);
+        }
+
+        // 获取userEmail的值,如果userEmail不为空，则根据email来做模糊查询
+        String emailText = (String) ParseHelper.parseWithMvel(emailValue, source.getParamObj());
+        if (StringHelper.isNotBlank(emailText)) {
+            // prefix是前缀，如"and","or"之类，没有则默认为空字符串""
+            join.append(source.getPrefix()).append(emailField).append(ZealotConst.LIEK_SUFFIX);
+            params.add("%" + emailText + "%");
+            return sqlInfo.setJoin(join).setParams(params);
+        }
+
+        return sqlInfo;
+    }
+
+}
+```
+
+#### (3). 配置自定义的标签和处理器
+
+在你继承的Zealot Java配置文件方法中添加配置自定义的标签和处理器，重启即可，代码示例如下：
+
+```java
+/**
+ * 我继承的zealotConfig配置类
+ * Created by blinkfox on 2016/11/4.
+ */
+public class MyZealotConfig extends AbstractZealotConfig {
+
+    public static final String USER_ZEALOT = "user_zealot";
+
+    @Override
+    public void configXml(XmlContext ctx) {
+        ctx.add(USER_ZEALOT, "/zealot/zealot-user.xml");
+    }
+
+    @Override
+    public void configTagHandler() {
+        // 自定义userIdEmail标签和处理器
+        add("userIdEmail", UserIdEmailHandler.class);
+        // 有and前缀的自定义标签
+        add("andUserIdEmail", " and " ,UserIdEmailHandler.class);
+    }
+
+}
+```
+
+#### (4). 测试生成结果
+
+测试代码和结果如下：
+
+```
+public void queryUserIdEmail() {
+    Map<String, Object> user = new HashMap<String, Object>();
+    user.put("userId", 3);
+    user.put("userEmail", "san");
+
+    SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserWithIdEmail", user);
+    String sql = sqlInfo.getSql();
+    Object[] params = sqlInfo.getParamsArr();
+    System.out.println("----生成sql的为:" + sql);
+    System.out.println("----生成sql的参数为:" + Arrays.toString(params));
+
+    List<User> users = User.userDao.find(sql, params);
+    renderJson(users);
+}
+```
+
+打印的sql结果：
+
+```markup
+----生成sql的为:select * from user where id = ?
+----生成sql的参数为:[3]
+```
+
+当把userId的值设为null时，打印的sql结果：
+
+```markup
+----生成sql的为:select * from user where email LIKE ?
+----生成sql的参数为:[%san%]
+```
 
 ## 六、许可证
 
 Zealot类库遵守[Apache License 2.0][4] 许可证
 
+## 七、版本更新记录
+
+- v1.0.3(2016-11-11)
+  - 修复了区间查询大于或等于情况下的bug
+  - XmlNodeHelper中新增getNodeAttrText()方法
+- v1.0.2(2016-11-10)
+  - 将缓存文档改为缓存Zealot节点，使生成sql效率更快
+  - 代码细节重构调整
+- v1.0.1(2016-11-08)
+  - 新增日志功能，替换System.out
+  - 新增自定义异常
+  - 完善文档注释
+- v1.0.0(2016-11-04)
+  - 核心功能完成
+  
   [1]: https://github.com/blinkfox/zealot
   [2]: http://www.jfinal.com/
   [3]: http://mvel.documentnode.com/
