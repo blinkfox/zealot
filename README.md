@@ -12,9 +12,11 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 [Zealot][1]是基于Java语言开发的SQL及对应参数动态拼接生成的工具包，其核心设计目标是帮助开发人员书写和生成出具有动态的、可复用逻辑的且易于维护的SQL及其对应的参数。为了做到可调试性，就必须将SQL提取到配置文件中来单独维护；为了保证SQL根据某些条件，某些逻辑来动态生成，就必须引入表达式语法或者标签语法来达到动态生成SQL的能力。因此，两者结合才诞生了Zealot。
 
+> **注**：zealot即狂热者，是游戏[星际争霸][2]中的单位。
+
 ## 二、主要特性
 
-- 轻量级，jar包仅仅27k大小，集成和使用简单
+- 轻量级，jar包仅仅29k大小，集成和使用简单
 - 让SQL和Java代码解耦和，易于维护
 - SQL采用XML集中管理，同时方便程序开发
 - 具有动态性、可复用逻辑和可半调试性的优点
@@ -34,7 +36,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -206,7 +208,7 @@ public class UserController extends Controller {
 
 > **代码解释**：
 
-> (1). 说明一下，我测试项目中采用的框架是[JFinal][2]，你自己具体的项目中有自己的SQL调用方式，而Zealot的目的只是生成SQL和对应的有序参数而已。
+> (1). 说明一下，我测试项目中采用的框架是[JFinal][3]，你自己具体的项目中有自己的SQL调用方式，而Zealot的目的只是生成SQL和对应的有序参数而已。
 
 > (2). Zealot.getSqlInfo()方法有三个参数，第一个参数表示前面所写的XML的标识名称，第二个表示你XML中具体想生成的SQL的zealot id,第三个表示生成动态SQL的参数对象，该对象可以是一个普通的Java对象，也可以是Map等。
 
@@ -228,7 +230,7 @@ Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、
 
 #### (1). 属性介绍
 
-- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。匹配规则使用`MVEL2`表达式，关于[MVEL的语法文档][3]参考这里。
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。匹配规则使用`MVEL2`表达式，关于[MVEL的语法文档][4]参考这里。
 - **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
 - **value**，表示参数值，对应Java中的名称。必要（填）属性，值也是使用`MVEL2`做解析。
 
@@ -478,12 +480,51 @@ public void queryUserIdEmail() {
 ----生成sql的参数为:[%san%]
 ```
 
-## 六、许可证
+## 六、番外篇之Khala--SQL字符串链式拼接
 
-Zealot类库遵守[Apache License 2.0][4] 许可证
+在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中除了提供在XML中配置SQL之外，还提供了一个额外高效的SQL字符串链式拼接工具Khala。Khala提供了常用SQL关键字的链式拼接方式，其使用示例如下：
 
-## 七、版本更新记录
+```java
+package com.blinkfox.test;
 
+import com.blinkfox.zealot.core.Khala;
+
+/**
+ * Zealot.jar中的Khala测试类
+ * Created by blinkfox on 2016/11/12.
+ */
+public class KhalaTest {
+
+    public static void main(String[] args) {
+        String sql = Khala.getInstance().start()
+            .select("u.id, u.name, u.email, ud.addr")
+            .from("user as u")
+            .leftJoin("user_detail as ud").on("u.id = ud.user_id")
+            .where("u.name like ?").and("u.email like ?")
+            .groupBy("u.id desc")
+            .end();
+        System.out.println("拼接的sql为:" + sql);
+    }
+
+}
+```
+
+打印结果：
+
+```markup
+拼接的sql为: SELECT u.id, u.name, u.email, ud.addr FROM user as u LEFT JOIN user_detail as ud ON u.id = ud.user_id WHERE u.name like ? AND u.email like ? GROUP BY u.id desc
+```
+
+Khala仅仅是作为SQL的一个链式拼接工具，优点就是让SQL的可读性提高了,缺点就是让SQL的非运行态的可调试性降低了。
+
+## 七、许可证
+
+Zealot类库遵守[Apache License 2.0][5] 许可证
+
+## 八、版本更新记录
+
+- v1.0.4(2016-11-12)
+  - 新增了SQL字符串链式拼接工具类Khala.java
 - v1.0.3(2016-11-11)
   - 修复了区间查询大于或等于情况下的bug
   - XmlNodeHelper中新增getNodeAttrText()方法
@@ -496,8 +537,9 @@ Zealot类库遵守[Apache License 2.0][4] 许可证
   - 完善文档注释
 - v1.0.0(2016-11-04)
   - 核心功能完成
-  
+
   [1]: https://github.com/blinkfox/zealot
-  [2]: http://www.jfinal.com/
-  [3]: http://mvel.documentnode.com/
-  [4]: http://www.apache.org/licenses/LICENSE-2.0
+  [2]: http://v.youku.com/v_show/id_XMTM4MjgyNDgxMg
+  [3]: http://www.jfinal.com/
+  [4]: http://mvel.documentnode.com/
+  [5]: http://www.apache.org/licenses/LICENSE-2.0
