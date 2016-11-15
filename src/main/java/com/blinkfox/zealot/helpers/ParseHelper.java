@@ -26,11 +26,11 @@ public class ParseHelper {
      * @return 返回解析后的值
      */
     public static Object parseWithMvel(String exp, Object paramObj) {
-        Object obj = false;
+        Object obj = null;
         try {
             obj = MVEL.eval(exp, paramObj);
         } catch (Exception e) {
-            log.error("MVEL表达式执行出错:" + exp, e);
+            log.error("MVEL表达式执行出错,表达式是:" + exp, e);
         }
         return obj;
     }
