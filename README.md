@@ -106,10 +106,10 @@ public class MyZealotConfig extends AbstractZealotConfig {
     <zealot id="queryUserInfo">
         select * from user where
         <like field="nickname" value="nickName"></like>
-        <andLike match="email != empty" field="email" value="email"></andLike>
-        <andBetween match="startAge > 0 || endAge > 0" field="age" start="startAge" end="endAge"></andBetween>
-        <andBetween match="startBirthday != empty || endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"></andBetween>
-        <andIn match="sexs != empty" field="sex" value="sexs"></andIn>
+        <andLike match="?email != empty" field="email" value="email"></andLike>
+        <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"></andBetween>
+        <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"></andBetween>
+        <andIn match="?sexs != empty" field="sex" value="sexs"></andIn>
         order by id desc 
     </zealot>
     
@@ -127,6 +127,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
 > (4). field表示对应的数据库字段；
 
 > (5). value、start、end则表示对应的参数。
+
+> (6). `?email != empty`前面的`?`表示属性的安全访问，即使email不存在的时候也不会抛出异常，仍会返回false。更详细的使用可以参考MVEL属性安全访问的表达式语法。
 
 回到你的Zealot核心配置类中，配置你Java代码中需要识别这个XML的标识和XML路径，我这里的示例如下：
 
@@ -241,7 +243,7 @@ Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、
 SQL片段的生成结果：nickname = ?
 解释：必然生成此条SQL片段和参数
 
-<andEqual match="email != empty" field="email" value="email"></andEqual>
+<andEqual match="?email != empty" field="email" value="email"></andEqual>
 SQL片段的生成结果：AND email = ?
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
@@ -257,7 +259,7 @@ SQL片段的生成结果：AND email = ?
 #### (2). 生成示例
 
 ```markup
-<andLike match="email != empty" field="email" value="email"></andLike>
+<andLike match="?email != empty" field="email" value="email"></andLike>
 
 SQL片段的生成结果：AND email LIKE ?
 
@@ -278,7 +280,7 @@ SQL片段的生成结果：AND email LIKE ?
 #### (2). 生成示例
 
 ```markup
-<andBetween match="startAge != null || endAge != null" field="age" start="startAge" end="endAge"></andBetween>
+<andBetween match="?startAge != null || ?endAge != null" field="age" start="startAge" end="endAge"></andBetween>
 
 start为null,end不为null，则SQL片段的生成结果：AND age >= ?
 start不为null,end为null，则SQL片段的生成结果：AND age <= ?
@@ -299,7 +301,7 @@ start为null,end为null，则不生成SQL片段
 #### (2). 使用生成示例
 
 ```markup
-<andIn match="sexs != empty" field="sex" value="sexs"></andIn>
+<andIn match="?sexs != empty" field="sex" value="sexs"></andIn>
 
 SQL片段的生成结果：AND sex in (?, ?)
 
@@ -323,7 +325,7 @@ SQL片段的生成结果：AND sex in (?, ?)
 ```markup
 <zealot id="queryUserWithIdEmail">
     select * from user where
-    <userIdEmail match="userId != empty || userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"></userIdEmail>
+    <userIdEmail match="?userId != empty || ?userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"></userIdEmail>
 </zealot>
 ```
 
