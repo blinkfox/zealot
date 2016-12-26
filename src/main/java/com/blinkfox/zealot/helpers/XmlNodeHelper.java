@@ -15,7 +15,6 @@ import com.blinkfox.zealot.consts.ZealotConst;
  */
 public class XmlNodeHelper {
 
-    // 得到log实例
     private static final Log log = Log.get(XmlNodeHelper.class);
 	
 	/**

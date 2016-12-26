@@ -21,7 +21,6 @@ import com.blinkfox.zealot.log.Log;
  */
 public class ZealotConfigManager {
     
-    // 得到 log 实例
     private static final Log log = Log.get(ZealotConfigManager.class);
 	
 	// 初始化的单例
