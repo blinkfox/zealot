@@ -22,10 +22,10 @@ import com.blinkfox.zealot.log.Log;
 public class ZealotConfigManager {
     
     // 得到 log 实例
-    private static final Log log = Log.get(ZealotConfigLoader.class);
+    private static final Log log = Log.get(ZealotConfigManager.class);
 	
 	// 初始化的单例
-	private static final ZealotConfigManager loadZcf = new ZealotConfigManager();
+	private static final ZealotConfigManager confManager = new ZealotConfigManager();
 	
 	/**
 	 * 私有化构造方法
@@ -39,7 +39,7 @@ public class ZealotConfigManager {
 	 * @return
 	 */
 	public static ZealotConfigManager getInstance() {
-		return loadZcf;
+		return confManager;
 	}
 	
 	/**
