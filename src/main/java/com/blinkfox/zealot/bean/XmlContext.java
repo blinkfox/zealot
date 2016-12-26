@@ -43,7 +43,7 @@ public class XmlContext {
      * 获取配置的xmlMap
      * @return 返回xml文档的命名空间、路径缓存上下文的map
      */
-    public static Map<String, String> getXmlMap() {
+    public Map<String, String> getXmlMap() {
         return xmlMap;
     }
 	

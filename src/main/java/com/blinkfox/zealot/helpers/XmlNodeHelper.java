@@ -37,7 +37,7 @@ public class XmlNodeHelper {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlPath);
             document = reader.read(is);
         } catch (DocumentException e) {
-            log.error("读取xml文件失败，xmlPath是：" + xmlPath, e);
+            log.error("读取或解析xml文件失败，xmlPath是：" + xmlPath, e);
         }
         return document;
     }
