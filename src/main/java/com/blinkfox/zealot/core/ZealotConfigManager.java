@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.loader;
+package com.blinkfox.zealot.core;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ZealotConfigManager {
 	}
 	
 	/**
-	 * 获取LoadZealotConfInfo的唯一实例
+	 * 获取 ZealotConfigManager 的唯一实例
 	 * @return
 	 */
 	public static ZealotConfigManager getInstance() {
@@ -72,7 +72,7 @@ public class ZealotConfigManager {
             throw new ConfigNotFoundException("未获取到ZealotConfig配置信息");
         }
 
-        Object temp = null;
+        Object temp;
         try {
             temp = Class.forName(configClass).newInstance();
         } catch (Exception e) {

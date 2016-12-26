@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.MyZealotConfig;
-import com.blinkfox.zealot.loader.ZealotConfigManager;
 import com.blinkfox.zealot.log.Log;
 
 /**

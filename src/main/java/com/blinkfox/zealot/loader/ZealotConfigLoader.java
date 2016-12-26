@@ -3,6 +3,7 @@ package com.blinkfox.zealot.loader;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.core.ZealotConfigManager;
 
 /**
  * Zealot配置的servlet监听器的初始化加载类

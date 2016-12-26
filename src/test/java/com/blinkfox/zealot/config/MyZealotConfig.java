@@ -13,6 +13,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 	/**
 	 * zealot的xml SQL文件和命名空间配置
+	 * @param ctx XML上下文
 	 */
 	@Override
 	public void configXml(XmlContext ctx) {
