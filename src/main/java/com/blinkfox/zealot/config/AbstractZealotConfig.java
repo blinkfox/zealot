@@ -19,7 +19,8 @@ import org.dom4j.Node;
  */
 public abstract class AbstractZealotConfig {
 	
-	// 所有zealots XML文档的缓存map，key是资源的路径（转换成下划线分割），value是dom4j文档
+	// 所有zealots XML文档的缓存map，
+    // key是资源的路径（将xml命名空间和zealotId用"@"符号分割），value是dom4j文档节点Node
     private static Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
 
     // 初始化默认的一些tagHandlers到HashSet集合中
@@ -72,7 +73,7 @@ public abstract class AbstractZealotConfig {
      * @param prefix 前缀
      * @param handlerCls 动态处理类的反射类型
      */
-    protected static void add(String tagName, String prefix,Class<?> handlerCls) {
+    protected static void add(String tagName, String prefix, Class<?> handlerCls) {
         tagHandlers.add(new TagHandler(tagName, prefix, handlerCls));
     }
 

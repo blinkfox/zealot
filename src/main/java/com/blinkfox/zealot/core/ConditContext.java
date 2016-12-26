@@ -14,7 +14,6 @@ import com.blinkfox.zealot.log.Log;
  */
 public class ConditContext {
 
-    // 得到日志对象
     private static final Log log = Log.get(ConditContext.class);
 	
 	/**

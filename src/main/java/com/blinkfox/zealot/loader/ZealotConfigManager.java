@@ -52,11 +52,19 @@ public class ZealotConfigManager {
         // 获取遍历每个zealotxml配置文件，将其key和文档缓存到ConcurrentHashMap内存缓存中
         cachingXmlZealots();
 	}
+
+    /**
+     * 清空zealot所有缓存的内容
+     * 包括xml命名空间路径缓存、xml节点缓存
+     */
+	public void clear() {
+        XmlContext.INSTANCE.getXmlMap().clear();
+        AbstractZealotConfig.getZealots().clear();
+    }
 	
 	/**
      * 初始化zealotConfig的之类，并执行初始化mapper到缓存中
-     * @param event 上下文事件对象
-     * @param xmlContext xmlContext实例
+     * @param configClass 配置类的class路径
      */
     private void loadZealotConfig(String configClass) {
         log.info("----zealot加载器开始加载，Zealot配置类为:" + configClass);
@@ -74,7 +82,7 @@ public class ZealotConfigManager {
         // 判断获取到的类是否是AbstractZealotConfig的子类
         if ((temp != null) && (temp instanceof AbstractZealotConfig)) {
         	AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
-            zealotConfig.configXml(XmlContext.getInstance());
+            zealotConfig.configXml(XmlContext.INSTANCE);
             zealotConfig.configTagHandler();
             log.info("------zealot的xml文件和tagHandler加载完成");
         }
@@ -84,7 +92,7 @@ public class ZealotConfigManager {
      * 将每个zealotxml配置文件的key和文档缓存到ConcurrentHashMap内存缓存中
      */
     private void cachingXmlZealots() {
-        Map<String, String> xmlMaps = XmlContext.getInstance().getXmlMap();
+        Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlMap();
 
         // 遍历所有的xml文档，将每个zealot节点缓存到ConcurrentHashMap内存缓存中
         for (Iterator<Map.Entry<String, String>> it = xmlMaps.entrySet().iterator(); it.hasNext();) {

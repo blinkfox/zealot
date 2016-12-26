@@ -7,13 +7,13 @@ import java.util.regex.Pattern;
  * 字符串工具类
  * Created by blinkfox on 2016/10/30.
  */
-public class StringHelper {
+public final class StringHelper {
 	
 	/**
 	 * 私有的构造方法
 	 */
 	private StringHelper() {
-		
+		super();
 	}
 
     /**

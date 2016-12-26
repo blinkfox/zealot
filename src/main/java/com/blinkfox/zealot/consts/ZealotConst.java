@@ -1,7 +1,7 @@
 package com.blinkfox.zealot.consts;
 
 /**
- * 常量接口
+ * 常量类
  * Created by blinkfox on 2016/10/30.
  */
 public final class ZealotConst {
@@ -53,7 +53,7 @@ public final class ZealotConst {
      * 私有构造方法
      */
     private ZealotConst() {
-
+        super();
     }
 
 }

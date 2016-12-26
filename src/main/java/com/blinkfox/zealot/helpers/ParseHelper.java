@@ -4,12 +4,11 @@ import com.blinkfox.zealot.log.Log;
 import org.mvel2.MVEL;
 
 /**
- * OGNL表达式相关的工具类
+ * MVEL表达式相关的工具类
  * Created by blinkfox on 2016/10/30.
  */
-public class ParseHelper {
+public final class ParseHelper {
 
-    // 得到 log 实例
     private static final Log log = Log.get(ParseHelper.class);
 	
 	/**

@@ -12,7 +12,7 @@ import com.blinkfox.zealot.consts.ZealotConst;
  * Zealot的核心解析和生成调用类
  * Created by blinkfox on 2016/10/30.
  */
-public class Zealot {
+public final class Zealot {
 	
 	/**
 	 * 私有构造方法

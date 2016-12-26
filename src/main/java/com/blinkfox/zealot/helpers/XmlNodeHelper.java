@@ -13,7 +13,7 @@ import com.blinkfox.zealot.consts.ZealotConst;
  * xml和xml节点相关的工具类
  * Created by blinkfox on 2016/10/30.
  */
-public class XmlNodeHelper {
+public final class XmlNodeHelper {
 
     private static final Log log = Log.get(XmlNodeHelper.class);
 	

@@ -10,7 +10,7 @@ import com.blinkfox.zealot.consts.ZealotConst;
  * 构建sql查询相关的帮助类
  * Created by blinkfox on 2016/10/30.
  */
-public class BuildSqlInfoHelper {
+public final class BuildSqlInfoHelper {
 	
 	private static SqlInfo sqlInfo = null; // sqlInfo对象
     private static StringBuilder join = null; // sql拼接器

@@ -35,15 +35,17 @@ public class Khala {
     public static final String DESC = "DESC";
 
     /**
-     * 空构造方法
+     * 私有构造方法
      */
-    private Khala() {}
+    private Khala() {
+        super();
+    }
 
     /**
      * 获取Khala的实例
      * @return Khala实例
      */
-    public static Khala getInstance() {
+    public static Khala newInstance() {
         return new Khala();
     }
 
