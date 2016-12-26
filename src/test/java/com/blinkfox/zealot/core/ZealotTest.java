@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.test;
+package com.blinkfox.zealot.core;
 
 import static org.junit.Assert.*;
 import java.util.Arrays;
@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.MyZealotConfig;
-import com.blinkfox.zealot.core.Zealot;
 import com.blinkfox.zealot.loader.ZealotConfigManager;
 import com.blinkfox.zealot.log.Log;
 
@@ -48,18 +47,24 @@ public class ZealotTest {
      */
     @Test
     public void testGetUserById() {
+        // 构造查询的参数
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", "2");
 
+        // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserById", paramMap);
         log.info("---生成sql耗时为:" + (System.currentTimeMillis() - startTime) + " ms");
-
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
         log.info("testGetUserById测试方法生成sql耗时为:" + sql);
         log.info("----testGetUserById测试方法的params:" + Arrays.toString(params));
-        assertNotNull("sql不为空", sql);
+
+        // 测试结果断言
+        String expectedSql = "select * from user where id = ?";
+        Object[] expectedParams = new Object[]{"2"};
+        assertEquals(expectedSql, sql);
+        assertArrayEquals(expectedParams, params);
     }
 
     /**
@@ -67,6 +72,7 @@ public class ZealotTest {
      */
     @Test
     public void testGetUsers() {
+        // 构造查询的参数
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("nickName", "张");
         paramMap.put("startAge", 23);
@@ -75,15 +81,22 @@ public class ZealotTest {
         paramMap.put("endBirthday", "1991-01-01 23:59:59");
         paramMap.put("sexs", new Integer[]{0, 1});
 
+        // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfo", paramMap);
         log.info("testGetUsers测试方法生成sql耗时为:" + (System.currentTimeMillis() - startTime) + " ms");
-
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
         log.info("testGetUsers测试方法的sql:" + sql);
         log.info("testGetUsers测试方法的params:" + Arrays.toString(params));
-        assertNotNull("sql不为空", sql);
+
+        // 测试结果断言
+        String expectedSql = "select * from user where nickname LIKE ? AND age BETWEEN ? AND ? " +
+                "AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc";
+        Object[] expectedParams = new Object[]{"%张%", 23, 28, "1990-01-01 00:00:00",
+                "1991-01-01 23:59:59", 0, 1};
+        assertEquals(expectedSql, sql);
+        assertArrayEquals(expectedParams, params);
     }
 
 }

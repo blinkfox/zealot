@@ -16,7 +16,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 	 */
 	@Override
 	public void configXml(XmlContext ctx) {
-		ctx.add(USER_ZEALOT, "com/blinkfox/zealot/xml/zealot-user.xml");
+		ctx.add(USER_ZEALOT, "zealot-user.xml");
 	}
 
 	/**
