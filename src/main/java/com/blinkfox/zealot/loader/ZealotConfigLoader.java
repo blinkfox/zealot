@@ -98,7 +98,8 @@ public class ZealotConfigLoader implements ServletContextListener {
             }
 
             // 获取该文档下所有的zealot元素,
-            List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
+            @SuppressWarnings("unchecked")
+			List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
             for (Node zealotNode: zealotNodes) {
                 Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
                 String zealotId = XmlNodeHelper.getNodeText(idNode);
