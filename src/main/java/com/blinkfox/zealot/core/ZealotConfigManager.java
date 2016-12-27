@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.core;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
+import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import com.blinkfox.zealot.log.Log;
@@ -51,6 +53,7 @@ public class ZealotConfigManager {
 
         // 获取遍历每个zealotxml配置文件，将其key和文档缓存到ConcurrentHashMap内存缓存中
         cachingXmlZealots();
+        testFirstEvaluate();
 	}
 
     /**
@@ -119,6 +122,15 @@ public class ZealotConfigManager {
                 AbstractZealotConfig.getZealots().put(zealotKey, zealotNode);
             }
         }
+    }
+    
+    /**
+     * 测试第一次MVEL表达式的计算,会缓存MVEL相关准备工作，加快后续的MVEL执行
+     */
+    private boolean testFirstEvaluate() {
+    	Map<String, Object> context = new HashMap<String, Object>();
+    	context.put("foo", "");
+    	return (Boolean) ParseHelper.parseWithMvel("foo == empty", context);
     }
 
 }

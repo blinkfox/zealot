@@ -63,7 +63,7 @@ public class Khala {
      * @return 拼接完成的sql字符串
      */
     public String end() {
-        return sql == null ? "": sql.toString().replaceAll("\\s{2,}", " ");
+        return sql == null ? "": sql.toString().replaceAll("\\s{2,}", " ").trim();
     }
 
     /**

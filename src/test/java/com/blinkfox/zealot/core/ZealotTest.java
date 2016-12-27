@@ -53,10 +53,10 @@ public class ZealotTest {
         // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserById", paramMap);
-        log.info("---生成sql耗时为:" + (System.currentTimeMillis() - startTime) + " ms");
+        log.info("testGetUserById测试方法生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
-        log.info("testGetUserById测试方法生成sql耗时为:" + sql);
+        log.info("testGetUserById测试方法生成的sql为:" + sql);
         log.info("----testGetUserById测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
@@ -83,7 +83,7 @@ public class ZealotTest {
         // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfo", paramMap);
-        log.info("testGetUsers测试方法生成sql耗时为:" + (System.currentTimeMillis() - startTime) + " ms");
+        log.info("testGetUsers测试方法生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
         log.info("testGetUsers测试方法的sql:" + sql);
