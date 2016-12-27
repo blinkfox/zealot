@@ -23,6 +23,7 @@ public class Log {
     /**
      * 构造并获取日志对象的实例
      * @param cls 记录日志的类Class
+     * @param <T> 泛型
      * @return 返回自身的实例
      */
     public static <T> Log get(Class<T> cls) {

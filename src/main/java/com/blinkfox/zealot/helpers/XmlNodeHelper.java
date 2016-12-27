@@ -64,6 +64,7 @@ public final class XmlNodeHelper {
     /**
      * 检查和获取节点文本，会检查节点是否为空，如果节点为空，则抛出异常
      * @param node dom4j节点
+     * @param nodeName 节点名称
      * @return 返回节点文本值
      */
     public static String getAndCheckNodeText(Node node, String nodeName) {

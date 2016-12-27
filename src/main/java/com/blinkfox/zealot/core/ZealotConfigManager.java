@@ -18,8 +18,7 @@ import com.blinkfox.zealot.log.Log;
 
 /**
  * Zealot配置缓存管理器，用于加载Zealot Config配置信息到缓存中
- * @author blinkfox
- * @date 2016-12-26
+ * Created by blinkfox on 2016/12/26.
  */
 public class ZealotConfigManager {
     
@@ -37,7 +36,7 @@ public class ZealotConfigManager {
 	
 	/**
 	 * 获取 ZealotConfigManager 的唯一实例
-	 * @return
+	 * @return ZealotConfigManager唯一实例
 	 */
 	public static ZealotConfigManager getInstance() {
 		return confManager;
