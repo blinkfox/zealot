@@ -42,6 +42,15 @@ public class Khala {
     }
 
     /**
+     * 获取Khala的实例，命令风格类似单例，不推荐使用
+     * @return Khala实例
+     */
+    @Deprecated
+    public static Khala getInstance() {
+        return new Khala();
+    }
+
+    /**
      * 获取Khala的实例
      * @return Khala实例
      */
