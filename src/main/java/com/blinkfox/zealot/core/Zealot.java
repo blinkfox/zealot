@@ -1,6 +1,8 @@
 package com.blinkfox.zealot.core;
 
 import java.util.List;
+
+import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import org.dom4j.Node;
 import com.blinkfox.zealot.bean.BuildSource;
@@ -43,7 +45,7 @@ public final class Zealot {
      */
     @SuppressWarnings("unchecked")
 	private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
-        SqlInfo sqlInfo = SqlInfo.getNewInstance();
+        SqlInfo sqlInfo = SqlInfo.newInstance();
 
         // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
@@ -59,7 +61,21 @@ public final class Zealot {
             }
         }
 
+        return buildFinalSql(sqlInfo, paramObj);
+    }
+
+    /**
+     * 根据标签拼接的SQL信息来生成最终的SQL
+     * @param sqlInfo sql及参数信息
+     * @param paramObj 参数对象信息
+     * @return 返回SqlInfo对象
+     */
+    private static SqlInfo buildFinalSql(SqlInfo sqlInfo, Object paramObj) {
+        // 得到生成的SQL，如果有MVEL的模板表达式，则执行计算出该表达式来生成最终的SQL
+        String sql = sqlInfo.getJoin().toString();
+        sql = (String) ParseHelper.parseTemplate(sql, paramObj);
+        sqlInfo.setSql(StringHelper.replaceBlank(sql));
         return sqlInfo;
     }
-	
+
 }

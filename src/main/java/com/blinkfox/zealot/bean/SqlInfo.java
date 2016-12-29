@@ -2,7 +2,6 @@ package com.blinkfox.zealot.bean;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.blinkfox.zealot.helpers.StringHelper;
 
 /**
  * 构造sql查询信息的拼接和参数对象
@@ -15,6 +14,8 @@ public class SqlInfo {
 
     // sql语句对应的有序参数
     private List<Object> params;
+
+    private String sql;
 
     /**
      * 全构造方法
@@ -31,16 +32,8 @@ public class SqlInfo {
      * 获取一个新的SqlInfo实例
      * @return 返回SqlInfo实例
      */
-    public static SqlInfo getNewInstance() {
+    public static SqlInfo newInstance() {
         return new SqlInfo(new StringBuilder(""), new ArrayList<Object>());
-    }
-
-    /**
-     * 获取最后拼接完成的sql
-     * @return 返回拼接的sql
-     */
-    public String getSql() {
-        return join == null ? "" : StringHelper.replaceBlank(join.toString());
     }
 
     /**
@@ -66,5 +59,11 @@ public class SqlInfo {
         this.params = params;
         return this;
     }
-	
+    public String getSql() {
+        return sql;
+    }
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
+
 }

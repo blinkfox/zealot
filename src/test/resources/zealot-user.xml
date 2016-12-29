@@ -18,4 +18,14 @@
         order by id desc 
     </zealot>
 
+    <!-- 根据流程控制标签查询用户信息 -->
+    <zealot id="queryUsersByFlowTag">
+        select * from user where
+        <like field="nickname" value="nickName"></like>
+        @if{email != empty}
+            AND email like '%@{email}%'
+        @end{}
+        order by id desc
+    </zealot>
+
 </zealots>

@@ -98,4 +98,31 @@ public class ZealotTest {
         assertArrayEquals(expectedParams, params);
     }
 
+    /**
+     * 测试根据流程控制标签来动态生成SqlInfo信息的方法
+     */
+    @Test
+    public void testGetUsersByFlowTag() {
+        // 构造查询的参数
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("nickName", "张");
+        paramMap.put("email", "zhang");
+
+        // 生成sql，并得到和打印对应的sql和参数
+        long startTime = System.currentTimeMillis();
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUsersByFlowTag", paramMap);
+        log.info("testGetUsersByFlowTag生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] params = sqlInfo.getParamsArr();
+        log.info("testGetUsersByFlowTag 测试方法的sql:" + sql);
+        log.info("testGetUsersByFlowTag 测试方法的params:" + Arrays.toString(params));
+
+        // 测试结果断言
+        String expectedSql = "select * from user where nickname LIKE ? AND email like '%zhang%' " +
+                "order by id desc";
+        Object[] expectedParams = new Object[]{"%张%"};
+        assertEquals(expectedSql, sql);
+        assertArrayEquals(expectedParams, params);
+    }
+
 }
