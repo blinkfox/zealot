@@ -36,7 +36,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
@@ -498,7 +498,7 @@ import com.blinkfox.zealot.core.Khala;
 public class KhalaTest {
 
     public static void main(String[] args) {
-        String sql = Khala.getInstance().start()
+        String sql = Khala.newInstance().start()
             .select("u.id, u.name, u.email, ud.addr")
             .from("user as u")
             .leftJoin("user_detail as ud").on("u.id = ud.user_id")
@@ -525,6 +525,10 @@ Zealot类库遵守[Apache License 2.0][5] 许可证
 
 ## 八、版本更新记录
 
+- v1.0.5(2016-12-29)
+  - 新增Zealot基本功能的单元测试
+  - 重构Zealot缓存加载的代码
+  - 新增了Khala的获取实例的方法
 - v1.0.4(2016-11-12)
   - 新增了SQL字符串链式拼接工具类Khala.java
 - v1.0.3(2016-11-11)
