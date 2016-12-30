@@ -22,7 +22,7 @@
     <zealot id="queryUsersByFlowTag">
         select * from user where
         <like field="nickname" value="nickName"></like>
-        @if{email != empty}
+        @if{?email != empty}
             AND email like '%@{email}%'
         @end{}
         order by id desc

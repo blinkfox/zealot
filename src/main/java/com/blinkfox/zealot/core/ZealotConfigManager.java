@@ -128,8 +128,9 @@ public class ZealotConfigManager {
      */
     private boolean testFirstEvaluate() {
     	Map<String, Object> context = new HashMap<String, Object>();
-    	context.put("foo", "");
-    	return (Boolean) ParseHelper.parseWithMvel("foo == empty", context);
+    	context.put("foo", "hello");
+    	ParseHelper.parseTemplate("@if{?foo != empty}Hello World!@end{}", context);
+    	return (Boolean) ParseHelper.parseWithMvel("foo != empty", context);
     }
 
 }
