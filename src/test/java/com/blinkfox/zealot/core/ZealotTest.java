@@ -13,8 +13,7 @@ import com.blinkfox.zealot.log.Log;
 
 /**
  * Zealot单元测试类
- * @author blinkfox
- * @date 2016-12-26
+ * Created by blinkfox on 2016/12/26.
  */
 public class ZealotTest {
 

@@ -1,14 +1,12 @@
 package com.blinkfox.zealot.core;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import com.blinkfox.zealot.log.Log;
 
 /**
  * Khala单元测试类
- * @author blinkfox
- * @date 2016-12-27
+ * Created by blinkfox on 2016/12/27.
  */
 public class KhalaTest {
 	

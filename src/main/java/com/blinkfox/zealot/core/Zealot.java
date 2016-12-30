@@ -73,7 +73,7 @@ public final class Zealot {
     private static SqlInfo buildFinalSql(SqlInfo sqlInfo, Object paramObj) {
         // 得到生成的SQL，如果有MVEL的模板表达式，则执行计算出该表达式来生成最终的SQL
         String sql = sqlInfo.getJoin().toString();
-        sql = (String) ParseHelper.parseTemplate(sql, paramObj);
+        sql = ParseHelper.parseTemplate(sql, paramObj);
         sqlInfo.setSql(StringHelper.replaceBlank(sql));
         return sqlInfo;
     }

@@ -41,7 +41,7 @@ public final class ParseHelper {
      * @param paramObj 参数对象
      * @return 返回解析后的结果
      */
-    public static Object parseTemplate(String template, Object paramObj) {
+    public static String parseTemplate(String template, Object paramObj) {
         String output = null;
         try {
             output = (String) TemplateRuntime.eval(template, paramObj);
