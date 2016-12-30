@@ -110,7 +110,7 @@ public class ZealotTest {
         // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUsersByFlowTag", paramMap);
-        log.info("testGetUsersByFlowTag生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
+        log.info("testGetUsersByFlowTag 生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
         log.info("testGetUsersByFlowTag 测试方法的sql:" + sql);
@@ -120,6 +120,32 @@ public class ZealotTest {
         String expectedSql = "select * from user where nickname LIKE ? AND email like '%zhang%' " +
                 "order by id desc";
         Object[] expectedParams = new Object[]{"%张%"};
+        assertEquals(expectedSql, sql);
+        assertArrayEquals(expectedParams, params);
+    }
+    
+    /**
+     * 测试根据自定义标签来动态生成SqlInfo信息的方法
+     */
+    @Test
+    public void testGetUsersByCustomTag() {
+        // 构造查询的参数
+    	Map<String, Object> user = new HashMap<String, Object>();
+        user.put("userId", 3);
+        user.put("userEmail", "san");
+
+        // 生成sql，并得到和打印对应的sql和参数
+        long startTime = System.currentTimeMillis();
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserWithIdEmail", user);
+        log.info("testGetUsersByCustomTag 生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] params = sqlInfo.getParamsArr();
+        log.info("testGetUsersByCustomTag 测试方法的sql:" + sql);
+        log.info("testGetUsersByCustomTag 测试方法的params:" + Arrays.toString(params));
+
+        // 测试结果断言
+        String expectedSql = "select * from user where id = ?";
+        Object[] expectedParams = new Object[]{3};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
     }

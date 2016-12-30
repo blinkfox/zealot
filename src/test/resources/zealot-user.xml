@@ -27,5 +27,11 @@
         @end{}
         order by id desc
     </zealot>
+    
+    <!-- 根据自定义 userIdEmail 标签来查询用户信息 -->
+    <zealot id="queryUserWithIdEmail">
+        select * from user where
+        <userIdEmail match="?userId != empty || ?userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"></userIdEmail>
+    </zealot>
 
 </zealots>
