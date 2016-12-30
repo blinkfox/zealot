@@ -13,7 +13,7 @@ import com.blinkfox.zealot.log.Log;
  */
 public class ParseHelperTest {
 	
-	private static final Log log = Log.get(KhalaTest.class);
+	private static final Log log = Log.get(ParseHelperTest.class);
 	
 	/**
 	 * 测试计算表达式的值
