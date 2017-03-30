@@ -68,7 +68,7 @@ public class ZealotConfigManager {
      * @param configClass 配置类的class路径
      */
     private void loadZealotConfig(String configClass) {
-        log.info("----zealot加载器开始加载，Zealot配置类为:" + configClass);
+        log.info("zealot加载器开始加载，Zealot配置类为:" + configClass);
         if (configClass == null) {
             throw new ConfigNotFoundException("未获取到ZealotConfig配置信息");
         }
@@ -85,7 +85,7 @@ public class ZealotConfigManager {
             AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
             zealotConfig.configXml(XmlContext.INSTANCE);
             zealotConfig.configTagHandler();
-            log.info("------zealot的xml文件和tagHandler加载完成");
+            log.info("zealot的xml文件和tagHandler加载完成");
         }
     }
 

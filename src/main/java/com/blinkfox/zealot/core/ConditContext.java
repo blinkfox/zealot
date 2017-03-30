@@ -11,7 +11,7 @@ import java.util.Set;
  * 构建动态条件查询的协调类.
  * Created by blinkfox on 2016/10/30.
  */
-public class ConditContext {
+class ConditContext {
 
     private static final Log log = Log.get(ConditContext.class);
 
@@ -28,7 +28,7 @@ public class ConditContext {
      * @param tag 标签名称
      * @return 返回SqlInfo对象
      */
-    public static SqlInfo buildSqlInfo(BuildSource source, String tag) {
+    static SqlInfo buildSqlInfo(BuildSource source, String tag) {
         // 获取所有配置的标签处理对象，并遍历判断当前类型是否符合该type标签
         // 如果符合就执行该标签中对应handler对象的方法
         Set<TagHandler> tagHandlers = AbstractZealotConfig.getTagHandlers();

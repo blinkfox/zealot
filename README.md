@@ -36,7 +36,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </dependency>
 ```
 
@@ -99,17 +99,17 @@ public class MyZealotConfig extends AbstractZealotConfig {
     <!-- 根据Id查询用户信息 -->
     <zealot id="queryUserById">
         select * from user where
-        <equal field="id" value="id"></equal>
+        <equal field="id" value="id"/>
     </zealot>
     
     <!-- 根据动态条件查询用户信息 -->
     <zealot id="queryUserInfo">
         select * from user where
-        <like field="nickname" value="nickName"></like>
-        <andLike match="?email != empty" field="email" value="email"></andLike>
-        <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"></andBetween>
-        <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"></andBetween>
-        <andIn match="?sexs != empty" field="sex" value="sexs"></andIn>
+        <like field="nickname" value="nickName"/>
+        <andLike match="?email != empty" field="email" value="email"/>
+        <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"/>
+        <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"/>
+        <andIn match="?sexs != empty" field="sex" value="sexs"/>
         order by id desc 
     </zealot>
     
@@ -382,11 +382,11 @@ public class UserIdEmailHandler implements IConditHandler {
 
     /**
      * 构建自定义的SqlInfo信息，区分是根据id做等值查询，还是根据email做模糊查询的情况
-     * @param source
-     * @param idField
-     * @param emailField
-     * @param idValue
-     * @param emailValue
+     * @param source source
+     * @param idField idField
+     * @param emailField emailField
+     * @param idValue idValue
+     * @param emailValue emailValue
      */
     private SqlInfo buildIdEmailSqlInfo(BuildSource source, String idField, String emailField,
             String idValue, String emailValue) {
@@ -494,7 +494,7 @@ Zealot中SQL片段标签和流程控制标签是可以混合使用的，看下�
 <!-- 根据流程控制标签查询用户信息 -->
 <zealot id="queryUsersByFlowTag">
     select * from user where
-    <like field="nickname" value="nickName"></like>
+    <like field="nickname" value="nickName"/>
     @if{?email != empty}
         AND email like '%@{email}%'
     @end{}
@@ -572,7 +572,7 @@ import com.blinkfox.zealot.core.Khala;
 public class KhalaTest {
 
     public static void main(String[] args) {
-        String sql = Khala.newInstance().start()
+        String sql = Khala.start()
             .select("u.id, u.name, u.email, ud.addr")
             .from("user as u")
             .leftJoin("user_detail as ud").on("u.id = ud.user_id")
@@ -599,6 +599,9 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.0.7(2017-03-31)
+  - 使用Google CheckStyle来规范Java代码风格,重构了部分代码,使代码更整洁
+  - Khala字符串的链式拼接去掉了手动newInstance的方式，直接调用start()方法即可
 - v1.0.6(2016-12-31)
   - 新增灵活强大的流程逻辑控制标签
   - 新增自定义标签的示例和单元测试
