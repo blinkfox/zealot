@@ -1,11 +1,5 @@
 package com.blinkfox.zealot.core;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import org.dom4j.Document;
-import org.dom4j.Node;
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
@@ -15,6 +9,11 @@ import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import com.blinkfox.zealot.log.Log;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.dom4j.Document;
+import org.dom4j.Node;
 
 /**
  * Zealot配置缓存管理器，用于加载Zealot Config配置信息到缓存中
@@ -23,49 +22,49 @@ import com.blinkfox.zealot.log.Log;
 public class ZealotConfigManager {
     
     private static final Log log = Log.get(ZealotConfigManager.class);
-	
-	// 初始化的单例
-	private static final ZealotConfigManager confManager = new ZealotConfigManager();
-	
-	/**
-	 * 私有化构造方法
-	 */
-	private ZealotConfigManager() {
-		super();
-	}
-	
-	/**
-	 * 获取 ZealotConfigManager 的唯一实例
-	 * @return ZealotConfigManager唯一实例
-	 */
-	public static ZealotConfigManager getInstance() {
-		return confManager;
-	}
-	
-	/**
-	 * 初始化加载Zealot的配置信息到缓存中
-	 * @param configClass 系统中Zealot的class路径
-	 */
-	public void initLoad(String configClass) {
-		// 加载ZealotConfig配置信息
-		loadZealotConfig(configClass);
+
+    // 初始化的单例
+    private static final ZealotConfigManager confManager = new ZealotConfigManager();
+
+    /**
+     * 私有化构造方法.
+     */
+    private ZealotConfigManager() {
+        super();
+    }
+
+    /**
+     * 获取 ZealotConfigManager的唯一实例.
+     * @return ZealotConfigManager唯一实例
+     */
+    public static ZealotConfigManager getInstance() {
+        return confManager;
+    }
+
+    /**
+     * 初始化加载Zealot的配置信息到缓存中.
+     * @param configClass 系统中Zealot的class路径
+     */
+    public void initLoad(String configClass) {
+        // 加载ZealotConfig配置信息
+        loadZealotConfig(configClass);
 
         // 获取遍历每个zealotxml配置文件，将其key和文档缓存到ConcurrentHashMap内存缓存中
         cachingXmlZealots();
         testFirstEvaluate();
-	}
+    }
 
     /**
-     * 清空zealot所有缓存的内容
+     * 清空zealot所有缓存的内容.
      * 包括xml命名空间路径缓存、xml节点缓存
      */
-	public void clear() {
+    public void clear() {
         XmlContext.INSTANCE.getXmlMap().clear();
         AbstractZealotConfig.getZealots().clear();
     }
-	
-	/**
-     * 初始化zealotConfig的之类，并执行初始化mapper到缓存中
+
+    /**
+     * 初始化zealotConfig的之类，并执行初始化mapper到缓存中.
      * @param configClass 配置类的class路径
      */
     private void loadZealotConfig(String configClass) {
@@ -83,7 +82,7 @@ public class ZealotConfigManager {
 
         // 判断获取到的类是否是AbstractZealotConfig的子类
         if ((temp != null) && (temp instanceof AbstractZealotConfig)) {
-        	AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
+            AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
             zealotConfig.configXml(XmlContext.INSTANCE);
             zealotConfig.configTagHandler();
             log.info("------zealot的xml文件和tagHandler加载完成");
@@ -91,14 +90,14 @@ public class ZealotConfigManager {
     }
 
     /**
-     * 将每个zealotxml配置文件的key和文档缓存到ConcurrentHashMap内存缓存中
+     * 将每个zealotxml配置文件的key和文档缓存到ConcurrentHashMap内存缓存中.
      */
+    @SuppressWarnings("unchecked")
     private void cachingXmlZealots() {
         Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlMap();
 
         // 遍历所有的xml文档，将每个zealot节点缓存到ConcurrentHashMap内存缓存中
-        for (Iterator<Map.Entry<String, String>> it = xmlMaps.entrySet().iterator(); it.hasNext();) {
-            Map.Entry<String, String> entry = it.next();
+        for (Map.Entry<String, String> entry: xmlMaps.entrySet()) {
             String nameSpace = entry.getKey();
             String value = entry.getValue();
             Document document = XmlNodeHelper.getDocument(value);
@@ -107,8 +106,7 @@ public class ZealotConfigManager {
             }
 
             // 获取该文档下所有的zealot元素,
-            @SuppressWarnings("unchecked")
-			List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
+            List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
             for (Node zealotNode: zealotNodes) {
                 Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
                 String zealotId = XmlNodeHelper.getNodeText(idNode);
@@ -122,15 +120,15 @@ public class ZealotConfigManager {
             }
         }
     }
-    
+
     /**
-     * 测试第一次MVEL表达式的计算,会缓存MVEL相关准备工作，加快后续的MVEL执行
+     * 测试第一次MVEL表达式的计算,会缓存MVEL相关准备工作，加快后续的MVEL执行.
      */
-    private boolean testFirstEvaluate() {
-    	Map<String, Object> context = new HashMap<String, Object>();
-    	context.put("foo", "hello");
-    	ParseHelper.parseTemplate("@if{?foo != empty}Hello World!@end{}", context);
-    	return (Boolean) ParseHelper.parseWithMvel("foo != empty", context);
+    private void testFirstEvaluate() {
+        Map<String, Object> context = new HashMap<String, Object>();
+        context.put("foo", "hello");
+        ParseHelper.parseTemplate("@if{?foo != empty}Hello World!@end{}", context);
+        ParseHelper.parseWithMvel("foo != empty", context);
     }
 
 }

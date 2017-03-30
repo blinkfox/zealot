@@ -1,17 +1,17 @@
 package com.blinkfox.zealot.handler;
 
-import com.blinkfox.zealot.bean.BuildSource;  
-import com.blinkfox.zealot.bean.SqlInfo;  
-import com.blinkfox.zealot.consts.ZealotConst;  
-import com.blinkfox.zealot.core.IConditHandler;  
-import com.blinkfox.zealot.helpers.ParseHelper;  
-import com.blinkfox.zealot.helpers.StringHelper;  
-import com.blinkfox.zealot.helpers.XmlNodeHelper;  
-import org.dom4j.Node;  
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.core.IConditHandler;
+import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import java.util.List;
+import org.dom4j.Node;
 
 /**
- * 用户ID、email的自定义标签处理器
+ * 用户ID、email的自定义标签处理器.
  * Created by blinkfox on 2016/10/30.
  */
 public class UserIdEmailHandler implements IConditHandler {
@@ -45,12 +45,12 @@ public class UserIdEmailHandler implements IConditHandler {
     }
 
     /**
-     * 构建自定义的SqlInfo信息，区分是根据id做等值查询，还是根据email做模糊查询的情况
-     * @param source
-     * @param idField
-     * @param emailField
-     * @param idValue
-     * @param emailValue
+     * 构建自定义的SqlInfo信息，区分是根据id做等值查询，还是根据email做模糊查询的情况.
+     * @param source BuildSource
+     * @param idField idField
+     * @param emailField emailField
+     * @param idValue idValue
+     * @param emailValue emailValue
      */
     private SqlInfo buildIdEmailSqlInfo(BuildSource source, String idField, String emailField,
             String idValue, String emailValue) {

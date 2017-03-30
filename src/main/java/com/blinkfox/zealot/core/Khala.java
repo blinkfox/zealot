@@ -1,7 +1,7 @@
 package com.blinkfox.zealot.core;
 
 /**
- * 数据库查询拼接sql及关键字的工具类
+ * 数据库查询拼接sql及关键字的工具类.
  * Created by blinkfox on 2016/11/12.
  */
 public class Khala {
@@ -35,14 +35,14 @@ public class Khala {
     public static final String DESC = "DESC";
 
     /**
-     * 私有构造方法
+     * 私有构造方法.
      */
     private Khala() {
         super();
     }
 
     /**
-     * 获取Khala的实例，命名风格类似单例，不推荐使用
+     * 获取Khala的实例，命名风格类似单例，不推荐使用.
      * @deprecated 命名风格不对
      * @return Khala实例
      */
@@ -52,7 +52,7 @@ public class Khala {
     }
 
     /**
-     * 获取Khala的实例
+     * 获取Khala的实例.
      * @return Khala实例
      */
     public static Khala newInstance() {
@@ -60,7 +60,7 @@ public class Khala {
     }
 
     /**
-     * 开始将sql置为空字符串的StringBuffer
+     * 开始将sql置为空字符串的StringBuffer.
      * @return khala对象本身
      */
     public Khala start() {
@@ -69,15 +69,15 @@ public class Khala {
     }
 
     /**
-     * 获取sql的字符串,如果有多于两个空格，则将多个空格转成一个空格
+     * 获取sql的字符串,如果有多于两个空格，则将多个空格转成一个空格.
      * @return 拼接完成的sql字符串
      */
     public String end() {
-        return sql == null ? "": sql.toString().replaceAll("\\s{2,}", " ").trim();
+        return sql == null ? "" : sql.toString().replaceAll("\\s{2,}", " ").trim();
     }
 
     /**
-     * 连接字符串
+     * 连接字符串.
      * @param sql sql拼接器
      * @param sqlKey sql关键字
      * @param params 其他若干字符串参数
@@ -90,7 +90,7 @@ public class Khala {
     }
 
     /**
-     * 添加 select 字符串
+     * 添加 select 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -100,7 +100,7 @@ public class Khala {
     }
 
     /**
-     * 添加 from 字符串
+     * 添加 from 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -110,7 +110,7 @@ public class Khala {
     }
 
     /**
-     * 添加 where 字符串
+     * 添加 where 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -120,7 +120,7 @@ public class Khala {
     }
 
     /**
-     * 添加 and 字符串
+     * 添加 and 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -130,7 +130,7 @@ public class Khala {
     }
 
     /**
-     * 添加 order by 字符串
+     * 添加 order by 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -140,7 +140,7 @@ public class Khala {
     }
 
     /**
-     * 添加 left join 字符串
+     * 添加 left join 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -150,7 +150,7 @@ public class Khala {
     }
 
     /**
-     * 添加 left join 字符串
+     * 添加 left join 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -160,7 +160,7 @@ public class Khala {
     }
 
     /**
-     * 添加 right join 字符串
+     * 添加 right join 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -170,7 +170,7 @@ public class Khala {
     }
 
     /**
-     * 添加 full join 字符串
+     * 添加 full join 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -180,9 +180,10 @@ public class Khala {
     }
 
     /**
-     * 添加 on 字符串
+     * 添加 on 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
+     *
      */
     public Khala on(String param) {
         concat(sql, ON, param);
@@ -190,7 +191,7 @@ public class Khala {
     }
 
     /**
-     * 添加 as 字符串
+     * 添加 as 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -200,7 +201,7 @@ public class Khala {
     }
 
     /**
-     * 添加 update 字符串
+     * 添加 update 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -210,7 +211,7 @@ public class Khala {
     }
 
     /**
-     * 添加 set 字符串
+     * 添加 set 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -220,7 +221,7 @@ public class Khala {
     }
 
     /**
-     * 添加 delete 字符串
+     * 添加 delete 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -230,7 +231,7 @@ public class Khala {
     }
 
     /**
-     * 添加 insert into 字符串
+     * 添加 insert into 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -240,7 +241,7 @@ public class Khala {
     }
 
     /**
-     * 添加 values 字符串
+     * 添加 values 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -250,7 +251,7 @@ public class Khala {
     }
 
     /**
-     * 添加 group by 字符串
+     * 添加 group by 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -260,7 +261,7 @@ public class Khala {
     }
 
     /**
-     * 添加 having 字符串
+     * 添加 having 字符串.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */
@@ -270,7 +271,7 @@ public class Khala {
     }
 
     /**
-     * 直接连接
+     * 直接连接.
      * @param param 待拼接的sql片段字符串
      * @return khala对象本身
      */

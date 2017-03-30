@@ -1,13 +1,14 @@
 package com.blinkfox.zealot.helpers;
 
-import java.io.InputStream;
+import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.log.Log;
+import java.io.InputStream;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import com.blinkfox.zealot.consts.ZealotConst;
+
 
 /**
  * xml和xml节点相关的工具类
@@ -16,16 +17,16 @@ import com.blinkfox.zealot.consts.ZealotConst;
 public final class XmlNodeHelper {
 
     private static final Log log = Log.get(XmlNodeHelper.class);
-	
-	/**
-	 * 私有构造方法
-	 */
-	private XmlNodeHelper() {
-		super();
-	}
 
-	/**
-     * 读取xml文档
+    /**
+     * 私有构造方法.
+     */
+    private XmlNodeHelper() {
+        super();
+    }
+
+    /**
+     * 读取xml文档.
      * @param xmlPath 定位xml文件的路径，如：com/blinkfox/test.xml
      * @return 返回dom4j文档
      */
@@ -40,18 +41,18 @@ public final class XmlNodeHelper {
         }
         return document;
     }
-    
+
     /**
-     * 获取xml节点的文本值，如果对象是空的，则转为空字符串
+     * 获取xml节点的文本值，如果对象是空的，则转为空字符串.
      * @param node dom4j节点
      * @return 返回节点文本值
      */
     public static String getNodeText(Node node) {
-        return node == null ? "": node.getText();
+        return node == null ? "" : node.getText();
     }
 
     /**
-     * 获取节点文本
+     * 获取节点文本.
      * @param node dom4j节点
      * @param attrName 节点属性
      * @return 返回节点文本值
@@ -62,13 +63,13 @@ public final class XmlNodeHelper {
     }
 
     /**
-     * 检查和获取节点文本，会检查节点是否为空，如果节点为空，则抛出异常
+     * 检查和获取节点文本，会检查节点是否为空，如果节点为空，则抛出异常.
      * @param node dom4j节点
      * @param nodeName 节点名称
      * @return 返回节点文本值
      */
     public static String getAndCheckNodeText(Node node, String nodeName) {
-		/* 判断必填的参数是否为空 */
+        /* 判断必填的参数是否为空 */
         Node fieldNode = node.selectSingleNode(nodeName);
         String fieldText = XmlNodeHelper.getNodeText(fieldNode);
         if (StringHelper.isBlank(fieldText)) {
@@ -78,7 +79,7 @@ public final class XmlNodeHelper {
     }
 
     /**
-     * 检查和获取开始和结束文本的内容，返回一个数组，会检查两个节点是否为空，如果都为空，则抛出异常
+     * 检查和获取开始和结束文本的内容，返回一个数组，会检查两个节点是否为空，如果都为空，则抛出异常.
      * @param node dom4j节点
      * @return 返回开始和结束文本的二元数组
      */
@@ -92,5 +93,5 @@ public final class XmlNodeHelper {
         }
         return new String[] {startText, endText};
     }
-	
+
 }

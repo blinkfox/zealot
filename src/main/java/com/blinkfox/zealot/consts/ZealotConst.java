@@ -1,7 +1,7 @@
 package com.blinkfox.zealot.consts;
 
 /**
- * 常量类
+ * 常量类.
  * Created by blinkfox on 2016/10/30.
  */
 public final class ZealotConst {
@@ -9,7 +9,7 @@ public final class ZealotConst {
     /* 分隔符常量,SP是Separate的简称 */
     public static final String SP_AT = "@"; // @分隔符
 
-	/* 节点类型 */
+    /* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点
 
@@ -50,7 +50,7 @@ public final class ZealotConst {
     public static final String IN_SUFFIX = " in ";
 
     /**
-     * 私有构造方法
+     * 私有构造方法.
      */
     private ZealotConst() {
         super();

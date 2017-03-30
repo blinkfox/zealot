@@ -12,7 +12,7 @@ import com.blinkfox.zealot.config.MyZealotConfig;
 import com.blinkfox.zealot.log.Log;
 
 /**
- * Zealot单元测试类
+ * Zealot单元测试类.
  * Created by blinkfox on 2016/12/26.
  */
 public class ZealotTest {
@@ -23,7 +23,7 @@ public class ZealotTest {
     private static final String CONFIG_CLASS = "com.blinkfox.zealot.config.MyZealotConfig";
 
     /**
-     * 初始化zealot信息到缓存中
+     * 初始化zealot信息到缓存中.
      */
     @BeforeClass
     public static void before() {
@@ -32,7 +32,7 @@ public class ZealotTest {
     }
 
     /**
-     * 清空缓存
+     * 清空缓存.
      */
     @AfterClass
     public static void after() {
@@ -41,7 +41,7 @@ public class ZealotTest {
     }
 
     /**
-     * 测试根据用户ID生成SqlInfo信息的方法
+     * 测试根据用户ID生成SqlInfo信息的方法.
      */
     @Test
     public void testGetUserById() {
@@ -66,7 +66,7 @@ public class ZealotTest {
     }
 
     /**
-     * 测试根据多条件动态生成SqlInfo信息的方法
+     * 测试根据多条件动态生成SqlInfo信息的方法.
      */
     @Test
     public void testGetUsers() {
@@ -98,7 +98,7 @@ public class ZealotTest {
     }
 
     /**
-     * 测试根据流程控制标签来动态生成SqlInfo信息的方法
+     * 测试根据流程控制标签来动态生成SqlInfo信息的方法.
      */
     @Test
     public void testGetUsersByFlowTag() {
@@ -125,7 +125,7 @@ public class ZealotTest {
     }
     
     /**
-     * 测试根据自定义标签来动态生成SqlInfo信息的方法
+     * 测试根据自定义标签来动态生成SqlInfo信息的方法.
      */
     @Test
     public void testGetUsersByCustomTag() {

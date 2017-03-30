@@ -1,12 +1,12 @@
 package com.blinkfox.zealot.bean;
 
 /**
- * 标签和对应的动态sql生成的处理类
+ * 标签和对应的动态sql生成的处理类.
  * Created by blinkfox on 2016-11-01.
  */
 public class TagHandler {
-	
-	// 标签名称
+
+    // 标签名称
     private String tagName;
 
     // 生成sql的前缀,如:and, or 等
@@ -16,7 +16,7 @@ public class TagHandler {
     private Class<?> handlerCls;
 
     /**
-     * 仅仅标签名称和其对应的处理类的构造方法
+     * 仅仅标签名称和其对应的处理类的构造方法.
      * @param tagName 标签名称
      * @param handlerCls 动态处理类的反射类型
      */
@@ -27,7 +27,7 @@ public class TagHandler {
     }
 
     /**
-     * 全构造方法
+     * 全构造方法.
      * @param tagName 标签名称
      * @param prefix sql前缀
      * @param handlerCls 动态处理类的反射类型
@@ -42,11 +42,13 @@ public class TagHandler {
     public String getTagName() {
         return tagName;
     }
+
     public String getPrefix() {
         return prefix;
     }
+
     public Class<?> getHandlerCls() {
         return handlerCls;
     }
-	
+
 }

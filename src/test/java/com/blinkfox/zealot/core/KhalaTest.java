@@ -5,7 +5,7 @@ import org.junit.Test;
 import com.blinkfox.zealot.log.Log;
 
 /**
- * Khala单元测试类
+ * Khala单元测试类.
  * Created by blinkfox on 2016/12/27.
  */
 public class KhalaTest {
@@ -13,7 +13,7 @@ public class KhalaTest {
 	private static final Log log = Log.get(KhalaTest.class);
 	
 	/**
-	 * 使用Khala拼接sql的测试方法
+	 * 使用Khala拼接sql的测试方法.
 	 */
 	@Test
 	public void testBuild() {

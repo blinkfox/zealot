@@ -5,22 +5,22 @@ import org.mvel2.MVEL;
 import org.mvel2.templates.TemplateRuntime;
 
 /**
- * MVEL表达式相关的工具类
+ * MVEL表达式相关的工具类.
  * Created by blinkfox on 2016/10/30.
  */
 public final class ParseHelper {
 
     private static final Log log = Log.get(ParseHelper.class);
-	
-	/**
-	 * 私有构造方法
-	 */
-	private ParseHelper() {
-		super();
-	}
 
-	/**
-     * 通过MVEL来解析表达式的值
+    /**
+     * 私有构造方法.
+     */
+    private ParseHelper() {
+        super();
+    }
+
+    /**
+     * 通过MVEL来解析表达式的值.
      * @param exp 待解析表达式
      * @param paramObj 参数对象
      * @return 返回解析后的值
@@ -36,7 +36,7 @@ public final class ParseHelper {
     }
 
     /**
-     * 通过MVEL来解析模板的值
+     * 通过MVEL来解析模板的值.
      * @param template 待解析表达式
      * @param paramObj 参数对象
      * @return 返回解析后的结果
@@ -50,5 +50,5 @@ public final class ParseHelper {
         }
         return output;
     }
-	
+
 }

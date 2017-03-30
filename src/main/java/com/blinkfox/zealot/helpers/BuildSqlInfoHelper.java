@@ -1,30 +1,30 @@
 package com.blinkfox.zealot.helpers;
 
-import java.util.Collection;
-import java.util.List;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 构建sql查询相关的帮助类
  * Created by blinkfox on 2016/10/30.
  */
 public final class BuildSqlInfoHelper {
-	
-	private static SqlInfo sqlInfo = null; // sqlInfo对象
+
+    private static SqlInfo sqlInfo = null; // sqlInfo对象
     private static StringBuilder join = null; // sql拼接器
     private static List<Object> params = null; // 有序的参数结合
     
     /**
-     * 私有构造方法
+     * 私有构造方法.
      */
     private BuildSqlInfoHelper() {
-    	super();
+        super();
     }
 
     /**
-     * 根据构建的资源参数初始化数据
+     * 根据构建的资源参数初始化数据.
      * @param source 构建所需的资源对象
      */
     private static void init(BuildSource source) {
@@ -34,7 +34,7 @@ public final class BuildSqlInfoHelper {
     }
 
     /**
-     * 构建普通的sql信息
+     * 构建普通的sql信息.
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
@@ -50,7 +50,7 @@ public final class BuildSqlInfoHelper {
     }
 
     /**
-     * 构建Like模糊查询的sql信息
+     * 构建Like模糊查询的sql信息.
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
@@ -67,7 +67,7 @@ public final class BuildSqlInfoHelper {
     }
 
     /**
-     * 构建数字查询的sql信息
+     * 构建数字查询的sql信息.
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param startText 参数开始值
@@ -99,14 +99,14 @@ public final class BuildSqlInfoHelper {
     }
 
     /**
-     * 构建Like模糊查询的sql信息
+     * 构建Like模糊查询的sql信息.
      * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
     @SuppressWarnings("rawtypes")
-	public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
+    public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
         init(source);
 
         // 获取value值，判断是否为空，若为空，则直接退出本方法
@@ -141,5 +141,5 @@ public final class BuildSqlInfoHelper {
 
         return sqlInfo.setJoin(join).setParams(params);
     }
-	
+
 }

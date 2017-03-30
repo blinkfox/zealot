@@ -8,7 +8,7 @@ import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.log.Log;
 
 /**
- * 表达式和模版解析的单元测试类
+ * 表达式和模版解析的单元测试类.
  * Created by blinkfox on 2016/12/26.
  */
 public class ParseHelperTest {
@@ -16,7 +16,7 @@ public class ParseHelperTest {
 	private static final Log log = Log.get(ParseHelperTest.class);
 	
 	/**
-	 * 测试计算表达式的值
+	 * 测试计算表达式的值.
 	 */
 	@Test
 	public void testParseWithMvel() {
@@ -30,7 +30,7 @@ public class ParseHelperTest {
 	}
 	
 	/**
-	 * 测试计算模版的值
+	 * 测试计算模版的值.
 	 */
 	@Test
 	public void testParseTemplate() {

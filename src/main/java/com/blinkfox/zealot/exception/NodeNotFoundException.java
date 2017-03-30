@@ -6,17 +6,17 @@ package com.blinkfox.zealot.exception;
  */
 public class NodeNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-     * 默认无参构造方法
+    /**
+     * 默认无参构造方法.
      */
     public NodeNotFoundException() {
         super();
     }
 
     /**
-     * 附带日志消息参数的构造方法
+     * 附带日志消息参数的构造方法.
      * @param msg 日志消息
      */
     public NodeNotFoundException(String msg) {

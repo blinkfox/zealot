@@ -1,30 +1,29 @@
 package com.blinkfox.zealot.core;
 
-import java.util.List;
-
-import com.blinkfox.zealot.helpers.ParseHelper;
-import com.blinkfox.zealot.helpers.StringHelper;
-import org.dom4j.Node;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
+import java.util.List;
+import org.dom4j.Node;
 
 /**
- * Zealot的核心解析和生成调用类
+ * Zealot的核心解析和生成调用类.
  * Created by blinkfox on 2016/10/30.
  */
 public final class Zealot {
-	
-	/**
-	 * 私有构造方法
-	 */
-	private Zealot() {
-		super();
-	}
 
-	/**
-     * 获取sqlInfo信息
+    /**
+     * 私有构造方法.
+     */
+    private Zealot() {
+        super();
+    }
+
+    /**
+     * 获取sqlInfo信息.
      * @param nameSpace xml命名空间
      * @param zealotId xml中的zealot id
      * @param paramObj 参数对象
@@ -38,19 +37,18 @@ public final class Zealot {
     }
 
     /**
-     * 构建完整的SqlInfo对象
+     * 构建完整的SqlInfo对象.
      * @param node dom4j对象节点
      * @param paramObj 参数对象
      * @return 返回SqlInfo对象
      */
     @SuppressWarnings("unchecked")
-	private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
+    private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
         SqlInfo sqlInfo = SqlInfo.newInstance();
 
         // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
-        for (int i = 0; i < nodes.size(); i++) {
-            Node n = nodes.get(i);
+        for (Node n: nodes) {
             if (ZealotConst.NODETYPE_TEXT.equals(n.getNodeTypeName())) {
                 // 如果子节点node 是文本节点，则直接获取其文本
                 sqlInfo.getJoin().append(n.getText());
@@ -65,7 +63,7 @@ public final class Zealot {
     }
 
     /**
-     * 根据标签拼接的SQL信息来生成最终的SQL
+     * 根据标签拼接的SQL信息来生成最终的SQL.
      * @param sqlInfo sql及参数信息
      * @param paramObj 参数对象信息
      * @return 返回SqlInfo对象

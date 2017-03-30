@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 基于 JDK Logging API 的日志打印工具类
+ * 基于 JDK Logging API 的日志打印工具类.
  * Created by blinkfox on 2016/11/5.
  */
 public class Log {
@@ -13,7 +13,7 @@ public class Log {
     private Logger logger;
 
     /**
-     * 私有构造方法
+     * 私有构造方法.
      * @param logger jdk Logger对象
      */
     private Log(Logger logger) {
@@ -21,7 +21,7 @@ public class Log {
     }
 
     /**
-     * 构造并获取日志对象的实例
+     * 构造并获取日志对象的实例.
      * @param cls 记录日志的类Class
      * @param <T> 泛型
      * @return 返回自身的实例
@@ -31,7 +31,7 @@ public class Log {
     }
 
     /**
-     * 记录 info 级别的日志信息
+     * 记录 info 级别的日志信息.
      * @param msg 日志消息
      */
     public void info(String msg) {
@@ -39,7 +39,7 @@ public class Log {
     }
 
     /**
-     * 记录 warning 级别的日志信息
+     * 记录 warning 级别的日志信息.
      * @param msg 日志消息
      */
     public void warn(String msg) {
@@ -47,7 +47,7 @@ public class Log {
     }
 
     /**
-     * 记录 error 级别的日志信息
+     * 记录 error 级别的日志信息.
      * @param msg 日志消息
      */
     public void error(String msg) {
@@ -55,7 +55,7 @@ public class Log {
     }
 
     /**
-     * 记录 error 级别的日志信息和异常信息
+     * 记录 error 级别的日志信息和异常信息.
      * @param msg 日志消息
      * @param t Throwable对象
      */

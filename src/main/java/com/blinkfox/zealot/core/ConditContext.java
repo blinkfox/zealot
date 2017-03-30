@@ -1,41 +1,38 @@
 package com.blinkfox.zealot.core;
 
-import java.util.Iterator;
-import java.util.Set;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.log.Log;
+import java.util.Set;
 
 /**
- * 构建动态条件查询的上下文协调类
+ * 构建动态条件查询的协调类.
  * Created by blinkfox on 2016/10/30.
  */
 public class ConditContext {
 
     private static final Log log = Log.get(ConditContext.class);
-	
-	/**
-	 * 私有构造方法
-	 */
-	private ConditContext() {
-		super();
-	}
 
-	/**
-     * 根据标签名称和对应的构建参数构造出对应标签的sql和参数
+    /**
+     * 私有构造方法.
+     */
+    private ConditContext() {
+        super();
+    }
+
+    /**
+     * 根据标签名称和对应的构建参数构造出对应标签的sql和参数.
      * @param source 构建所需的资源对象
      * @param tag 标签名称
      * @return 返回SqlInfo对象
      */
-    protected static SqlInfo buildSqlInfo(BuildSource source, String tag) {
+    public static SqlInfo buildSqlInfo(BuildSource source, String tag) {
         // 获取所有配置的标签处理对象，并遍历判断当前类型是否符合该type标签
         // 如果符合就执行该标签中对应handler对象的方法
         Set<TagHandler> tagHandlers = AbstractZealotConfig.getTagHandlers();
-        for (Iterator<TagHandler> it = tagHandlers.iterator(); it.hasNext();) {
-            TagHandler th = it.next();
-
+        for (TagHandler th: tagHandlers) {
             // 如果从全局的set中获取到了该标签，则将其前缀和handler对象的方法执行来获取sql和参数
             if (tag.equals(th.getTagName())) {
                 source.setPrefix(th.getPrefix());
