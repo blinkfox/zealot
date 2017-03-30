@@ -56,7 +56,7 @@
             <version>2.2.8.Final</version>
         </dependency>
     </dependencies>
-	
+
     <build>
         <finalName>zealot</finalName>
         <defaultGoal>compile</defaultGoal>
@@ -123,19 +123,19 @@
                     </plugin>
                 </plugins>
             </build>
-		    <distributionManagement>
-		        <snapshotRepository>
-		            <id>oss</id>
-		            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-		        </snapshotRepository>
-		        <repository>
-		            <id>oss</id>
-		            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		        </repository>
-		    </distributionManagement>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
-	
+
     <distributionManagement>
         <snapshotRepository>
             <id>oss</id>

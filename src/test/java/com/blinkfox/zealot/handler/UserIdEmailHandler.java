@@ -15,8 +15,8 @@ import org.dom4j.Node;
  * Created by blinkfox on 2016/10/30.
  */
 public class UserIdEmailHandler implements IConditHandler {
-	
-	@Override
+
+    @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
         /* 获取拼接的参数和Zealot节点 */
         SqlInfo sqlInfo = source.getSqlInfo();
@@ -78,5 +78,5 @@ public class UserIdEmailHandler implements IConditHandler {
 
         return sqlInfo;
     }
-	
+
 }

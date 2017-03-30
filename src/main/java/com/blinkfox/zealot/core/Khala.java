@@ -37,35 +37,16 @@ public class Khala {
     /**
      * 私有构造方法.
      */
-    private Khala() {
-        super();
-    }
-
-    /**
-     * 获取Khala的实例，命名风格类似单例，不推荐使用.
-     * @deprecated 命名风格不对
-     * @return Khala实例
-     */
-    @Deprecated
-    public static Khala getInstance() {
-        return new Khala();
-    }
-
-    /**
-     * 获取Khala的实例.
-     * @return Khala实例
-     */
-    public static Khala newInstance() {
-        return new Khala();
+    private Khala(StringBuilder sql) {
+        this.sql = sql;
     }
 
     /**
      * 开始将sql置为空字符串的StringBuffer.
      * @return khala对象本身
      */
-    public Khala start() {
-        sql = new StringBuilder("");
-        return this;
+    public static Khala start() {
+        return new Khala(new StringBuilder(""));
     }
 
     /**

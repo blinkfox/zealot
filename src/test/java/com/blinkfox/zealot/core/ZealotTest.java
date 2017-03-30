@@ -1,15 +1,18 @@
 package com.blinkfox.zealot.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.MyZealotConfig;
+import com.blinkfox.zealot.log.Log;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.config.MyZealotConfig;
-import com.blinkfox.zealot.log.Log;
+
 
 /**
  * Zealot单元测试类.
@@ -89,8 +92,8 @@ public class ZealotTest {
         log.info("testGetUsers测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
-        String expectedSql = "select * from user where nickname LIKE ? AND age BETWEEN ? AND ? " +
-                "AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc";
+        String expectedSql = "select * from user where nickname LIKE ? AND age BETWEEN ? AND ? "
+                + "AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc";
         Object[] expectedParams = new Object[]{"%张%", 23, 28, "1990-01-01 00:00:00",
                 "1991-01-01 23:59:59", 0, 1};
         assertEquals(expectedSql, sql);
@@ -117,8 +120,8 @@ public class ZealotTest {
         log.info("testGetUsersByFlowTag 测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
-        String expectedSql = "select * from user where nickname LIKE ? AND email like '%zhang%' " +
-                "order by id desc";
+        String expectedSql = "select * from user where nickname LIKE ? AND email like '%zhang%' "
+                + "order by id desc";
         Object[] expectedParams = new Object[]{"%张%"};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
@@ -130,7 +133,7 @@ public class ZealotTest {
     @Test
     public void testGetUsersByCustomTag() {
         // 构造查询的参数
-    	Map<String, Object> user = new HashMap<String, Object>();
+        Map<String, Object> user = new HashMap<String, Object>();
         user.put("userId", 3);
         user.put("userEmail", "san");
 
