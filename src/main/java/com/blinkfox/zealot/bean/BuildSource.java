@@ -39,11 +39,6 @@ public class BuildSource {
         return sqlInfo;
     }
 
-    public BuildSource setSqlInfo(SqlInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-        return this;
-    }
-
     public Node getNode() {
         return node;
     }
@@ -57,18 +52,12 @@ public class BuildSource {
         return paramObj;
     }
 
-    public BuildSource setParamObj(Object paramObj) {
-        this.paramObj = paramObj;
-        return this;
-    }
-
     public String getPrefix() {
         return prefix;
     }
 
-    public BuildSource setPrefix(String prefix) {
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
-        return this;
     }
 
 }

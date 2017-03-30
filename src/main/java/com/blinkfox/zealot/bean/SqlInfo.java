@@ -15,6 +15,7 @@ public class SqlInfo {
     // sql语句对应的有序参数
     private List<Object> params;
 
+    // 最终生成的可用sql
     private String sql;
 
     /**
