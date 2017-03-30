@@ -9,13 +9,6 @@ public class ConfigNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 默认构造方法.
-     */
-    public ConfigNotFoundException() {
-        super();
-    }
-
-    /**
      * 附带日志消息组成的构造方法.
      * @param msg 日志消息
      */
@@ -31,4 +24,5 @@ public class ConfigNotFoundException extends RuntimeException {
     public ConfigNotFoundException(String msg, Throwable t) {
         super(msg, t);
     }
+
 }
