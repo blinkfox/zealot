@@ -38,6 +38,22 @@ public final class ZealotBuilder {
     }
 
     /**
+     * 执行生成等值查询SQL的片段.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotBuilder的当前实例
+     */
+    private ZealotBuilder doEqual(String prefix, String field, Object value, boolean match) {
+        if (match) {
+            JavaSqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildEqualSql(field, value);
+            source.resetPrefix();
+        }
+        return this;
+    }
+
+    /**
      * 生成等值查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
@@ -59,7 +75,7 @@ public final class ZealotBuilder {
     }
 
     /**
-     * 生成等值查询的SQL片段.
+     * 生成带" AND "前缀等值查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
      * @return SqlInfo
@@ -69,7 +85,7 @@ public final class ZealotBuilder {
     }
 
     /**
-     * 生成等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * 生成带" AND "前缀等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
      * @param field 数据库字段
      * @param value 值
      * @param match 是否匹配
@@ -80,7 +96,7 @@ public final class ZealotBuilder {
     }
 
     /**
-     * 生成等值查询的SQL片段.
+     * 生成带" OR "前缀等值查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
      * @return SqlInfo
@@ -90,7 +106,7 @@ public final class ZealotBuilder {
     }
 
     /**
-     * 生成等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * 生成带" OR "前缀等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
      * @param field 数据库字段
      * @param value 值
      * @param match 是否匹配
@@ -98,22 +114,6 @@ public final class ZealotBuilder {
      */
     public ZealotBuilder orEqual(String field, Object value, boolean match) {
         return doEqual(ZealotConst.OR_PREFIX, field, value, match);
-    }
-
-    /**
-     * 执行生成等值查询SQL的片段.
-     * @param prefix 前缀
-     * @param field 数据库字段
-     * @param value 值
-     * @param match 是否匹配
-     * @return ZealotBuilder的当前实例
-     */
-    private ZealotBuilder doEqual(String prefix, String field, Object value, boolean match) {
-        if (match) {
-            JavaSqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildEqualSql(field, value);
-            source.resetPrefix();
-        }
-        return this;
     }
 
 }
