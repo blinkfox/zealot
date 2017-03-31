@@ -46,12 +46,22 @@ class SqlInfoBuilder {
     }
 
     /**
-     * 构建等值查询需要的StrinbBuider join片段信息.
+     * 构建等值查询需要的StrinbBuider join信息.
      * @param fieldText 数据库字段的文本
      * @return sqlInfo
      */
     SqlInfo buildEqualJoin(String fieldText) {
         join.append(prefix).append(fieldText).append(ZealotConst.EQUAL_SUFFIX);
+        return sqlInfo.setJoin(join);
+    }
+
+    /**
+     * 构建like模糊查询需要的StrinbBuider join信息.
+     * @param fieldText 数据库字段的文本
+     * @return sqlInfo
+     */
+    SqlInfo buildLikeJoin(String fieldText) {
+        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
         return sqlInfo.setJoin(join);
     }
 }

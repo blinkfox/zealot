@@ -38,7 +38,7 @@ public final class ZealotBuilder {
     }
 
     /**
-     * 执行生成等值查询SQL的片段.
+     * 执行生成等值查询SQL片段的方法.
      * @param prefix 前缀
      * @param field 数据库字段
      * @param value 值
@@ -54,13 +54,29 @@ public final class ZealotBuilder {
     }
 
     /**
+     * 执行生成like模糊查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotBuilder的当前实例
+     */
+    private ZealotBuilder doLike(String prefix, String field, Object value, boolean match) {
+        if (match) {
+            JavaSqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildLikeSql(field, value);
+            source.resetPrefix();
+        }
+        return this;
+    }
+
+    /**
      * 生成等值查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
      * @return SqlInfo
      */
     public ZealotBuilder equalled(String field, Object value) {
-        return doEqual(ZealotConst.SPACE_PREFIX, field, value, true);
+        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, true);
     }
 
     /**
@@ -71,7 +87,7 @@ public final class ZealotBuilder {
      * @return SqlInfo
      */
     public ZealotBuilder equalled(String field, Object value, boolean match) {
-        return doEqual(ZealotConst.SPACE_PREFIX, field, value, match);
+        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, match);
     }
 
     /**
@@ -81,7 +97,7 @@ public final class ZealotBuilder {
      * @return SqlInfo
      */
     public ZealotBuilder andEqual(String field, Object value) {
-        return doEqual(ZealotConst.AND_PREFIX, field, value, true);
+        return this.doEqual(ZealotConst.AND_PREFIX, field, value, true);
     }
 
     /**
@@ -92,7 +108,7 @@ public final class ZealotBuilder {
      * @return SqlInfo
      */
     public ZealotBuilder andEqual(String field, Object value, boolean match) {
-        return doEqual(ZealotConst.AND_PREFIX, field, value, match);
+        return this.doEqual(ZealotConst.AND_PREFIX, field, value, match);
     }
 
     /**
@@ -102,7 +118,7 @@ public final class ZealotBuilder {
      * @return SqlInfo
      */
     public ZealotBuilder orEqual(String field, Object value) {
-        return doEqual(ZealotConst.OR_PREFIX, field, value, true);
+        return this.doEqual(ZealotConst.OR_PREFIX, field, value, true);
     }
 
     /**
@@ -113,7 +129,70 @@ public final class ZealotBuilder {
      * @return SqlInfo
      */
     public ZealotBuilder orEqual(String field, Object value, boolean match) {
-        return doEqual(ZealotConst.OR_PREFIX, field, value, match);
+        return this.doEqual(ZealotConst.OR_PREFIX, field, value, match);
+    }
+
+    /**
+     * 生成like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return SqlInfo
+     */
+    public ZealotBuilder like(String field, Object value) {
+        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, true);
+    }
+
+    /**
+     * 生成like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return SqlInfo
+     */
+    public ZealotBuilder like(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, match);
+    }
+
+    /**
+     * 生成带" AND "前缀的like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return SqlInfo
+     */
+    public ZealotBuilder andLike(String field, Object value) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, true);
+    }
+
+    /**
+     * 生成带" AND "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return SqlInfo
+     */
+    public ZealotBuilder andLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, match);
+    }
+
+    /**
+     * 生成带" OR "前缀的like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return SqlInfo
+     */
+    public ZealotBuilder orLike(String field, Object value) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, true);
+    }
+
+    /**
+     * 生成带" OR "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return SqlInfo
+     */
+    public ZealotBuilder orLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, match);
     }
 
 }

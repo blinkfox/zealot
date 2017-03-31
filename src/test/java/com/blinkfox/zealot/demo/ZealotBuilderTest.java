@@ -12,7 +12,6 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 /**
  * ZealotBuilder的单元测试类.
  * Created by blinkfox on 2017-03-31.
