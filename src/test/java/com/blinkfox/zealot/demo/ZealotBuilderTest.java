@@ -32,6 +32,8 @@ public class ZealotBuilderTest {
         context.put("id", "3");
         context.put("name", "zhagnsan");
         context.put("myEmail", "zhagnsan@163.com");
+        context.put("myAge", 25);
+        context.put("myBirthday", "1990-03-31");
     }
 
     /**
@@ -45,22 +47,36 @@ public class ZealotBuilderTest {
     }
 
     /**
-     * equalled方法.
+     * equal相关方法测试.
      */
     @Test
     public void equalled() {
+        long start = System.currentTimeMillis();
         SqlInfo sqlInfo = ZealotBuilder.start()
-                .equalled("u.id", (String) context.get("id"), "4".equals(context.get("id")))
-                .equalled("u.nick_name", (String) context.get("name"))
-                .equalled("u.email", (String) context.get("myEmail"), context.get("myEmail") != null)
+                .equalled("u.id", context.get("id"), "4".equals(context.get("id")))
+                .equalled("u.nick_name", context.get("name"))
+                .equalled("u.email", context.get("myEmail"), context.get("myEmail") != null)
+                .andEqual("u.age", context.get("myAge"))
+                .andEqual("u.true_age", context.get("myAge"))
+                .andEqual("u.true_age", context.get("myAge"), context.get("myAge") != null)
+                .andEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
+                .equalled("u.nick_name", context.get("name"))
+                .orEqual("u.email", context.get("myEmail"))
+                .orEqual("u.birthday", context.get("myBirthday"))
+                .orEqual("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
+                .orEqual("u.nick_name", context.get("myBirthday"), context.get("name") == null)
+                .equalled("u.id", context.get("id"))
                 .end();
+        log.info("equal()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getJoin().toString();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals(" u.nick_name = ?  u.email = ? ", sql);
-        assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com"}, sqlInfo.getParamsArr());
-        log.info("equal()方法生成的sql信息:" + sql + ",参数为:" + Arrays.toString(arr));
+        assertEquals(" u.nick_name = ?  u.email = ?  AND u.age = ?  AND u.true_age = ?  AND u.true_age = ?  "
+                + "u.nick_name = ?  OR u.email = ?  OR u.birthday = ?  OR u.birthday = ?  u.id = ? ", sql);
+        assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
+                "1990-03-31", "1990-03-31", "3"}, sqlInfo.getParamsArr());
+        log.info("equal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
 }

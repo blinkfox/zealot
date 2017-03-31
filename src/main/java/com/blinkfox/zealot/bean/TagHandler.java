@@ -24,7 +24,7 @@ public class TagHandler {
      */
     public TagHandler(String tagName, Class<?> handlerCls) {
         this.tagName = tagName;
-        this.prefix = ZealotConst.SPACE;
+        this.prefix = ZealotConst.SPACE_PREFIX;
         this.handlerCls = handlerCls;
     }
 

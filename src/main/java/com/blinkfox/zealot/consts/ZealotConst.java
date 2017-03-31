@@ -38,7 +38,7 @@ public final class ZealotConst {
     public static final String ATTR_ENT = "attribute::end";
 
     /* sql中前缀常量 */
-    public static final String SPACE = " ";
+    public static final String SPACE_PREFIX = " ";
     public static final String AND_PREFIX = " AND ";
     public static final String OR_PREFIX = " OR ";
 

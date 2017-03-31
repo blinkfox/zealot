@@ -1,7 +1,6 @@
 package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
-import com.blinkfox.zealot.bean.SqlInfo;
 
 /**
  * 构建使用Java拼接sql片段的工具类.
@@ -31,11 +30,10 @@ public final class JavaSqlInfoBuilder extends SqlInfoBuilder {
      * 构建普通等值查询的sql信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
-     * @return 返回SqlInfo信息
      */
-    public SqlInfo buildEqualSql(String fieldText, String valueText) {
+    public void buildEqualSql(String fieldText, Object valueText) {
         params.add(valueText);
-        return buildEqualJoin(fieldText).setParams(params);
+        buildEqualJoin(fieldText).setParams(params);
     }
 
 }

@@ -18,8 +18,18 @@ public class BuildSource {
     // 参数对象
     private Object paramObj;
 
-    // 前缀，默认空字符串
-    private String prefix = ZealotConst.SPACE;
+    // 前缀
+    private String prefix;
+
+    /**
+     * 仅仅有sqlInfo的构造方法.
+     * @param sqlInfo SQL拼接和参数对象
+     */
+    public BuildSource(SqlInfo sqlInfo) {
+        super();
+        this.sqlInfo = sqlInfo;
+        resetPrefix();
+    }
 
     /**
      * 全构造方法.
@@ -32,6 +42,15 @@ public class BuildSource {
         this.sqlInfo = sqlInfo;
         this.node = node;
         this.paramObj = paramObj;
+        resetPrefix();
+    }
+
+    /**
+     * 重置前缀为默认值.
+     * 为了防止SQL拼接时连在一起，默认前缀为一个空格的字符串.
+     */
+    public void resetPrefix() {
+        this.prefix = ZealotConst.SPACE_PREFIX;
     }
 
     /* getter 和 setter 方法 */
@@ -62,8 +81,9 @@ public class BuildSource {
         return prefix;
     }
 
-    public void setPrefix(String prefix) {
+    public BuildSource setPrefix(String prefix) {
         this.prefix = prefix;
+        return this;
     }
 
 }
