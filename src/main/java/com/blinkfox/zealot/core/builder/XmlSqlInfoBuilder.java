@@ -36,8 +36,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildEqualSql(String fieldText, String valueText) {
-        params.add(ParseHelper.parseWithMvel(valueText, context));
-        return buildEqualJoin(fieldText).setParams(params);
+        return super.doBuildEqualSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
     }
 
     /**
@@ -47,11 +46,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildLikeSql(String fieldText, String valueText) {
-        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
-        Object obj = ParseHelper.parseWithMvel(valueText, context);
-        params.add("%" + obj + "%");
-
-        return sqlInfo.setJoin(join).setParams(params);
+        return super.doBuildLikeSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
     }
 
     /**
@@ -62,24 +57,10 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildBetweenSql(String fieldText, String startText, String endText) {
-        // 获取开始属性值和结束属性值
+        // 获取开始属性值和结束属性值,作区间查询
         Object startValue = ParseHelper.parseWithMvel(startText, context);
         Object endValue = ParseHelper.parseWithMvel(endText, context);
-
-        /* 根据开始文本和结束文本判断执行是大于、小于还是区间的查询sql和参数的生成 */
-        if (startValue != null && endValue == null) { // 开始不为空，结束为空的情况
-            join.append(prefix).append(fieldText).append(ZealotConst.GT_SUFFIX);
-            params.add(startValue);
-        } else if (startValue == null && endValue != null) { // 开始为空，结束不为空的情况
-            join.append(prefix).append(fieldText).append(ZealotConst.LT_SUFFIX);
-            params.add(endValue);
-        } else { // 开始、结束均不为空的情况
-            join.append(prefix).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
-            params.add(startValue);
-            params.add(endValue);
-        }
-
-        return sqlInfo.setJoin(join).setParams(params);
+        return super.doBuildBetweenSql(fieldText, startValue, endValue);
     }
 
     /**

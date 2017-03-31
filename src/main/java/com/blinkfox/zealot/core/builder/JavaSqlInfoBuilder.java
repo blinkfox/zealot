@@ -29,21 +29,29 @@ public final class JavaSqlInfoBuilder extends SqlInfoBuilder {
     /**
      * 构建普通等值查询的sql和参数.
      * @param fieldText 字段文本值
-     * @param valueText 参数值
+     * @param value 参数值
      */
-    public void buildEqualSql(String fieldText, Object valueText) {
-        params.add(valueText);
-        super.buildEqualJoin(fieldText).setParams(params);
+    public void buildEqualSql(String fieldText, Object value) {
+        super.doBuildEqualSql(fieldText, value);
     }
 
     /**
      * 构建like模糊查询的sql和参数.
      * @param fieldText 字段文本值
-     * @param valueText 参数值
+     * @param value 参数值
      */
-    public void buildLikeSql(String fieldText, Object valueText) {
-        params.add("%" + valueText + "%");
-        super.buildLikeJoin(fieldText).setParams(params);
+    public void buildLikeSql(String fieldText, Object value) {
+        super.doBuildLikeSql(fieldText, value);
+    }
+
+    /**
+     * 构建like模糊查询的sql和参数.
+     * @param fieldText 字段文本值
+     * @param startValue 开始值
+     * @param endValue 结束值
+     */
+    public void buildBetweenSql(String fieldText, Object startValue, Object endValue) {
+        super.doBuildBetweenSql(fieldText, startValue, endValue);
     }
 
 }
