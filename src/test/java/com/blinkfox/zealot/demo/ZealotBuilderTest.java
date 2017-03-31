@@ -49,7 +49,7 @@ public class ZealotBuilderTest {
      * equal相关方法测试.
      */
     @Test
-    public void equalled() {
+    public void testEqual() {
         long start = System.currentTimeMillis();
         SqlInfo sqlInfo = ZealotBuilder.start()
                 .equalled("u.id", context.get("id"), "4".equals(context.get("id")))
@@ -66,7 +66,7 @@ public class ZealotBuilderTest {
                 .orEqual("u.nick_name", context.get("myBirthday"), context.get("name") == null)
                 .equalled("u.id", context.get("id"))
                 .end();
-        log.info("equal()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        log.info("testEqual()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getJoin().toString();
         Object[] arr = sqlInfo.getParamsArr();
 
@@ -75,7 +75,41 @@ public class ZealotBuilderTest {
                 + "u.nick_name = ?  OR u.email = ?  OR u.birthday = ?  OR u.birthday = ?  u.id = ? ", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
                 "1990-03-31", "1990-03-31", "3"}, sqlInfo.getParamsArr());
-        log.info("equal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+        log.info("testEqual()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * equal相关方法测试.
+     */
+    @Test
+    public void testLike() {
+        long start = System.currentTimeMillis();
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .like("u.id", context.get("id"), "4".equals(context.get("id")))
+                .like("u.nick_name", context.get("name"))
+                .like("u.email", context.get("myEmail"), context.get("myEmail") != null)
+                .andLike("u.age", context.get("myAge"))
+                .andLike("u.true_age", context.get("myAge"))
+                .andLike("u.true_age", context.get("myAge"), context.get("myAge") != null)
+                .andLike("u.email", context.get("myAge"), context.get("myEmail") == null)
+                .like("u.nick_name", context.get("name"))
+                .orLike("u.email", context.get("myEmail"))
+                .orLike("u.birthday", context.get("myBirthday"))
+                .orLike("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
+                .orLike("u.nick_name", context.get("myBirthday"), context.get("name") == null)
+                .like("u.id", context.get("id"))
+                .end();
+        log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getJoin().toString();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals(" u.nick_name LIKE ?  u.email LIKE ?  AND u.age LIKE ?  AND u.true_age LIKE ?  "
+                + "AND u.true_age LIKE ?  u.nick_name LIKE ?  OR u.email LIKE ?  OR u.birthday LIKE ?  "
+                + "OR u.birthday LIKE ?  u.id LIKE ? ", sql);
+        assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%", "%25%", "%zhagnsan%",
+                "%zhagnsan@163.com%", "%1990-03-31%", "%1990-03-31%", "%3%"}, arr);
+        log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
 }
