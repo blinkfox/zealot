@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.bean;
 
+import com.blinkfox.zealot.consts.ZealotConst;
+
 /**
  * 标签和对应的动态sql生成的处理类.
  * Created by blinkfox on 2016-11-01.
@@ -22,7 +24,7 @@ public class TagHandler {
      */
     public TagHandler(String tagName, Class<?> handlerCls) {
         this.tagName = tagName;
-        this.prefix = "";
+        this.prefix = ZealotConst.SPACE;
         this.handlerCls = handlerCls;
     }
 

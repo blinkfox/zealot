@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.bean;
 
+import com.blinkfox.zealot.consts.ZealotConst;
 import org.dom4j.Node;
 
 /**
@@ -18,7 +19,7 @@ public class BuildSource {
     private Object paramObj;
 
     // 前缀，默认空字符串
-    private String prefix = "";
+    private String prefix = ZealotConst.SPACE;
 
     /**
      * 全构造方法.
@@ -37,6 +38,11 @@ public class BuildSource {
 
     public SqlInfo getSqlInfo() {
         return sqlInfo;
+    }
+
+    public BuildSource setSqlInfo(SqlInfo sqlInfo) {
+        this.sqlInfo = sqlInfo;
+        return this;
     }
 
     public Node getNode() {

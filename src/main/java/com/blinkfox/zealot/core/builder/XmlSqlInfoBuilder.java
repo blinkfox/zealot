@@ -1,66 +1,54 @@
-package com.blinkfox.zealot.helpers;
+package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.helpers.ParseHelper;
 import java.util.Collection;
-import java.util.List;
 
 /**
- * 构建sql查询相关的帮助类
+ * 构建使用xml拼接sql片段的工具类.
  * Created by blinkfox on 2016/10/30.
  */
-public final class BuildSqlInfoHelper {
-
-    private static SqlInfo sqlInfo = null; // sqlInfo对象
-    private static StringBuilder join = null; // sql拼接器
-    private static List<Object> params = null; // 有序的参数结合
+public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     
     /**
      * 私有构造方法.
      */
-    private BuildSqlInfoHelper() {
+    private XmlSqlInfoBuilder() {
         super();
     }
 
     /**
-     * 根据构建的资源参数初始化数据.
-     * @param source 构建所需的资源对象
-     */
-    private static void init(BuildSource source) {
-        sqlInfo = source.getSqlInfo();
-        join = sqlInfo.getJoin();
-        params = sqlInfo.getParams();
+     * 获取XmlSqlInfoBuilder的实例，并初始化属性信息.
+     * @param source BuildSource实例
+     * @return XmlSqlInfoBuilder实例     */
+    public static XmlSqlInfoBuilder newInstace(BuildSource source) {
+        XmlSqlInfoBuilder builder = new XmlSqlInfoBuilder();
+        builder.init(source);
+        return builder;
     }
 
     /**
-     * 构建普通的sql信息.
-     * @param source 构建所需的资源对象
+     * 构建普通等值查询的sql信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
-    public static SqlInfo buildEqualSql(BuildSource source, String fieldText, String valueText) {
-        init(source);
-
-        join.append(source.getPrefix()).append(fieldText).append(ZealotConst.EQUAL_SUFFIX);
-        params.add(ParseHelper.parseWithMvel(valueText, source.getParamObj()));
-
-        return sqlInfo.setJoin(join).setParams(params);
+    public SqlInfo buildEqualSql(String fieldText, String valueText) {
+        params.add(ParseHelper.parseWithMvel(valueText, context));
+        return buildEqualJoin(fieldText).setParams(params);
     }
 
     /**
      * 构建Like模糊查询的sql信息.
-     * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
-    public static SqlInfo buildLikeSql(BuildSource source, String fieldText, String valueText) {
-        init(source);
-
-        join.append(source.getPrefix()).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
-        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
+    public SqlInfo buildLikeSql(String fieldText, String valueText) {
+        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
+        Object obj = ParseHelper.parseWithMvel(valueText, context);
         params.add("%" + obj + "%");
 
         return sqlInfo.setJoin(join).setParams(params);
@@ -68,29 +56,25 @@ public final class BuildSqlInfoHelper {
 
     /**
      * 构建数字查询的sql信息.
-     * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param startText 参数开始值
      * @param endText 参数结束值
      * @return 返回SqlInfo信息
      */
-    public static SqlInfo buildBetweenSql(BuildSource source, String fieldText,
-            String startText, String endText) {
-        init(source);
-
+    public SqlInfo buildBetweenSql(String fieldText, String startText, String endText) {
         // 获取开始属性值和结束属性值
-        Object startValue = ParseHelper.parseWithMvel(startText, source.getParamObj());
-        Object endValue = ParseHelper.parseWithMvel(endText, source.getParamObj());
+        Object startValue = ParseHelper.parseWithMvel(startText, context);
+        Object endValue = ParseHelper.parseWithMvel(endText, context);
 
         /* 根据开始文本和结束文本判断执行是大于、小于还是区间的查询sql和参数的生成 */
         if (startValue != null && endValue == null) { // 开始不为空，结束为空的情况
-            join.append(source.getPrefix()).append(fieldText).append(ZealotConst.GT_SUFFIX);
+            join.append(prefix).append(fieldText).append(ZealotConst.GT_SUFFIX);
             params.add(startValue);
         } else if (startValue == null && endValue != null) { // 开始为空，结束不为空的情况
-            join.append(source.getPrefix()).append(fieldText).append(ZealotConst.LT_SUFFIX);
+            join.append(prefix).append(fieldText).append(ZealotConst.LT_SUFFIX);
             params.add(endValue);
         } else { // 开始、结束均不为空的情况
-            join.append(source.getPrefix()).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
+            join.append(prefix).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
             params.add(startValue);
             params.add(endValue);
         }
@@ -100,17 +84,14 @@ public final class BuildSqlInfoHelper {
 
     /**
      * 构建Like模糊查询的sql信息.
-     * @param source 构建所需的资源对象
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
     @SuppressWarnings("rawtypes")
-    public static SqlInfo buildInSql(BuildSource source, String fieldText, String valueText) {
-        init(source);
-
+    public SqlInfo buildInSql(String fieldText, String valueText) {
         // 获取value值，判断是否为空，若为空，则直接退出本方法
-        Object obj = ParseHelper.parseWithMvel(valueText, source.getParamObj());
+        Object obj = ParseHelper.parseWithMvel(valueText, context);
         if (obj == null) {
             return sqlInfo;
         }
@@ -128,7 +109,7 @@ public final class BuildSqlInfoHelper {
         }
 
         // 遍历数组，并遍历添加in查询的替换符和参数
-        join.append(source.getPrefix()).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
+        join.append(prefix).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
         int len = values.length;
         for (int i = 0; i < len; i++) {
             if (i == (len - 1)) {

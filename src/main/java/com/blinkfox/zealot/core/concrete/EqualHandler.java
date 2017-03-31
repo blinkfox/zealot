@@ -4,7 +4,7 @@ import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.IConditHandler;
-import com.blinkfox.zealot.helpers.BuildSqlInfoHelper;
+import com.blinkfox.zealot.core.builder.XmlSqlInfoBuilder;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
@@ -35,12 +35,12 @@ public class EqualHandler implements IConditHandler {
         Node matchNode = node.selectSingleNode(ZealotConst.ATTR_MATCH);
         String matchText = XmlNodeHelper.getNodeText(matchNode);
         if (StringHelper.isBlank(matchText)) {
-            sqlInfo = BuildSqlInfoHelper.buildEqualSql(source, fieldText, valueText);
+            sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildEqualSql(fieldText, valueText);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
             Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
             if (isTrue) {
-                sqlInfo = BuildSqlInfoHelper.buildEqualSql(source, fieldText, valueText);
+                sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildEqualSql(fieldText, valueText);
             }
         }
 
