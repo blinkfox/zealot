@@ -36,7 +36,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildEqualSql(String fieldText, String valueText) {
-        return super.doBuildEqualSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
+        return super.buildEqualSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
     }
 
     /**
@@ -46,7 +46,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildLikeSql(String fieldText, String valueText) {
-        return super.doBuildLikeSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
+        return super.buildLikeSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
     }
 
     /**
@@ -60,7 +60,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
         // 获取开始属性值和结束属性值,作区间查询
         Object startValue = ParseHelper.parseWithMvel(startText, context);
         Object endValue = ParseHelper.parseWithMvel(endText, context);
-        return super.doBuildBetweenSql(fieldText, startValue, endValue);
+        return super.buildBetweenSql(fieldText, startValue, endValue);
     }
 
     /**

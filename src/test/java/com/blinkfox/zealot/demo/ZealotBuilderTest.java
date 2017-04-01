@@ -32,7 +32,11 @@ public class ZealotBuilderTest {
         context.put("name", "zhagnsan");
         context.put("myEmail", "zhagnsan@163.com");
         context.put("myAge", 25);
+        context.put("startAge", 18);
+        context.put("endAge", 26);
         context.put("myBirthday", "1990-03-31");
+        context.put("startBirthday", null);
+        context.put("endBirthday", "2010-05-28");
     }
 
     /**
@@ -109,6 +113,43 @@ public class ZealotBuilderTest {
                 + "OR u.birthday LIKE ?  u.id LIKE ? ", sql);
         assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%", "%25%", "%zhagnsan%",
                 "%zhagnsan@163.com%", "%1990-03-31%", "%1990-03-31%", "%3%"}, arr);
+        log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * equal相关方法测试.
+     */
+    @Test
+    public void testBetween() {
+        Object startAge = context.get("startAge");
+        Object endAge = context.get("endAge");
+        Object startBirthday = context.get("startBirthday");
+        Object endBirthday = context.get("endBirthday");
+
+        long start = System.currentTimeMillis();
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .between("u.age", startAge, endAge)
+                .between("u.age", startAge, endAge, startAge == null && endAge == null)
+                .between("u.birthday", startBirthday, endBirthday)
+                .between("u.birthday", startBirthday, endBirthday, startBirthday != null)
+                .andBetween("u.age", startAge, endAge)
+                .andBetween("u.age", startAge, endAge, startAge != null && endAge != null)
+                .andBetween("u.birthday", startBirthday, endBirthday)
+                .andBetween("u.birthday", startBirthday, endBirthday, startBirthday != null)
+                .orBetween("u.age", startAge, endAge)
+                .orBetween("u.age", startAge, endAge, startAge != null && endAge != null)
+                .orBetween("u.birthday", startBirthday, endBirthday)
+                .orBetween("u.birthday", startBirthday, endBirthday, startBirthday != null)
+                .end();
+        log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getJoin().toString();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals(" u.age BETWEEN ? AND ?  u.birthday <= ?  AND u.age BETWEEN ? AND ?  AND u.age BETWEEN ? AND ?  "
+                + "AND u.birthday <= ?  OR u.age BETWEEN ? AND ?  OR u.age BETWEEN ? AND ?  OR u.birthday <= ? ", sql);
+        assertArrayEquals(new Object[]{18, 26, "2010-05-28", 18, 26, 18, 26, "2010-05-28", 18, 26, 18, 26,
+                "2010-05-28"}, arr);
         log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
