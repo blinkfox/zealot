@@ -15,16 +15,16 @@ public class SqlInfoBuilder {
     SqlInfo sqlInfo;
 
     // sql拼接器，sqlInfo对象的属性
-    StringBuilder join;
+    private StringBuilder join;
 
     // 有序的参数集合，sqlInfo对象的属性
-    List<Object> params;
+    private List<Object> params;
 
     // 上下文参数
     Object context;
 
     // 前缀
-    String prefix;
+    private String prefix;
 
     /**
      * 私有构造方法.
@@ -99,6 +99,32 @@ public class SqlInfoBuilder {
             join.append(prefix).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
             params.add(startValue);
             params.add(endValue);
+        }
+
+        return sqlInfo.setJoin(join).setParams(params);
+    }
+
+    /**
+     * 构建区间查询的sql信息.
+     * @param fieldText 数据库字段文本
+     * @param values 对象数组的值
+     * @return 返回SqlInfo信息
+     */
+    public SqlInfo buildInSql(String fieldText, Object[] values) {
+        if (values == null || values.length == 0) {
+            return sqlInfo;
+        }
+
+        // 遍历数组，并遍历添加in查询的替换符和参数
+        join.append(prefix).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
+        int len = values.length;
+        for (int i = 0; i < len; i++) {
+            if (i == (len - 1)) {
+                join.append("?)");
+            } else {
+                join.append("?, ");
+            }
+            params.add(values[i]);
         }
 
         return sqlInfo.setJoin(join).setParams(params);

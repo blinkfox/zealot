@@ -50,6 +50,10 @@ public final class ZealotConst {
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " in ";
 
+    /* 集合类型的常量,1表示普通Java集合,2表示数组 */
+    public static final int OBJTYPE_ARRAY = 1;
+    public static final int OBJTYPE_COLLECTION = 2;
+
     /**
      * 私有构造方法.
      */

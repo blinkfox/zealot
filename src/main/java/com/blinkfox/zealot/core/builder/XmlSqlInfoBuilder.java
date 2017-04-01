@@ -2,7 +2,7 @@ package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import java.util.Collection;
 
@@ -78,30 +78,16 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
         }
 
         // 获取参数的集合信息，并转换成数组
-        Object[] values = new Object[] {};
+        Object[] values;
         if (obj instanceof Collection) {
             values = ((Collection) obj).toArray();
         } else if (obj.getClass().isArray()) {
             values = (Object[]) obj;
+        } else {
+            throw new NotCollectionOrArrayException("in查询xml标签中的值解析后不是有效的集合或数组!");
         }
 
-        if (values.length == 0) {
-            return sqlInfo;
-        }
-
-        // 遍历数组，并遍历添加in查询的替换符和参数
-        join.append(prefix).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
-        int len = values.length;
-        for (int i = 0; i < len; i++) {
-            if (i == (len - 1)) {
-                join.append("?)");
-            } else {
-                join.append("?, ");
-            }
-            params.add(values[i]);
-        }
-
-        return sqlInfo.setJoin(join).setParams(params);
+        return super.buildInSql(fieldText, values);
     }
 
 }
