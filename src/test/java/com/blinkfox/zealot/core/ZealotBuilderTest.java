@@ -1,10 +1,9 @@
-package com.blinkfox.zealot.demo;
+package com.blinkfox.zealot.core;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.core.ZealotBuilder;
 import com.blinkfox.zealot.log.Log;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,9 +63,9 @@ public class ZealotBuilderTest {
                 .anyText("u.id = ? ").anyParam(5)
                 .anyText("and u.nick_name like ? ").anyParam("lisi")
                 .anyText("and u.sex in (?, ?, ?, ?, ?) ").anyParam(0, 1).anyParam(2, 3, 4)
-                .anyText("and u.city in (?, ?, ?)").anyParam(citys)
+                .anyText("and u.city in (?, ?, ?) ").anyParam(citys)
                 .end();
-        String sql = sqlInfo.getJoin().toString();
+        String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
@@ -98,12 +97,12 @@ public class ZealotBuilderTest {
                 .equalled("u.id", context.get("id"))
                 .end();
         log.info("testEqual()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
-        String sql = sqlInfo.getJoin().toString();
+        String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals(" u.nick_name = ?  u.email = ?  AND u.age = ?  AND u.true_age = ?  AND u.true_age = ?  "
-                + "u.nick_name = ?  OR u.email = ?  OR u.birthday = ?  OR u.birthday = ?  u.id = ? ", sql);
+        assertEquals("u.nick_name = ? u.email = ? AND u.age = ? AND u.true_age = ? AND u.true_age = ? "
+                + "u.nick_name = ? OR u.email = ? OR u.birthday = ? OR u.birthday = ? u.id = ?", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
                 "1990-03-31", "1990-03-31", "3"}, arr);
         log.info("testEqual()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
@@ -131,13 +130,13 @@ public class ZealotBuilderTest {
                 .like("u.id", context.get("id"))
                 .end();
         log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
-        String sql = sqlInfo.getJoin().toString();
+        String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals(" u.nick_name LIKE ?  u.email LIKE ?  AND u.age LIKE ?  AND u.true_age LIKE ?  "
-                + "AND u.true_age LIKE ?  u.nick_name LIKE ?  OR u.email LIKE ?  OR u.birthday LIKE ?  "
-                + "OR u.birthday LIKE ?  u.id LIKE ? ", sql);
+        assertEquals("u.nick_name LIKE ? u.email LIKE ? AND u.age LIKE ? AND u.true_age LIKE ? "
+                + "AND u.true_age LIKE ? u.nick_name LIKE ? OR u.email LIKE ? OR u.birthday LIKE ? "
+                + "OR u.birthday LIKE ? u.id LIKE ?", sql);
         assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%", "%25%", "%zhagnsan%",
                 "%zhagnsan@163.com%", "%1990-03-31%", "%1990-03-31%", "%3%"}, arr);
         log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
@@ -169,12 +168,12 @@ public class ZealotBuilderTest {
                 .orBetween("u.birthday", startBirthday, endBirthday, startBirthday != null)
                 .end();
         log.info("testBetween()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
-        String sql = sqlInfo.getJoin().toString();
+        String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals(" u.age BETWEEN ? AND ?  u.birthday <= ?  AND u.age BETWEEN ? AND ?  AND u.age BETWEEN ? AND ?  "
-                + "AND u.birthday <= ?  OR u.age BETWEEN ? AND ?  OR u.age BETWEEN ? AND ?  OR u.birthday <= ? ", sql);
+        assertEquals("u.age BETWEEN ? AND ? u.birthday <= ? AND u.age BETWEEN ? AND ? AND u.age BETWEEN ? AND ? "
+                + "AND u.birthday <= ? OR u.age BETWEEN ? AND ? OR u.age BETWEEN ? AND ? OR u.birthday <= ?", sql);
         assertArrayEquals(new Object[]{18, 26, "2010-05-28", 18, 26, 18, 26, "2010-05-28", 18, 26, 18, 26,
                 "2010-05-28"}, arr);
         log.info("testBetween()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
@@ -206,13 +205,13 @@ public class ZealotBuilderTest {
                 .end();
 
         log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
-        String sql = sqlInfo.getJoin().toString();
+        String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals(" u.sex in (?, ?)  u.city in (?, ?, ?)  u.sex in (?, ?)  AND u.sex in (?, ?)  "
-                + "AND u.city in (?, ?, ?)  AND u.sex in (?, ?)  OR u.sex in (?, ?)  OR u.city in (?, ?, ?)  "
-                + "OR u.sex in (?, ?) ", sql);
+        assertEquals("u.sex in (?, ?) u.city in (?, ?, ?) u.sex in (?, ?) AND u.sex in (?, ?) "
+                + "AND u.city in (?, ?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?) OR u.city in (?, ?, ?) "
+                + "OR u.sex in (?, ?)", sql);
         assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
                 0, 1, "四川", "北京", "上海", 0, 1} ,arr);
         log.info("testIn()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));

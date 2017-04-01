@@ -7,6 +7,7 @@ import com.blinkfox.zealot.core.builder.JavaSqlInfoBuilder;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.CollectionHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -39,7 +40,8 @@ public final class ZealotBuilder {
      * @return sqlInfo
      */
     public SqlInfo end() {
-        return source.getSqlInfo();
+        SqlInfo sqlInfo = source.getSqlInfo();
+        return sqlInfo.setSql(StringHelper.replaceBlank(sqlInfo.getJoin().toString()));
     }
 
     /**
