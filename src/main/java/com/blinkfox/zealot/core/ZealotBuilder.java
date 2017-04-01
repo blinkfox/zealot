@@ -11,6 +11,9 @@ import com.blinkfox.zealot.helpers.StringHelper;
 import java.util.Collection;
 import java.util.Collections;
 
+import static com.blinkfox.zealot.consts.SqlKeyConst.*;
+
+
 /**
  * Zealot构造Java链式SQL和参数的类.
  * Created by blinkfox on 2017-03-31.
@@ -29,7 +32,7 @@ public final class ZealotBuilder {
 
     /**
      * 开始的方法.
-     * @return SqlInfo实例
+     * @return ZealotBuilder实例
      */
     public static ZealotBuilder start() {
         return new ZealotBuilder();
@@ -45,11 +48,114 @@ public final class ZealotBuilder {
     }
 
     /**
+     * 连接字符串.
+     * @param sqlKey sql关键字
+     * @param params 其他若干字符串参数
+     */
+    private ZealotBuilder concat(String sqlKey, String ... params) {
+        source.getSqlInfo().getJoin().append(SPACE).append(sqlKey).append(SPACE);
+        for (String s: params) {
+            source.getSqlInfo().getJoin().append(s).append(SPACE);
+        }
+        return this;
+    }
+
+    /**
+     * 拼接并带上'INSERT_INTO'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder insertInto(String text) {
+        return concat(INSERT_INTO , text);
+    }
+
+    /**
+     * 拼接并带上'VALUES'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder values(String text) {
+        return concat(VALUES , text);
+    }
+
+    /**
+     * 拼接并带上'DELETE FROM'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder deleteFrom(String text) {
+        return concat(DELETE_FROM , text);
+    }
+
+    /**
+     * 拼接并带上'UPDATE'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder update(String text) {
+        return concat(UPDATE, text);
+    }
+
+    /**
+     * 拼接并带上'SELECT'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder select(String text) {
+        return concat(SELECT, text);
+    }
+
+    /**
+     * 拼接并带上'FROM'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder from(String text) {
+        return concat(FROM, text);
+    }
+
+    /**
+     * 拼接并带上'WHERE'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder where(String text) {
+        return concat(WHERE, text);
+    }
+
+    /**
+     * 拼接并带上'AND'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder and(String text) {
+        return concat(AND, text);
+    }
+
+    /**
+     * 拼接并带上'AS'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder as(String text) {
+        return concat(AS, text);
+    }
+
+    /**
+     * 拼接并带上'AS'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder set(String text) {
+        return concat(SET, text);
+    }
+
+    /**
      * 在sql后追加任何文本字符串.
      * @param text 文本
      * @return ZealotBuilder
      */
-    public ZealotBuilder anyText(String text) {
+    public ZealotBuilder text(String text) {
         source.getSqlInfo().getJoin().append(text);
         return this;
     }
@@ -60,7 +166,7 @@ public final class ZealotBuilder {
      * @param objType 对象类型那
      * @return ZealotBuilder
      */
-    private ZealotBuilder anyParam(Object value, int objType) {
+    private ZealotBuilder appendParams(Object value, int objType) {
         Object[] values = CollectionHelper.toArray(value, objType);
         if (CollectionHelper.isNotEmpty(values)) {
             Collections.addAll(source.getSqlInfo().getParams(), values);
@@ -73,8 +179,8 @@ public final class ZealotBuilder {
      * @param value 单个值
      * @return ZealotBuilder
      */
-    public ZealotBuilder anyParam(Object value) {
-        return this.anyParam(value, ZealotConst.OBJTYPE_OBJECT);
+    public ZealotBuilder param(Object value) {
+        return this.appendParams(value, ZealotConst.OBJTYPE_OBJECT);
     }
 
     /**
@@ -82,8 +188,8 @@ public final class ZealotBuilder {
      * @param value 不定个数的值，也是数组
      * @return ZealotBuilder
      */
-    public ZealotBuilder anyParam(Object... value) {
-        return this.anyParam(value, ZealotConst.OBJTYPE_ARRAY);
+    public ZealotBuilder param(Object... value) {
+        return this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
     }
 
     /**
@@ -91,8 +197,8 @@ public final class ZealotBuilder {
      * @param values 不定个数的值
      * @return ZealotBuilder
      */
-    public ZealotBuilder anyParam(Collection<?> values) {
-        return this.anyParam(values, ZealotConst.OBJTYPE_COLLECTION);
+    public ZealotBuilder param(Collection<?> values) {
+        return this.appendParams(values, ZealotConst.OBJTYPE_COLLECTION);
     }
 
     /**

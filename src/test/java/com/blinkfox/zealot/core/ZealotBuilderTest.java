@@ -52,6 +52,78 @@ public class ZealotBuilderTest {
     }
 
     /**
+     * 测试INSERT的一些拼接方式.
+     */
+    @Test
+    public void testInsert() {
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .insertInto("user").values("('3', 'lisi')")
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("INSERT INTO user VALUES ('3', 'lisi')", sql);
+        assertArrayEquals(new Object[]{}, arr);
+        log.info("testDelete()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * 测试DELETE的一些拼接方式.
+     */
+    @Test
+    public void testDelete() {
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .deleteFrom("user")
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("DELETE FROM user", sql);
+        assertArrayEquals(new Object[]{}, arr);
+        log.info("testDelete()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * 测试UPDATE的一些拼接方式.
+     */
+    @Test
+    public void testUpdate() {
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .update("user").set("nick_name = 'wangwu'")
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("UPDATE user SET nick_name = 'wangwu'", sql);
+        assertArrayEquals(new Object[]{}, arr);
+        log.info("testUpdate()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * 测试SELECT的一些拼接方式.
+     */
+    @Test
+    public void testSelect() {
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .select("u.id, u.nick_name, u.email")
+                .from("user").as("u")
+                .where("u.id = ?").param("3")
+                .and("u.nick_name like '%zhang%'")
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u WHERE u.id = ? AND u.nick_name "
+                + "like '%zhang%'", sql);
+        assertArrayEquals(new Object[]{"3"}, arr);
+        log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
      * any任何文字和参数的相关方法测试.
      */
     @Test
@@ -59,11 +131,11 @@ public class ZealotBuilderTest {
     public void testAny() {
         List<String> citys = (List<String>) context.get("citys");
         SqlInfo sqlInfo = ZealotBuilder.start()
-                .anyText("select u.id, u.nick_name from user as u where ")
-                .anyText("u.id = ? ").anyParam(5)
-                .anyText("and u.nick_name like ? ").anyParam("lisi")
-                .anyText("and u.sex in (?, ?, ?, ?, ?) ").anyParam(0, 1).anyParam(2, 3, 4)
-                .anyText("and u.city in (?, ?, ?) ").anyParam(citys)
+                .text("select u.id, u.nick_name from user as u where ")
+                .text("u.id = ? ").param(5)
+                .text("and u.nick_name like ? ").param("lisi")
+                .text("and u.sex in (?, ?, ?, ?, ?) ").param(0, 1).param(2, 3, 4)
+                .text("and u.city in (?, ?, ?) ").param(citys)
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
