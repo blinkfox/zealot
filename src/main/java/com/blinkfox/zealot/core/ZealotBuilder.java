@@ -138,7 +138,7 @@ public final class ZealotBuilder {
      * @param match 是否匹配
      * @return ZealotBuilder的当前实例
      */
-    private ZealotBuilder doIn(String prefix, String field, Collection<Object> values, boolean match) {
+    private ZealotBuilder doIn(String prefix, String field, Collection<?> values, boolean match) {
         return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_COLLECTION);
     }
 
@@ -364,7 +364,7 @@ public final class ZealotBuilder {
      * @param values 集合的值
      * @return ZealotBuilder
      */
-    public ZealotBuilder in(String field, Collection<Object> values) {
+    public ZealotBuilder in(String field, Collection<?> values) {
         return this.doIn(ZealotConst.SPACE_PREFIX, field, values, true);
     }
 
@@ -375,7 +375,7 @@ public final class ZealotBuilder {
      * @param match 是否匹配
      * @return ZealotBuilder
      */
-    public ZealotBuilder in(String field, Collection<Object> values, boolean match) {
+    public ZealotBuilder in(String field, Collection<?> values, boolean match) {
         return this.doIn(ZealotConst.SPACE_PREFIX, field, values, match);
     }
 
@@ -406,7 +406,7 @@ public final class ZealotBuilder {
      * @param values 集合的值
      * @return ZealotBuilder
      */
-    public ZealotBuilder andIn(String field, Collection<Object> values) {
+    public ZealotBuilder andIn(String field, Collection<?> values) {
         return this.doIn(ZealotConst.AND_PREFIX, field, values, true);
     }
 
@@ -417,7 +417,7 @@ public final class ZealotBuilder {
      * @param match 是否匹配
      * @return ZealotBuilder
      */
-    public ZealotBuilder andIn(String field, Collection<Object> values, boolean match) {
+    public ZealotBuilder andIn(String field, Collection<?> values, boolean match) {
         return this.doIn(ZealotConst.AND_PREFIX, field, values, match);
     }
 
@@ -448,7 +448,7 @@ public final class ZealotBuilder {
      * @param values 集合的值
      * @return ZealotBuilder
      */
-    public ZealotBuilder orIn(String field, Collection<Object> values) {
+    public ZealotBuilder orIn(String field, Collection<?> values) {
         return this.doIn(ZealotConst.OR_PREFIX, field, values, true);
     }
 
@@ -459,7 +459,7 @@ public final class ZealotBuilder {
      * @param match 是否匹配
      * @return ZealotBuilder
      */
-    public ZealotBuilder orIn(String field, Collection<Object> values, boolean match) {
+    public ZealotBuilder orIn(String field, Collection<?> values, boolean match) {
         return this.doIn(ZealotConst.OR_PREFIX, field, values, match);
     }
 

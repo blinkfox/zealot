@@ -8,6 +8,7 @@ import com.blinkfox.zealot.core.ZealotBuilder;
 import com.blinkfox.zealot.log.Log;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,6 +38,8 @@ public class ZealotBuilderTest {
         context.put("myBirthday", "1990-03-31");
         context.put("startBirthday", null);
         context.put("endBirthday", "2010-05-28");
+        context.put("sexs", new Integer[] {0, 1});
+        context.put("citys", Arrays.asList("四川", "北京", "上海"));
     }
 
     /**
@@ -121,10 +124,10 @@ public class ZealotBuilderTest {
      */
     @Test
     public void testBetween() {
-        Object startAge = context.get("startAge");
-        Object endAge = context.get("endAge");
-        Object startBirthday = context.get("startBirthday");
-        Object endBirthday = context.get("endBirthday");
+        Integer startAge = (Integer) context.get("startAge");
+        Integer endAge = (Integer) context.get("endAge");
+        String startBirthday = (String) context.get("startBirthday");
+        String endBirthday = (String) context.get("endBirthday");
 
         long start = System.currentTimeMillis();
         SqlInfo sqlInfo = ZealotBuilder.start()
@@ -141,7 +144,7 @@ public class ZealotBuilderTest {
                 .orBetween("u.birthday", startBirthday, endBirthday)
                 .orBetween("u.birthday", startBirthday, endBirthday, startBirthday != null)
                 .end();
-        log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        log.info("testBetween()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getJoin().toString();
         Object[] arr = sqlInfo.getParamsArr();
 
@@ -150,7 +153,45 @@ public class ZealotBuilderTest {
                 + "AND u.birthday <= ?  OR u.age BETWEEN ? AND ?  OR u.age BETWEEN ? AND ?  OR u.birthday <= ? ", sql);
         assertArrayEquals(new Object[]{18, 26, "2010-05-28", 18, 26, 18, 26, "2010-05-28", 18, 26, 18, 26,
                 "2010-05-28"}, arr);
-        log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+        log.info("testBetween()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * in相关方法测试.
+     */
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testIn() {
+        Integer[] sexs = (Integer[]) context.get("sexs");
+        List<String> citys = (List<String>) context.get("citys");
+        long start = System.currentTimeMillis();
+
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .in("u.sex", sexs)
+                .in("u.city", citys)
+                .in("u.sex", sexs, sexs != null)
+                .in("u.city", citys, citys == null)
+                .andIn("u.sex", sexs)
+                .andIn("u.city", citys)
+                .andIn("u.sex", sexs, sexs != null)
+                .andIn("u.city", citys, citys == null)
+                .orIn("u.sex", sexs)
+                .orIn("u.city", citys)
+                .orIn("u.sex", sexs, sexs != null)
+                .orIn("u.city", citys, citys == null)
+                .end();
+
+        log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getJoin().toString();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals(" u.sex in (?, ?)  u.city in (?, ?, ?)  u.sex in (?, ?)  AND u.sex in (?, ?)  "
+                + "AND u.city in (?, ?, ?)  AND u.sex in (?, ?)  OR u.sex in (?, ?)  OR u.city in (?, ?, ?)  "
+                + "OR u.sex in (?, ?) ", sql);
+        assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
+                0, 1, "四川", "北京", "上海", 0, 1} ,arr);
+        log.info("testIn()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
 }
