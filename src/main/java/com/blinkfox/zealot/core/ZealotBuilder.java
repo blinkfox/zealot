@@ -6,7 +6,9 @@ import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.builder.JavaSqlInfoBuilder;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
+import com.blinkfox.zealot.helpers.CollectionHelper;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Zealot构造Java链式SQL和参数的类.
@@ -38,6 +40,57 @@ public final class ZealotBuilder {
      */
     public SqlInfo end() {
         return source.getSqlInfo();
+    }
+
+    /**
+     * 在sql后追加任何文本字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder anyText(String text) {
+        source.getSqlInfo().getJoin().append(text);
+        return this;
+    }
+
+    /**
+     * 在sql的参数集合后追加任何的数组.
+     * @param value 值
+     * @param objType 对象类型那
+     * @return ZealotBuilder
+     */
+    private ZealotBuilder anyParam(Object value, int objType) {
+        Object[] values = CollectionHelper.toArray(value, objType);
+        if (CollectionHelper.isNotEmpty(values)) {
+            Collections.addAll(source.getSqlInfo().getParams(), values);
+        }
+        return this;
+    }
+
+    /**
+     * 在sql的参数集合后追加任何的单个参数值.
+     * @param value 单个值
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder anyParam(Object value) {
+        return this.anyParam(value, ZealotConst.OBJTYPE_OBJECT);
+    }
+
+    /**
+     * 在sql的参数集合后追加不定对象个数的数组.
+     * @param value 不定个数的值，也是数组
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder anyParam(Object... value) {
+        return this.anyParam(value, ZealotConst.OBJTYPE_ARRAY);
+    }
+
+    /**
+     * 在sql的参数集合后追加任何的一个集合.
+     * @param values 不定个数的值
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder anyParam(Collection<?> values) {
+        return this.anyParam(values, ZealotConst.OBJTYPE_COLLECTION);
     }
 
     /**

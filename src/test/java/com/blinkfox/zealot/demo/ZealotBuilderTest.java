@@ -53,6 +53,30 @@ public class ZealotBuilderTest {
     }
 
     /**
+     * any任何文字和参数的相关方法测试.
+     */
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testAny() {
+        List<String> citys = (List<String>) context.get("citys");
+        SqlInfo sqlInfo = ZealotBuilder.start()
+                .anyText("select u.id, u.nick_name from user as u where ")
+                .anyText("u.id = ? ").anyParam(5)
+                .anyText("and u.nick_name like ? ").anyParam("lisi")
+                .anyText("and u.sex in (?, ?, ?, ?, ?) ").anyParam(0, 1).anyParam(2, 3, 4)
+                .anyText("and u.city in (?, ?, ?)").anyParam(citys)
+                .end();
+        String sql = sqlInfo.getJoin().toString();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("select u.id, u.nick_name from user as u where u.id = ? and u.nick_name like ? "
+                + "and u.sex in (?, ?, ?, ?, ?) and u.city in (?, ?, ?)", sql);
+        assertArrayEquals(new Object[]{5, "lisi", 0, 1, 2, 3, 4, "四川", "北京", "上海"}, arr);
+        log.info("testAny方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
      * equal相关方法测试.
      */
     @Test
@@ -81,7 +105,7 @@ public class ZealotBuilderTest {
         assertEquals(" u.nick_name = ?  u.email = ?  AND u.age = ?  AND u.true_age = ?  AND u.true_age = ?  "
                 + "u.nick_name = ?  OR u.email = ?  OR u.birthday = ?  OR u.birthday = ?  u.id = ? ", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
-                "1990-03-31", "1990-03-31", "3"}, sqlInfo.getParamsArr());
+                "1990-03-31", "1990-03-31", "3"}, arr);
         log.info("testEqual()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
