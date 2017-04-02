@@ -54,8 +54,10 @@ public final class ZealotBuilder {
      */
     private ZealotBuilder concat(String sqlKey, String ... params) {
         source.getSqlInfo().getJoin().append(SPACE).append(sqlKey).append(SPACE);
-        for (String s: params) {
-            source.getSqlInfo().getJoin().append(s).append(SPACE);
+        if (params != null && params.length > 0) {
+            for (String s: params) {
+                source.getSqlInfo().getJoin().append(s).append(SPACE);
+            }
         }
         return this;
     }
@@ -148,6 +150,94 @@ public final class ZealotBuilder {
      */
     public ZealotBuilder set(String text) {
         return concat(SET, text);
+    }
+
+    /**
+     * 拼接并带上'INNER JOIN'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder innerJoin(String text) {
+        return concat(INNER_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'LEFT JOIN'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder leftJoin(String text) {
+        return concat(LEFT_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'RIGHT JOIN'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder rightJoin(String text) {
+        return concat(RIGHT_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'FULL JOIN'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder fullJoin(String text) {
+        return concat(FULL_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'ON'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder on(String text) {
+        return concat(ON, text);
+    }
+
+    /**
+     * 拼接并带上'ORDER BY'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder orderBy(String text) {
+        return concat(ORDER_BY, text);
+    }
+
+    /**
+     * 拼接并带上'GROUP BY'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder groupBy(String text) {
+        return concat(GROUP_BY, text);
+    }
+
+    /**
+     * 拼接并带上'HAVING'关键字的字符串.
+     * @param text 文本
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder having(String text) {
+        return concat(HAVING, text);
+    }
+
+    /**
+     * 拼接并带上'ASC'关键字的字符串.
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder asc() {
+        return concat(ASC);
+    }
+
+    /**
+     * 拼接并带上'DESC'关键字的字符串.
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder desc() {
+        return concat(DESC);
     }
 
     /**

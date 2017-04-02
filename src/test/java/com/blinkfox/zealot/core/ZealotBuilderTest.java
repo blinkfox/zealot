@@ -14,6 +14,7 @@ import org.junit.Test;
 
 /**
  * ZealotBuilder的单元测试类.
+ * 下面的拼接程序不一定是正确可执行的SQL，仅仅用来测试程序.
  * Created by blinkfox on 2017-03-31.
  */
 public class ZealotBuilderTest {
@@ -110,15 +111,23 @@ public class ZealotBuilderTest {
         SqlInfo sqlInfo = ZealotBuilder.start()
                 .select("u.id, u.nick_name, u.email")
                 .from("user").as("u")
+                .innerJoin("corp as c").on("u.corp_id = c.id")
+                .leftJoin("dept").as("d").on("u.dept_id = d.id")
+                .rightJoin("office").as("o").on("u.office_id = o.id")
+                .fullJoin("user_detail").as("ud").on("u.detail_id = ud.id")
                 .where("u.id = ?").param("3")
                 .and("u.nick_name like '%zhang%'")
+                .groupBy("u.id").having("u.id")
+                .orderBy("u.id").desc().text(", u.nick_name").asc()
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u WHERE u.id = ? AND u.nick_name "
-                + "like '%zhang%'", sql);
+        assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u INNER JOIN corp as c ON u.corp_id = c.id "
+                + "LEFT JOIN dept AS d ON u.dept_id = d.id RIGHT JOIN office AS o ON u.office_id = o.id "
+                + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
+                + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC", sql);
         assertArrayEquals(new Object[]{"3"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
