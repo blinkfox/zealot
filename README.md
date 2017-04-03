@@ -16,9 +16,10 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅31k大小，集成和使用简单
-- 让SQL和Java代码解耦和，易于维护
-- SQL采用XML集中管理，同时方便程序开发
+- 轻量级，jar包仅仅37k大小，集成和使用简单
+- 提供了纯Java代码或XML两种方式书写维护SQL
+- Java的方式采用流式API的方式书写动态SQL，易于书写阅读
+- XML的方式让SQL和Java代码解耦和，易于维护
 - 具有动态性、可复用逻辑和可半调试性的优点
 - 具有可扩展性，可自定义标签和处理器来完成自定义逻辑的SQL和参数生成
 
@@ -36,11 +37,61 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
-### 3. 配置使用
+## 四、Java方式之Khala
+
+在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，在v1.1.0版本中增强了Khala，Khala采用流式API的方式可以书写出更流畅的动态SQL。其使用示例如下：
+
+```java
+public class KhalaTest {
+
+    /**
+     * 测试使用Khala书写的sql.
+     */
+    @Test
+    public void testSql() {
+        String userName = "zhang";
+        String startBirthday = "1990-03-25";
+        String endBirthday = "2010-08-28";
+
+        SqlInfo sqlInfo = Khala.start()
+                .select("u.id, u.name, u.email, d.birthday, d.address")
+                .from("user AS u")
+                .leftJoin("user_detail AS d").on("u.id = d.user_id")
+                .where("u.id != ''")
+                .andLike("u.id", userName, userName != null)
+                .andBetween("d.birthday", startBirthday, endBirthday)
+                .orderBy("d.birthday").desc()
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
+                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? "
+                + "AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC", sql);
+        assertArrayEquals(new Object[]{"%zhang%", "1990-03-25", "2010-08-28"} ,arr);
+        log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+}
+```
+
+打印结果如下：
+
+```
+testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC
+参数为:[%zhang%, 1990-03-25, 2010-08-28]
+```
+
+## 五、XML方式之Zealot
+
+对于很长的动态或统计性的SQL采用Java书写会不易于维护和调试，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，易于维护和阅读。
+
+### 配置使用
 
 在你的Java web项目项目中，创建一个继承自AbstractZealotConfig的核心配置类，如以下示例：
 
@@ -222,7 +273,7 @@ public class UserController extends Controller {
 
 > ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
 
-## 四、Zealot SQL配置
+## 六、Zealot SQL配置
 
 Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
 
@@ -482,7 +533,7 @@ public void queryUserIdEmail() {
 ----生成sql的参数为:[%san%]
 ```
 
-## 六、流程控制标签
+## 七、流程控制标签
 
 由于Zealot中SQL片段生成的标签大多是工具库预设或自定义的，但是在实现更为灵活的逻辑控制时就显得力不从心了，如果都通过自定义标签去实现更灵活多变的逻辑会显得很麻烦。因此，决定在1.0.6的版本中增加更为强大灵活的流程逻辑控制标签。自由的流程逻辑控制方式就意味着难以实现绑定变量参数的方式来生成SQL，而是即时生成替换变量值后的SQL。
 
@@ -556,49 +607,14 @@ foreach标签允许您在模板中迭代集合或数组。 注意：foreach的�
 @end{}
 ```
 
-## 七、番外篇之Khala--SQL字符串链式拼接
-
-在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中除了提供在XML中配置SQL之外，还提供了一个额外高效的SQL字符串链式拼接工具Khala。Khala提供了常用SQL关键字的链式拼接方式，其使用示例如下：
-
-```java
-package com.blinkfox.test;
-
-import com.blinkfox.zealot.core.Khala;
-
-/**
- * Zealot.jar中的Khala测试类
- * Created by blinkfox on 2016/11/12.
- */
-public class KhalaTest {
-
-    public static void main(String[] args) {
-        String sql = Khala.start()
-            .select("u.id, u.name, u.email, ud.addr")
-            .from("user as u")
-            .leftJoin("user_detail as ud").on("u.id = ud.user_id")
-            .where("u.name like ?").and("u.email like ?")
-            .groupBy("u.id desc")
-            .end();
-        System.out.println("拼接的sql为:" + sql);
-    }
-
-}
-```
-
-打印结果：
-
-```markup
-拼接的sql为: SELECT u.id, u.name, u.email, ud.addr FROM user as u LEFT JOIN user_detail as ud ON u.id = ud.user_id WHERE u.name like ? AND u.email like ? GROUP BY u.id desc
-```
-
-Khala仅仅是作为SQL的一个链式拼接工具，优点就是让SQL的可读性提高了,缺点就是让SQL的非运行态的可调试性降低了。
-
 ## 八、许可证
 
 Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.0(2017-04-04)
+  - 重构了Khala，使Khala用Java也可以链式的书写动态SQL，和Zealot的标签相互应
 - v1.0.7(2017-03-31)
   - 使用Google CheckStyle来规范Java代码风格,重构了部分代码,使代码更整洁
   - Khala字符串的链式拼接去掉了手动newInstance的方式，直接调用start()方法即可

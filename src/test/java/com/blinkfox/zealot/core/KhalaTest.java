@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * ZealotBuilder的单元测试类.
+ * Khala的单元测试类.
  * 下面的拼接程序不一定是正确可执行的SQL，仅仅用来测试程序.
  * Created by blinkfox on 2017-03-31.
  */
@@ -300,6 +300,35 @@ public class KhalaTest {
         assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
                 0, 1, "四川", "北京", "上海", 0, 1} ,arr);
         log.info("testIn()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+    }
+
+    /**
+     * 测试使用Khala书写的sql.
+     */
+    @Test
+    public void testSql() {
+        String userName = "zhang";
+        String startBirthday = "1990-03-25";
+        String endBirthday = "2010-08-28";
+
+        SqlInfo sqlInfo = Khala.start()
+                .select("u.id, u.name, u.email, d.birthday, d.address")
+                .from("user AS u")
+                .leftJoin("user_detail AS d").on("u.id = d.user_id")
+                .where("u.id != ''")
+                .andLike("u.id", userName, userName != null)
+                .andBetween("d.birthday", startBirthday, endBirthday)
+                .orderBy("d.birthday").desc()
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
+                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? "
+                + "AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC", sql);
+        assertArrayEquals(new Object[]{"%zhang%", "1990-03-25", "2010-08-28"} ,arr);
+        log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
 }
