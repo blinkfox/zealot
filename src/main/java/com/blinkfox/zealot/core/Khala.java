@@ -1,264 +1,735 @@
 package com.blinkfox.zealot.core;
 
+import static com.blinkfox.zealot.consts.SqlKeyConst.*;
+
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.core.builder.JavaSqlInfoBuilder;
+import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
+import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
+import com.blinkfox.zealot.helpers.CollectionHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
- * 数据库查询拼接sql及关键字的工具类.
- * Created by blinkfox on 2016/11/12.
+ * 构造Java链式SQL和参数的类.
+ * Created by blinkfox on 2017-03-31.
  */
-public class Khala {
+public final class Khala {
 
-    // sql拼接的StringBuilder对象
-    private StringBuilder sql;
-
-    // SQL中常用的拼接关键字
-    private static final String SELECT = "SELECT";
-    private static final String UPDATE = "UPDATE";
-    private static final String DELETE = "DELETE";
-    private static final String INSERT_INTO = "INSERT INTO";
-    private static final String VALUES = "VALUES";
-    private static final String FROM = "FROM";
-    private static final String WHERE = "WHERE";
-    private static final String AND = "AND";
-    private static final String GROUP_BY = "GROUP BY";
-    private static final String HAVING = "HAVING";
-    private static final String ORDER_BY = "ORDER BY";
-    private static final String INNER_JOIN = "INNER JOIN";
-    private static final String LEFT_JOIN = "LEFT JOIN";
-    private static final String RIGHT_JOIN = "RIGHT JOIN";
-    private static final String FULL_JOIN = "FULL JOIN";
-    private static final String ON = "ON";
-    private static final String AS = "AS";
-    private static final String SET = "SET";
-    private static final String SPACE = " ";
-
-    // 顺序和倒序的常量
-    public static final String ASC = "ASC";
-    public static final String DESC = "DESC";
+    // 封装了SqlInfo、应用中提供的上下文参数、前缀等信息.由于这里是纯Java拼接,所以就没有xml的Node节点信息，初始为为null即可
+    private static BuildSource source;
 
     /**
-     * 私有构造方法.
+     * 私有构造方法，构造时就初始化BuildSource相应的参数信息.
      */
-    private Khala(StringBuilder sql) {
-        this.sql = sql;
+    private Khala() {
+        source = new BuildSource(SqlInfo.newInstance());
     }
 
     /**
-     * 开始将sql置为空字符串的StringBuffer.
-     * @return khala对象本身
+     * 开始的方法.
+     * @return Khala实例实例
      */
     public static Khala start() {
-        return new Khala(new StringBuilder(""));
+        return new Khala();
     }
 
     /**
-     * 获取sql的字符串,如果有多于两个空格，则将多个空格转成一个空格.
-     * @return 拼接完成的sql字符串
+     * 结束SQL拼接流程，并生成最终的sqlInfo信息.
+     * @return sqlInfo
      */
-    public String end() {
-        return sql == null ? "" : sql.toString().replaceAll("\\s{2,}", " ").trim();
+    public SqlInfo end() {
+        SqlInfo sqlInfo = source.getSqlInfo();
+        return sqlInfo.setSql(StringHelper.replaceBlank(sqlInfo.getJoin().toString()));
     }
 
     /**
      * 连接字符串.
-     * @param sql sql拼接器
      * @param sqlKey sql关键字
      * @param params 其他若干字符串参数
      */
-    private void concat(StringBuilder sql, String sqlKey, String ... params) {
-        sql.append(SPACE).append(sqlKey).append(SPACE);
-        for (String s: params) {
-            sql.append(s).append(SPACE);
+    private Khala concat(String sqlKey, String ... params) {
+        source.getSqlInfo().getJoin().append(SPACE).append(sqlKey).append(SPACE);
+        if (params != null && params.length > 0) {
+            for (String s: params) {
+                source.getSqlInfo().getJoin().append(s).append(SPACE);
+            }
         }
-    }
-
-    /**
-     * 添加 select 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
-     */
-    public Khala select(String param) {
-        concat(sql, SELECT, param);
         return this;
     }
 
     /**
-     * 添加 from 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 拼接并带上'INSERT_INTO'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
      */
-    public Khala from(String param) {
-        concat(sql, FROM, param);
+    public Khala insertInto(String text) {
+        return concat(INSERT_INTO , text);
+    }
+
+    /**
+     * 拼接并带上'VALUES'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala values(String text) {
+        return concat(VALUES , text);
+    }
+
+    /**
+     * 拼接并带上'DELETE FROM'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala deleteFrom(String text) {
+        return concat(DELETE_FROM , text);
+    }
+
+    /**
+     * 拼接并带上'UPDATE'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala update(String text) {
+        return concat(UPDATE, text);
+    }
+
+    /**
+     * 拼接并带上'SELECT'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala select(String text) {
+        return concat(SELECT, text);
+    }
+
+    /**
+     * 拼接并带上'FROM'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala from(String text) {
+        return concat(FROM, text);
+    }
+
+    /**
+     * 拼接并带上'WHERE'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala where(String text) {
+        return concat(WHERE, text);
+    }
+
+    /**
+     * 拼接并带上'AND'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala and(String text) {
+        return concat(AND, text);
+    }
+
+    /**
+     * 拼接并带上'AS'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala as(String text) {
+        return concat(AS, text);
+    }
+
+    /**
+     * 拼接并带上'AS'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala set(String text) {
+        return concat(SET, text);
+    }
+
+    /**
+     * 拼接并带上'INNER JOIN'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala innerJoin(String text) {
+        return concat(INNER_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'LEFT JOIN'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala leftJoin(String text) {
+        return concat(LEFT_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'RIGHT JOIN'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala rightJoin(String text) {
+        return concat(RIGHT_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'FULL JOIN'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala fullJoin(String text) {
+        return concat(FULL_JOIN, text);
+    }
+
+    /**
+     * 拼接并带上'ON'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala on(String text) {
+        return concat(ON, text);
+    }
+
+    /**
+     * 拼接并带上'ORDER BY'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala orderBy(String text) {
+        return concat(ORDER_BY, text);
+    }
+
+    /**
+     * 拼接并带上'GROUP BY'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala groupBy(String text) {
+        return concat(GROUP_BY, text);
+    }
+
+    /**
+     * 拼接并带上'HAVING'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala having(String text) {
+        return concat(HAVING, text);
+    }
+
+    /**
+     * 拼接并带上'ASC'关键字的字符串.
+     * @return Khala实例
+     */
+    public Khala asc() {
+        return concat(ASC);
+    }
+
+    /**
+     * 拼接并带上'DESC'关键字的字符串.
+     * @return Khala实例
+     */
+    public Khala desc() {
+        return concat(DESC);
+    }
+
+    /**
+     * 拼接并带上'UNION'关键字的字符串.
+     * @return Khala实例
+     */
+    public Khala union() {
+        return concat(UNION);
+    }
+
+    /**
+     * 拼接并带上'UNION ALL'关键字的字符串.
+     * @return Khala实例
+     */
+    public Khala unionAll() {
+        return concat(UNION_ALL);
+    }
+
+    /**
+     * 在sql后追加任何文本字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala text(String text) {
+        source.getSqlInfo().getJoin().append(text);
         return this;
     }
 
     /**
-     * 添加 where 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 在sql后追加任何文本字符串，后可追加自定义可变参数.
+     * @param text 文本
+     * @param value 可变参数数组
+     * @return Khala实例
      */
-    public Khala where(String param) {
-        concat(sql, WHERE, param);
+    public Khala text(String text, Object... value) {
+        source.getSqlInfo().getJoin().append(text);
+        this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
         return this;
     }
 
     /**
-     * 添加 and 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 在sql的参数集合后追加任何的数组.
+     * @param value 值
+     * @param objType 对象类型那
+     * @return Khala实例
      */
-    public Khala and(String param) {
-        concat(sql, AND, param);
+    private Khala appendParams(Object value, int objType) {
+        Object[] values = CollectionHelper.toArray(value, objType);
+        if (CollectionHelper.isNotEmpty(values)) {
+            Collections.addAll(source.getSqlInfo().getParams(), values);
+        }
         return this;
     }
 
     /**
-     * 添加 order by 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 在sql的参数集合后追加不定对象个数的数组.
+     * @param value 不定个数的值，也是数组
+     * @return Khala实例
      */
-    public Khala orderBy(String ... param) {
-        concat(sql, ORDER_BY, param);
+    public Khala param(Object... value) {
+        return this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
+    }
+
+    /**
+     * 在sql的参数集合后追加任何的一个集合.
+     * @param values 不定个数的值
+     * @return Khala实例
+     */
+    public Khala param(Collection<?> values) {
+        return this.appendParams(values, ZealotConst.OBJTYPE_COLLECTION);
+    }
+
+    /**
+     * 执行生成等值查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例的当前实例
+     */
+    private Khala doEqual(String prefix, String field, Object value, boolean match) {
+        if (match) {
+            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildEqualSql(field, value);
+            source.resetPrefix();
+        }
         return this;
     }
 
     /**
-     * 添加 left join 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 执行生成like模糊查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例的当前实例
      */
-    public Khala innerJoin(String param) {
-        concat(sql, INNER_JOIN, param);
+    private Khala doLike(String prefix, String field, Object value, boolean match) {
+        if (match) {
+            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildLikeSql(field, value);
+            source.resetPrefix();
+        }
         return this;
     }
 
     /**
-     * 添加 left join 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 执行生成like模糊查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param startValue 值
+     * @param endValue 值
+     * @param match 是否匹配
+     * @return Khala实例的当前实例
      */
-    public Khala leftJoin(String param) {
-        concat(sql, LEFT_JOIN, param);
+    private Khala doBetween(String prefix, String field, Object startValue, Object endValue, boolean match) {
+        if (match) {
+            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildBetweenSql(field, startValue, endValue);
+            source.resetPrefix();
+        }
         return this;
     }
 
     /**
-     * 添加 right join 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 执行生成in范围查询SQL片段的方法,如果是集合或数组，则执行生成，否则抛出异常.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param value 数组的值
+     * @param match 是否匹配
+     * @param objType 对象类型，取自ZealotConst.java中以OBJTYPE开头的类型
+     * @return Khala实例的当前实例
      */
-    public Khala rightJoin(String param) {
-        concat(sql, RIGHT_JOIN, param);
+    @SuppressWarnings("unchecked")
+    private Khala doInByType(String prefix, String field, Object value, boolean match, int objType) {
+        if (match) {
+            // 根据对象类型调用对应的生成in查询的sql片段方法,否则抛出类型不符合的异常
+            switch (objType) {
+                case ZealotConst.OBJTYPE_ARRAY:
+                    SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildInSql(field, (Object[]) value);
+                    break;
+                case ZealotConst.OBJTYPE_COLLECTION:
+                    JavaSqlInfoBuilder.newInstace(source.setPrefix(prefix))
+                            .buildInSqlByCollection(field, (Collection<Object>) value);
+                    break;
+                default:
+                    throw new NotCollectionOrArrayException("in查询的值不是有效的集合或数组!");
+            }
+            source.resetPrefix();
+        }
         return this;
     }
 
     /**
-     * 添加 full join 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 执行生成in范围查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return Khala实例的当前实例
      */
-    public Khala fullJoin(String param) {
-        concat(sql, FULL_JOIN, param);
-        return this;
+    private Khala doIn(String prefix, String field, Object[] values, boolean match) {
+        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_ARRAY);
     }
 
     /**
-     * 添加 on 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
-     *
+     * 执行生成in范围查询SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return Khala实例的当前实例
      */
-    public Khala on(String param) {
-        concat(sql, ON, param);
-        return this;
+    private Khala doIn(String prefix, String field, Collection<?> values, boolean match) {
+        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_COLLECTION);
     }
 
     /**
-     * 添加 as 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成等值查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
      */
-    public Khala as(String param) {
-        concat(sql, AS, param);
-        return this;
+    public Khala equalled(String field, Object value) {
+        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, true);
     }
 
     /**
-     * 添加 update 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
      */
-    public Khala update(String param) {
-        concat(sql, UPDATE, param);
-        return this;
+    public Khala equalled(String field, Object value, boolean match) {
+        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, match);
     }
 
     /**
-     * 添加 set 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成带" AND "前缀等值查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
      */
-    public Khala set(String param) {
-        concat(sql, SET, param);
-        return this;
+    public Khala andEqual(String field, Object value) {
+        return this.doEqual(ZealotConst.AND_PREFIX, field, value, true);
     }
 
     /**
-     * 添加 delete 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成带" AND "前缀等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
      */
-    public Khala delete(String param) {
-        concat(sql, DELETE, param);
-        return this;
+    public Khala andEqual(String field, Object value, boolean match) {
+        return this.doEqual(ZealotConst.AND_PREFIX, field, value, match);
     }
 
     /**
-     * 添加 insert into 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成带" OR "前缀等值查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
      */
-    public Khala insertInto(String param) {
-        concat(sql, INSERT_INTO, param);
-        return this;
+    public Khala orEqual(String field, Object value) {
+        return this.doEqual(ZealotConst.OR_PREFIX, field, value, true);
     }
 
     /**
-     * 添加 values 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成带" OR "前缀等值查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
      */
-    public Khala values(String param) {
-        concat(sql, VALUES, param);
-        return this;
+    public Khala orEqual(String field, Object value, boolean match) {
+        return this.doEqual(ZealotConst.OR_PREFIX, field, value, match);
     }
 
     /**
-     * 添加 group by 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
      */
-    public Khala groupBy(String param) {
-        concat(sql, GROUP_BY, param);
-        return this;
+    public Khala like(String field, Object value) {
+        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, true);
     }
 
     /**
-     * 添加 having 字符串.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
      */
-    public Khala having(String param) {
-        concat(sql, HAVING, param);
-        return this;
+    public Khala like(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, match);
     }
 
     /**
-     * 直接连接.
-     * @param param 待拼接的sql片段字符串
-     * @return khala对象本身
+     * 生成带" AND "前缀的like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
      */
-    public Khala add(String param) {
-        sql.append(param);
-        return this;
+    public Khala andLike(String field, Object value) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, true);
+    }
+
+    /**
+     * 生成带" AND "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala andLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, match);
+    }
+
+    /**
+     * 生成带" OR "前缀的like模糊查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return Khala实例
+     */
+    public Khala orLike(String field, Object value) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, true);
+    }
+
+    /**
+     * 生成带" OR "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala orLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, match);
+    }
+
+    /**
+     * 生成between区间查询的SQL片段(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @return Khala实例
+     */
+    public Khala between(String field, Object startValue, Object endValue) {
+        return this.doBetween(ZealotConst.SPACE_PREFIX, field, startValue, endValue, true);
+    }
+
+    /**
+     * 生成between区间查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala between(String field, Object startValue, Object endValue, boolean match) {
+        return this.doBetween(ZealotConst.SPACE_PREFIX, field, startValue, endValue, match);
+    }
+
+    /**
+     * 生成带" AND "前缀的between区间查询的SQL片段(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @return Khala实例
+     */
+    public Khala andBetween(String field, Object startValue, Object endValue) {
+        return this.doBetween(ZealotConst.AND_PREFIX, field, startValue, endValue, true);
+    }
+
+    /**
+     * 生成带" AND "前缀的between区间查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala andBetween(String field, Object startValue, Object endValue, boolean match) {
+        return this.doBetween(ZealotConst.AND_PREFIX, field, startValue, endValue, match);
+    }
+
+    /**
+     * 生成带" OR "前缀的between区间查询的SQL片段(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @return Khala实例
+     */
+    public Khala orBetween(String field, Object startValue, Object endValue) {
+        return this.doBetween(ZealotConst.OR_PREFIX, field, startValue, endValue, true);
+    }
+
+    /**
+     * 生成带" OR "前缀的between区间查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成(当某一个值为null时，会是大于等于或小于等于的情形).
+     * @param field 数据库字段
+     * @param startValue 开始值
+     * @param endValue 结束值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala orBetween(String field, Object startValue, Object endValue, boolean match) {
+        return this.doBetween(ZealotConst.OR_PREFIX, field, startValue, endValue, match);
+    }
+
+    /**
+     * 生成in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return Khala实例
+     */
+    public Khala in(String field, Object[] values) {
+        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala in(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, match);
+    }
+
+    /**
+     * 生成in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return Khala实例
+     */
+    public Khala in(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala in(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, match);
+    }
+
+    /**
+     * 生成带" AND "前缀的in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return Khala实例
+     */
+    public Khala andIn(String field, Object[] values) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成带" AND "前缀的in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala andIn(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match);
+    }
+
+    /**
+     * 生成带" AND "前缀的in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return Khala实例
+     */
+    public Khala andIn(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成带" AND "前缀的in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala andIn(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match);
+    }
+
+    /**
+     * 生成带" OR "前缀的in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return Khala实例
+     */
+    public Khala orIn(String field, Object[] values) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成带" OR "前缀的in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala orIn(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match);
+    }
+
+    /**
+     * 生成带" OR "前缀的in范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return Khala实例
+     */
+    public Khala orIn(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true);
+    }
+
+    /**
+     * 生成带" OR "前缀的in范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return Khala实例
+     */
+    public Khala orIn(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match);
     }
 
 }
