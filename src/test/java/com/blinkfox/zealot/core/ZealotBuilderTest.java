@@ -119,6 +119,9 @@ public class ZealotBuilderTest {
                 .and("u.nick_name like '%zhang%'")
                 .groupBy("u.id").having("u.id")
                 .orderBy("u.id").desc().text(", u.nick_name").asc()
+                .unionAll()
+                .select("u.id, u.nick_name, u.email")
+                .from("user2")
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
@@ -127,7 +130,8 @@ public class ZealotBuilderTest {
         assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u INNER JOIN corp as c ON u.corp_id = c.id "
                 + "LEFT JOIN dept AS d ON u.dept_id = d.id RIGHT JOIN office AS o ON u.office_id = o.id "
                 + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
-                + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC", sql);
+                + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
+                + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2", sql);
         assertArrayEquals(new Object[]{"3"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }

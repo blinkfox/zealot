@@ -241,6 +241,22 @@ public final class ZealotBuilder {
     }
 
     /**
+     * 拼接并带上'UNION'关键字的字符串.
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder union() {
+        return concat(UNION);
+    }
+
+    /**
+     * 拼接并带上'UNION ALL'关键字的字符串.
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder unionAll() {
+        return concat(UNION_ALL);
+    }
+
+    /**
      * 在sql后追加任何文本字符串.
      * @param text 文本
      * @return ZealotBuilder

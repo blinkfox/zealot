@@ -28,6 +28,8 @@ public final class SqlKeyConst {
     public static final String HAVING = "HAVING";
     public static final String ASC = "ASC";
     public static final String DESC = "DESC";
+    public static final String UNION = "UNION";
+    public static final String UNION_ALL = "UNION ALL";
 
     /**
      * 私有构造方法.
