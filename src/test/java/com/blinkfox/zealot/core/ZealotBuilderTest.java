@@ -118,7 +118,7 @@ public class ZealotBuilderTest {
                 .where("u.id = ?").param("3")
                 .and("u.nick_name like '%zhang%'")
                 .groupBy("u.id").having("u.id")
-                .orderBy("u.id").desc().text(", u.nick_name").asc()
+                .orderBy("u.id").desc().text(", u.nick_name", "zhang").asc()
                 .unionAll()
                 .select("u.id, u.nick_name, u.email")
                 .from("user2")
@@ -132,7 +132,7 @@ public class ZealotBuilderTest {
                 + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
                 + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
                 + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2", sql);
-        assertArrayEquals(new Object[]{"3"}, arr);
+        assertArrayEquals(new Object[]{"3", "zhang"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 

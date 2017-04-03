@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.core;
 
+import static com.blinkfox.zealot.consts.SqlKeyConst.*;
+
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
@@ -10,9 +12,6 @@ import com.blinkfox.zealot.helpers.CollectionHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import java.util.Collection;
 import java.util.Collections;
-
-import static com.blinkfox.zealot.consts.SqlKeyConst.*;
-
 
 /**
  * Zealot构造Java链式SQL和参数的类.
@@ -267,6 +266,18 @@ public final class ZealotBuilder {
     }
 
     /**
+     * 在sql后追加任何文本字符串，后可追加自定义可变参数.
+     * @param text 文本
+     * @param value 可变参数数组
+     * @return ZealotBuilder
+     */
+    public ZealotBuilder text(String text, Object... value) {
+        source.getSqlInfo().getJoin().append(text);
+        this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
+        return this;
+    }
+
+    /**
      * 在sql的参数集合后追加任何的数组.
      * @param value 值
      * @param objType 对象类型那
@@ -278,15 +289,6 @@ public final class ZealotBuilder {
             Collections.addAll(source.getSqlInfo().getParams(), values);
         }
         return this;
-    }
-
-    /**
-     * 在sql的参数集合后追加任何的单个参数值.
-     * @param value 单个值
-     * @return ZealotBuilder
-     */
-    public ZealotBuilder param(Object value) {
-        return this.appendParams(value, ZealotConst.OBJTYPE_OBJECT);
     }
 
     /**
