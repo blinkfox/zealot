@@ -30,6 +30,8 @@ public final class SqlKeyConst {
     public static final String DESC = "DESC";
     public static final String UNION = "UNION";
     public static final String UNION_ALL = "UNION ALL";
+    public static final String LIMIT = "LIMIT";
+    public static final String OFFSET = "OFFSET";
 
     /**
      * 私有构造方法.

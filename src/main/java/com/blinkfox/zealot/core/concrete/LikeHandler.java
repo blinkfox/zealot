@@ -38,7 +38,7 @@ public class LikeHandler implements IConditHandler {
             sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
-            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
+            Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText);
             }

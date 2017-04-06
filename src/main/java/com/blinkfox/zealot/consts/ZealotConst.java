@@ -51,7 +51,6 @@ public final class ZealotConst {
     public static final String IN_SUFFIX = " in ";
 
     /* 集合类型的常量,0表示单个对象，1表示普通数组，2表示Java集合 */
-    public static final int OBJTYPE_OBJECT = 0;
     public static final int OBJTYPE_ARRAY = 1;
     public static final int OBJTYPE_COLLECTION = 2;
 

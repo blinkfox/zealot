@@ -122,6 +122,8 @@ public class KhalaTest {
                 .unionAll()
                 .select("u.id, u.nick_name, u.email")
                 .from("user2")
+                .limit("5")
+                .offset("3")
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
@@ -131,7 +133,7 @@ public class KhalaTest {
                 + "LEFT JOIN dept AS d ON u.dept_id = d.id RIGHT JOIN office AS o ON u.office_id = o.id "
                 + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
                 + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
-                + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2", sql);
+                + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2 LIMIT 5 OFFSET 3", sql);
         assertArrayEquals(new Object[]{"3", "zhang"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
@@ -167,19 +169,19 @@ public class KhalaTest {
     public void testEqual() {
         long start = System.currentTimeMillis();
         SqlInfo sqlInfo = Khala.start()
-                .equalled("u.id", context.get("id"), "4".equals(context.get("id")))
-                .equalled("u.nick_name", context.get("name"))
-                .equalled("u.email", context.get("myEmail"), context.get("myEmail") != null)
+                .equal("u.id", context.get("id"), "4".equals(context.get("id")))
+                .equal("u.nick_name", context.get("name"))
+                .equal("u.email", context.get("myEmail"), context.get("myEmail") != null)
                 .andEqual("u.age", context.get("myAge"))
                 .andEqual("u.true_age", context.get("myAge"))
                 .andEqual("u.true_age", context.get("myAge"), context.get("myAge") != null)
                 .andEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
-                .equalled("u.nick_name", context.get("name"))
+                .equal("u.nick_name", context.get("name"))
                 .orEqual("u.email", context.get("myEmail"))
                 .orEqual("u.birthday", context.get("myBirthday"))
                 .orEqual("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
                 .orEqual("u.nick_name", context.get("myBirthday"), context.get("name") == null)
-                .equalled("u.id", context.get("id"))
+                .equal("u.id", context.get("id"))
                 .end();
         log.info("testEqual()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getSql();

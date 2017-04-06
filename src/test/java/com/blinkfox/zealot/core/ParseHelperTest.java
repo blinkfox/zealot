@@ -26,7 +26,7 @@ public class ParseHelperTest {
         Map<String, Object> context = new HashMap<String, Object>();
         context.put("foo", "Hello");
         context.put("bar", "World");
-        String result = (String) ParseHelper.parseWithMvel("foo + bar", context);
+        String result = (String) ParseHelper.parseExpressWithException("foo + bar", context);
         log.info("testParseWithMvel 结果:" + result);
         assertEquals("HelloWorld", result);
     }

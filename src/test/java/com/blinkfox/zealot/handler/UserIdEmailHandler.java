@@ -35,7 +35,7 @@ public class UserIdEmailHandler implements IConditHandler {
             sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
-            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
+            Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
             }
@@ -59,7 +59,7 @@ public class UserIdEmailHandler implements IConditHandler {
         List<Object> params = sqlInfo.getParams();
 
         // 如果userId不为空，则根据id来做等值查询
-        Integer idText = (Integer) ParseHelper.parseWithMvel(idValue, source.getParamObj());
+        Integer idText = (Integer) ParseHelper.parseExpressWithException(idValue, source.getParamObj());
         if (idText != null) {
             // prefix是前缀，如"and","or"之类，没有则默认为空字符串""
             join.append(source.getPrefix()).append(idField).append(ZealotConst.EQUAL_SUFFIX);
@@ -68,7 +68,7 @@ public class UserIdEmailHandler implements IConditHandler {
         }
 
         // 获取userEmail的值,如果userEmail不为空，则根据email来做模糊查询
-        String emailText = (String) ParseHelper.parseWithMvel(emailValue, source.getParamObj());
+        String emailText = (String) ParseHelper.parseExpressWithException(emailValue, source.getParamObj());
         if (StringHelper.isNotBlank(emailText)) {
             // prefix是前缀，如"and","or"之类，没有则默认为空字符串""
             join.append(source.getPrefix()).append(emailField).append(ZealotConst.LIEK_SUFFIX);

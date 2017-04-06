@@ -36,7 +36,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildEqualSql(String fieldText, String valueText) {
-        return super.buildEqualSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
+        return super.buildEqualSql(fieldText, ParseHelper.parseExpressWithException(valueText, context));
     }
 
     /**
@@ -46,7 +46,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildLikeSql(String fieldText, String valueText) {
-        return super.buildLikeSql(fieldText, ParseHelper.parseWithMvel(valueText, context));
+        return super.buildLikeSql(fieldText, ParseHelper.parseExpressWithException(valueText, context));
     }
 
     /**
@@ -58,8 +58,8 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      */
     public SqlInfo buildBetweenSql(String fieldText, String startText, String endText) {
         // 获取开始属性值和结束属性值,作区间查询
-        Object startValue = ParseHelper.parseWithMvel(startText, context);
-        Object endValue = ParseHelper.parseWithMvel(endText, context);
+        Object startValue = ParseHelper.parseExpress(startText, context);
+        Object endValue = ParseHelper.parseExpress(endText, context);
         return super.buildBetweenSql(fieldText, startValue, endValue);
     }
 
@@ -72,7 +72,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     @SuppressWarnings("rawtypes")
     public SqlInfo buildInSql(String fieldText, String valueText) {
         // 获取value值，判断是否为空，若为空，则直接退出本方法
-        Object obj = ParseHelper.parseWithMvel(valueText, context);
+        Object obj = ParseHelper.parseExpressWithException(valueText, context);
         if (obj == null) {
             return sqlInfo;
         }

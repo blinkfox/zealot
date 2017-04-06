@@ -39,7 +39,7 @@ public class BetweenHandler implements IConditHandler {
                     valueTextArr[0], valueTextArr[1]);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
-            Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
+            Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildBetweenSql(fieldText,
                         valueTextArr[0], valueTextArr[1]);

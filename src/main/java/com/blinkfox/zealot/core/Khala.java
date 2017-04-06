@@ -224,6 +224,24 @@ public final class Khala {
     }
 
     /**
+     * 拼接并带上'LIMIT'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala limit(String text) {
+        return concat(LIMIT, text);
+    }
+
+    /**
+     * 拼接并带上'OFFSET'关键字的字符串.
+     * @param text 文本
+     * @return Khala实例
+     */
+    public Khala offset(String text) {
+        return concat(OFFSET, text);
+    }
+
+    /**
      * 拼接并带上'ASC'关键字的字符串.
      * @return Khala实例
      */
@@ -417,7 +435,7 @@ public final class Khala {
      * @param value 值
      * @return Khala实例
      */
-    public Khala equalled(String field, Object value) {
+    public Khala equal(String field, Object value) {
         return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, true);
     }
 
@@ -428,7 +446,7 @@ public final class Khala {
      * @param match 是否匹配
      * @return Khala实例
      */
-    public Khala equalled(String field, Object value, boolean match) {
+    public Khala equal(String field, Object value, boolean match) {
         return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, match);
     }
 
