@@ -4,7 +4,7 @@
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.0</version>
     <name>zealot</name>
     <description>This is a sql and parameters dynamically generated tool.</description>
     <url>http://blinkfox.com</url>

@@ -16,7 +16,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅37k大小，集成和使用简单
+- 轻量级，jar包仅仅39k大小，集成和使用简单
 - 提供了纯Java代码或XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
@@ -41,12 +41,12 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 </dependency>
 ```
 
-## 四、Java方式之Khala
+## 四、Java链式式之ZealotKhala
 
-在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，在v1.1.0版本中增强了Khala，Khala采用流式API的方式可以书写出更流畅的动态SQL。其使用示例如下：
+在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
 
 ```java
-public class KhalaTest {
+public class ZealotKhalaTest {
 
     /**
      * 测试使用Khala书写的sql.
@@ -614,7 +614,7 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 ## 九、版本更新记录
 
 - v1.1.0(2017-04-04)
-  - 重构了Khala，使Khala用Java也可以链式的书写动态SQL，和Zealot的标签相互应
+  - 新增了ZealotKhala，使ZealotKhala用Java也可以链式的书写动态SQL，和Zealot的XML标签相互应
 - v1.0.7(2017-03-31)
   - 使用Google CheckStyle来规范Java代码风格,重构了部分代码,使代码更整洁
   - Khala字符串的链式拼接去掉了手动newInstance的方式，直接调用start()方法即可

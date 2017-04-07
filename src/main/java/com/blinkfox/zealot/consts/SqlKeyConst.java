@@ -10,6 +10,7 @@ public final class SqlKeyConst {
     public static final String SPACE = " ";
     public static final String SELECT = "SELECT";
     public static final String UPDATE = "UPDATE";
+    public static final String DELETE = "DELETE";
     public static final String DELETE_FROM = "DELETE FROM";
     public static final String INSERT_INTO = "INSERT INTO";
     public static final String VALUES = "VALUES";
