@@ -41,7 +41,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 </dependency>
 ```
 
-## 四、Java链式式之ZealotKhala
+## 四、Java链式之ZealotKhala
 
 在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
 
