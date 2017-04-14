@@ -116,12 +116,14 @@ public final class ZealotKhala {
     }
 
     /**
-     * 拼接并带上'WHERE'关键字的字符串.
+     * 拼接并带上'WHERE'关键字的字符串和动态参数.
      * @param text 文本
+     * @param value 参数值
      * @return ZealotKhala实例
      */
-    public ZealotKhala where(String text) {
-        return concat(WHERE, text);
+    public ZealotKhala where(String text, Object... value) {
+        concat(WHERE, text);
+        return this.param(value);
     }
 
     /**
