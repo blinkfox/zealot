@@ -123,7 +123,7 @@ public class ZealotKhalaTest {
                 .doAnything(true, new ICustomAction() {
                     @Override
                     public void execute(StringBuilder join, List<Object> params) {
-                        join.append(" abc111");
+                        join.append(" hi");
                         params.add(5);
                         log.info("执行了自定义操作，可拼接字符串和有序参数...");
                     }
@@ -143,7 +143,7 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u INNER JOIN corp as c ON u.corp_id = c.id "
                 + "LEFT JOIN dept AS d ON u.dept_id = d.id RIGHT JOIN office AS o ON u.office_id = o.id "
                 + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
-                + "like '%zhang%' AND u.email = ? abc111 GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
+                + "like '%zhang%' AND u.email = ? hi GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
                 + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2 LIMIT 5 OFFSET 3", sql);
         assertArrayEquals(new Object[]{"3", "san@163.com", 5, "zhang"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
