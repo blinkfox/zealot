@@ -9,6 +9,7 @@
             and name in (?, ?)
             and email = ?
         </text>
+        <andLike match="?email != empty" field="email" value="email"/>
     </zealot>
 
     <!-- 根据动态条件查询用户信息 -->
