@@ -8,14 +8,15 @@
     </zealot>
 
     <!-- 根据动态条件查询用户信息 -->
-    <zealot id="queryUserInfo">
-        select * from user where
-        <like field="nickname" value="nickName"/>
-        <andLike match="?email != empty" field="email" value="email"/>
-        <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"/>
-        <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"/>
-        <andIn match="?sexs != empty" field="sex" value="sexs"/>
-        order by id desc 
+    <zealot id="queryUserInfos">
+        select * from user as u where
+        <like field="u.nickname" value="nickName"/>
+        <andEqual match="?state == 1" field="u.status" value="state"/>
+        <andLike match="?email != empty" field="u.email" value="email"/>
+        <andBetween match="?startAge > 0 || ?endAge > 0" field="u.age" start="startAge" end="endAge"/>
+        <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="u.birthday" start="startBirthday" end="endBirthday"/>
+        <andIn match="?sexs != empty" field="u.sex" value="sexs"/>
+        order by u.id desc
     </zealot>
 
     <!-- 根据流程控制标签查询用户信息 -->

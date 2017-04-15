@@ -76,6 +76,7 @@ public class ZealotTest {
         // 构造查询的参数
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("nickName", "张");
+        paramMap.put("state", 1);
         paramMap.put("startAge", 23);
         paramMap.put("endAge", 28);
         paramMap.put("startBirthday", "1990-01-01 00:00:00");
@@ -84,7 +85,7 @@ public class ZealotTest {
 
         // 生成sql，并得到和打印对应的sql和参数
         long startTime = System.currentTimeMillis();
-        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfo", paramMap);
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfos", paramMap);
         log.info("testGetUsers测试方法生成的sql耗时:" + (System.currentTimeMillis() - startTime) + " ms");
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
@@ -92,9 +93,9 @@ public class ZealotTest {
         log.info("testGetUsers测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
-        String expectedSql = "select * from user where nickname LIKE ? AND age BETWEEN ? AND ? "
-                + "AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc";
-        Object[] expectedParams = new Object[]{"%张%", 23, 28, "1990-01-01 00:00:00",
+        String expectedSql = "select * from user as u where u.nickname LIKE ? AND u.status = ? AND "
+                + "u.age BETWEEN ? AND ? AND u.birthday BETWEEN ? AND ? AND u.sex in (?, ?) order by u.id desc";
+        Object[] expectedParams = new Object[]{"%张%", 1, 23, 28, "1990-01-01 00:00:00",
                 "1991-01-01 23:59:59", 0, 1};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
