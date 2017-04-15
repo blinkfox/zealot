@@ -21,6 +21,9 @@ public class BuildSource {
     // 前缀
     private String prefix;
 
+    // 后缀，如：> = <=等
+    private String suffix;
+
     /**
      * 仅仅有sqlInfo的构造方法.
      * @param sqlInfo SQL拼接和参数对象
@@ -29,6 +32,7 @@ public class BuildSource {
         super();
         this.sqlInfo = sqlInfo;
         resetPrefix();
+        resetSuffix();
     }
 
     /**
@@ -43,6 +47,7 @@ public class BuildSource {
         this.node = node;
         this.paramObj = paramObj;
         resetPrefix();
+        resetSuffix();
     }
 
     /**
@@ -50,7 +55,15 @@ public class BuildSource {
      * 为了防止SQL拼接时连在一起，默认前缀为一个空格的字符串.
      */
     public void resetPrefix() {
-        this.prefix = ZealotConst.SPACE_PREFIX;
+        this.prefix = ZealotConst.ONE_SPACE;
+    }
+
+    /**
+     * 重置后缀为默认值.
+     * 为了防止SQL拼接时连在一起，默认后缀为一个空格的字符串.
+     */
+    public void resetSuffix() {
+        this.suffix = ZealotConst.ONE_SPACE;
     }
 
     /* getter 和 setter 方法 */
@@ -83,6 +96,15 @@ public class BuildSource {
 
     public BuildSource setPrefix(String prefix) {
         this.prefix = prefix;
+        return this;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public BuildSource setSuffix(String suffix) {
+        this.suffix = suffix;
         return this;
     }
 

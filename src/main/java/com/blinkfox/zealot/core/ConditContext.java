@@ -4,8 +4,9 @@ import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.log.Log;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * 构建动态条件查询的协调类.
@@ -29,25 +30,34 @@ class ConditContext {
      * @return 返回SqlInfo对象
      */
     static SqlInfo buildSqlInfo(BuildSource source, String tag) {
-        // 获取所有配置的标签处理对象，并遍历判断当前类型是否符合该type标签
+        // 获取所有配置的标签和标签处理器的全局map对象，并得到对应标签的标签处理器
         // 如果符合就执行该标签中对应handler对象的方法
-        Set<TagHandler> tagHandlers = AbstractZealotConfig.getTagHandlers();
-        for (TagHandler th: tagHandlers) {
-            // 如果从全局的set中获取到了该标签，则将其前缀和handler对象的方法执行来获取sql和参数
-            if (tag.equals(th.getTagName())) {
-                source.setPrefix(th.getPrefix());
-                try {
-                    // 使用反射获取该Handler对应的实例，并执行方法
-                    IConditHandler handler = (IConditHandler) th.getHandlerCls().newInstance();
-                    return handler.buildSqlInfo(source);
-                } catch (InstantiationException e) {
-                    log.error("实例化IConditHandler的实现类出错!", e);
-                } catch (IllegalAccessException e) {
-                    log.error("访问Handler的实现类出错!", e);
-                }
-            }
+        Map<String, TagHandler> tagHandlerMap = AbstractZealotConfig.getTagHandlerMap();
+        if (tagHandlerMap.containsKey(tag)) {
+            TagHandler th = tagHandlerMap.get(tag);
+            source.setPrefix(th.getPrefix()).setSuffix(th.getSuffix());
+            return doBuildSqlInfo(source, th);
+        } else {
+            throw new NodeNotFoundException("未找到标签对应的处理器，该标签为:<" + tag + ">");
         }
+    }
 
+    /**
+     * 执行构建SQL片段和参数的方法.
+     * @param source 构建所需的资源对象
+     * @param th 标签处理器实体
+     * @return 返回SqlInfo对象
+     */
+    private static SqlInfo doBuildSqlInfo(BuildSource source, TagHandler th) {
+        try {
+            // 使用反射获取该Handler对应的实例，并执行方法
+            IConditHandler handler = (IConditHandler) th.getHandlerCls().newInstance();
+            return handler.buildSqlInfo(source);
+        } catch (InstantiationException e) {
+            log.error("实例化IConditHandler的实现类出错!", e);
+        } catch (IllegalAccessException e) {
+            log.error("访问Handler的实现类出错!", e);
+        }
         return source.getSqlInfo();
     }
 

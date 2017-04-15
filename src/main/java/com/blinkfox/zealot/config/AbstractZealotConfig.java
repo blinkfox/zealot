@@ -1,15 +1,15 @@
 package com.blinkfox.zealot.config;
 
+import static com.blinkfox.zealot.consts.ZealotConst.*;
+
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.concrete.BetweenHandler;
-import com.blinkfox.zealot.core.concrete.EqualHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
 import com.blinkfox.zealot.core.concrete.LikeHandler;
-import java.util.HashSet;
+import com.blinkfox.zealot.core.concrete.NormalHandler;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.dom4j.Node;
 
@@ -23,23 +23,50 @@ public abstract class AbstractZealotConfig {
     // key是资源的路径（将xml命名空间和zealotId用"@"符号分割），value是dom4j文档节点Node
     private static Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
 
-    // 初始化默认的一些tagHandlers到HashSet集合中
-    private static Set<TagHandler> tagHandlers = new HashSet<TagHandler>();
+    // 初始化默认的一些标签和tagHandlers到HashMap集合中,key是标签字符串,value是TagHandler对象
+    private static Map<String, TagHandler> tagHandlerMap = new HashMap<String, TagHandler>();
     
-    /* 添加默认的标签和对应的handler处理器，分别是equal,like,between,in等 */
+    /* 添加默认的标签和对应的handler处理器，主要是普通条件,like,between,in等 */
     static {
-        add(ZealotConst.EQUAL, EqualHandler.class);
-        add(ZealotConst.AND_EQUAL, ZealotConst.AND_PREFIX, EqualHandler.class);
-        add(ZealotConst.OR_EQUAL, ZealotConst.OR_PREFIX, EqualHandler.class);
-        add(ZealotConst.LIKE, LikeHandler.class);
-        add(ZealotConst.AND_LIKE, ZealotConst.AND_PREFIX, LikeHandler.class);
-        add(ZealotConst.OR_LIKE, ZealotConst.OR_PREFIX, LikeHandler.class);
-        add(ZealotConst.BETWEEN, BetweenHandler.class);
-        add(ZealotConst.AND_BETWEEN, ZealotConst.AND_PREFIX, BetweenHandler.class);
-        add(ZealotConst.OR_BETWEEN, ZealotConst.OR_PREFIX, BetweenHandler.class);
-        add(ZealotConst.IN, InHandler.class);
-        add(ZealotConst.AND_IN, ZealotConst.AND_PREFIX, InHandler.class);
-        add(ZealotConst.OR_IN, ZealotConst.OR_PREFIX, InHandler.class);
+        // 等于相关标签：equal、andEqual、orEqual
+        add(EQUAL, NormalHandler.class, EQUAL_SUFFIX);
+        add(AND_EQUAL, AND_PREFIX, NormalHandler.class, EQUAL_SUFFIX);
+        add(OR_EQUAL, OR_PREFIX, NormalHandler.class, EQUAL_SUFFIX);
+
+        // 大于相关标签：greaterThan、andGreaterThan、orGreaterThan
+        add(MORE, NormalHandler.class, GT_SUFFIX);
+        add(AND_MORE, AND_PREFIX, NormalHandler.class, GT_SUFFIX);
+        add(OR_MORE, OR_PREFIX, NormalHandler.class, GT_SUFFIX);
+
+        // 小于相关标签：lessThan、andGreater、orGreater
+        add(LESS, NormalHandler.class, LT_SUFFIX);
+        add(AND_LESS, AND_PREFIX, NormalHandler.class, LT_SUFFIX);
+        add(OR_LESS, OR_PREFIX, NormalHandler.class, LT_SUFFIX);
+
+        // 大于等于相关标签：greaterEqual、andGreaterEqual、orGreaterEqual
+        add(MORE_EQUAL, NormalHandler.class, GTE_SUFFIX);
+        add(AND_MORE_EQUAL, AND_PREFIX, NormalHandler.class, GTE_SUFFIX);
+        add(OR_MORE_EQUAL, OR_PREFIX, NormalHandler.class, GTE_SUFFIX);
+
+        // 小于等于相关标签：lessEqual、andLessEqual、orLessEqual
+        add(LESS_EQUAL, NormalHandler.class, LTE_SUFFIX);
+        add(AND_LESS_EQUAL, AND_PREFIX, NormalHandler.class, LTE_SUFFIX);
+        add(OR_LESS_EQUAL, OR_PREFIX, NormalHandler.class, LTE_SUFFIX);
+
+        // like相关标签：like、andLike、orLike
+        add(LIKE, LikeHandler.class);
+        add(AND_LIKE, AND_PREFIX, LikeHandler.class);
+        add(OR_LIKE, OR_PREFIX, LikeHandler.class);
+
+        // between相关标签：between、andBetween、orBetween
+        add(BETWEEN, BetweenHandler.class);
+        add(AND_BETWEEN, AND_PREFIX, BetweenHandler.class);
+        add(OR_BETWEEN, OR_PREFIX, BetweenHandler.class);
+
+        // in相关标签：in、andIn、orIn
+        add(IN, InHandler.class);
+        add(AND_IN, AND_PREFIX, InHandler.class);
+        add(OR_IN, OR_PREFIX, InHandler.class);
     }
 
     /**
@@ -51,11 +78,11 @@ public abstract class AbstractZealotConfig {
     }
 
     /**
-     * 获取全局的tagHandlers集合对象.
-     * @return 返回标签和其Handler的对象
+     * 获取全局的标签和对应处理器的tagHandlerMap对象.
+     * @return tagHandlerMap 标签和对应处理器的Map
      */
-    public static Set<TagHandler> getTagHandlers() {
-        return tagHandlers;
+    public static Map<String, TagHandler> getTagHandlerMap() {
+        return tagHandlerMap;
     }
 
     /**
@@ -64,7 +91,7 @@ public abstract class AbstractZealotConfig {
      * @param handlerCls 动态处理类的反射类型
      */
     protected static void add(String tagName, Class<?> handlerCls) {
-        tagHandlers.add(new TagHandler(tagName, handlerCls));
+        tagHandlerMap.put(tagName, new TagHandler(handlerCls));
     }
 
     /**
@@ -74,7 +101,28 @@ public abstract class AbstractZealotConfig {
      * @param handlerCls 动态处理类的反射类型
      */
     protected static void add(String tagName, String prefix, Class<?> handlerCls) {
-        tagHandlers.add(new TagHandler(tagName, prefix, handlerCls));
+        tagHandlerMap.put(tagName, new TagHandler(prefix, handlerCls));
+    }
+
+    /**
+     * 添加自定义标签和其对应的Handler class.
+     * @param tagName 标签名称
+     * @param handlerCls 动态处理类的反射类型
+     * @param suffix 后缀
+     */
+    protected static void add(String tagName, Class<?> handlerCls, String suffix) {
+        tagHandlerMap.put(tagName, new TagHandler(handlerCls, suffix));
+    }
+
+    /**
+     * 添加自定义标签和其对应的Handler class.
+     * @param tagName 标签名称
+     * @param prefix 前缀
+     * @param handlerCls 动态处理类的反射类型
+     * @param suffix 后缀
+     */
+    protected static void add(String tagName, String prefix, Class<?> handlerCls, String suffix) {
+        tagHandlerMap.put(tagName, new TagHandler(prefix, handlerCls, suffix));
     }
 
     /**

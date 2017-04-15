@@ -7,22 +7,42 @@ package com.blinkfox.zealot.consts;
 public final class ZealotConst {
 
     /* 分隔符常量,SP是Separate的简称 */
-    public static final String SP_AT = "@"; // @分隔符
+    public static final String SP_AT = "@@"; // @@分隔符
 
     /* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点
 
-    /* 元素节点类型 ElementType->ET */
+    /* 自定义的zealot的元素节点类型 ElementType->ET */
+    // 等于
     public static final String EQUAL = "equal";
     public static final String AND_EQUAL = "andEqual";
     public static final String OR_EQUAL = "orEqual";
+    // 大于
+    public static final String MORE = "moreThan";
+    public static final String AND_MORE = "andMoreThan";
+    public static final String OR_MORE = "orMoreThan";
+    // 小于
+    public static final String LESS = "lessThan";
+    public static final String AND_LESS = "andLessThan";
+    public static final String OR_LESS = "orLessThan";
+    // 大于等于
+    public static final String MORE_EQUAL = "moreEqual";
+    public static final String AND_MORE_EQUAL = "andMoreEqual";
+    public static final String OR_MORE_EQUAL = "orMoreEqual";
+    // 小于等于
+    public static final String LESS_EQUAL = "lessEqual";
+    public static final String AND_LESS_EQUAL = "andLessEqual";
+    public static final String OR_LESS_EQUAL = "orLessEqual";
+    // like模糊
     public static final String LIKE = "like";
     public static final String AND_LIKE = "andLike";
     public static final String OR_LIKE = "orLike";
+    // between区间
     public static final String BETWEEN = "between";
     public static final String AND_BETWEEN = "andBetween";
     public static final String OR_BETWEEN = "orBetween";
+    // in范围
     public static final String IN = "in";
     public static final String AND_IN = "andIn";
     public static final String OR_IN = "orIn";
@@ -38,11 +58,11 @@ public final class ZealotConst {
     public static final String ATTR_ENT = "attribute::end";
 
     /* sql中前缀常量 */
-    public static final String SPACE_PREFIX = " ";
+    public static final String ONE_SPACE = " ";
     public static final String AND_PREFIX = " AND ";
     public static final String OR_PREFIX = " OR ";
 
-    /* 查询sql中后缀常量 */
+    /* sql中的后缀常量 */
     public static final String EQUAL_SUFFIX = " = ? ";
     public static final String GT_SUFFIX = " > ? ";
     public static final String LT_SUFFIX = " < ? ";

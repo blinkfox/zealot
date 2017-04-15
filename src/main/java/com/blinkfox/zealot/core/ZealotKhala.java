@@ -471,7 +471,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala equal(String field, Object value) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX,true);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.EQUAL_SUFFIX,true);
     }
 
     /**
@@ -482,7 +482,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala equal(String field, Object value, boolean match) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, match);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.EQUAL_SUFFIX, match);
     }
 
     /**
@@ -533,8 +533,8 @@ public final class ZealotKhala {
      * @param value 值
      * @return ZealotKhala实例
      */
-    public ZealotKhala greaterThan(String field, Object value) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GT_SUFFIX, true);
+    public ZealotKhala moreThan(String field, Object value) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.GT_SUFFIX, true);
     }
 
     /**
@@ -544,8 +544,8 @@ public final class ZealotKhala {
      * @param match 是否匹配
      * @return ZealotKhala实例
      */
-    public ZealotKhala greaterThan(String field, Object value, boolean match) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GT_SUFFIX, match);
+    public ZealotKhala moreThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.GT_SUFFIX, match);
     }
 
     /**
@@ -554,7 +554,7 @@ public final class ZealotKhala {
      * @param value 值
      * @return ZealotKhala实例
      */
-    public ZealotKhala andGreaterThan(String field, Object value) {
+    public ZealotKhala andMoreThan(String field, Object value) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GT_SUFFIX, true);
     }
 
@@ -565,7 +565,7 @@ public final class ZealotKhala {
      * @param match 是否匹配
      * @return ZealotKhala实例
      */
-    public ZealotKhala andGreaterThan(String field, Object value, boolean match) {
+    public ZealotKhala andMoreThan(String field, Object value, boolean match) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GT_SUFFIX, match);
     }
 
@@ -576,7 +576,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala lessThan(String field, Object value) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LT_SUFFIX, true);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.LT_SUFFIX, true);
     }
 
     /**
@@ -587,7 +587,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala lessThan(String field, Object value, boolean match) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LT_SUFFIX, match);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.LT_SUFFIX, match);
     }
 
     /**
@@ -617,8 +617,8 @@ public final class ZealotKhala {
      * @param value 值
      * @return ZealotKhala实例
      */
-    public ZealotKhala greaterEqual(String field, Object value) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GTE_SUFFIX, true);
+    public ZealotKhala moreEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.GTE_SUFFIX, true);
     }
 
     /**
@@ -628,8 +628,8 @@ public final class ZealotKhala {
      * @param match 是否匹配
      * @return ZealotKhala实例
      */
-    public ZealotKhala greaterEqual(String field, Object value, boolean match) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GTE_SUFFIX, match);
+    public ZealotKhala moreEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.GTE_SUFFIX, match);
     }
 
     /**
@@ -638,7 +638,7 @@ public final class ZealotKhala {
      * @param value 值
      * @return ZealotKhala实例
      */
-    public ZealotKhala andGreaterEqual(String field, Object value) {
+    public ZealotKhala andMoreEqual(String field, Object value) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GTE_SUFFIX, true);
     }
 
@@ -649,7 +649,7 @@ public final class ZealotKhala {
      * @param match 是否匹配
      * @return ZealotKhala实例
      */
-    public ZealotKhala andGreaterEqual(String field, Object value, boolean match) {
+    public ZealotKhala andMoreEqual(String field, Object value, boolean match) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GTE_SUFFIX, match);
     }
 
@@ -660,7 +660,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala lessEqual(String field, Object value) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LTE_SUFFIX, true);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.LTE_SUFFIX, true);
     }
 
     /**
@@ -671,7 +671,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala lessEqual(String field, Object value, boolean match) {
-        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LTE_SUFFIX, match);
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.LTE_SUFFIX, match);
     }
 
     /**
@@ -702,7 +702,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala like(String field, Object value) {
-        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, true);
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, true);
     }
 
     /**
@@ -713,7 +713,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala like(String field, Object value, boolean match) {
-        return this.doLike(ZealotConst.SPACE_PREFIX, field, value, match);
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, match);
     }
 
     /**
@@ -766,7 +766,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala between(String field, Object startValue, Object endValue) {
-        return this.doBetween(ZealotConst.SPACE_PREFIX, field, startValue, endValue, true);
+        return this.doBetween(ZealotConst.ONE_SPACE, field, startValue, endValue, true);
     }
 
     /**
@@ -778,7 +778,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala between(String field, Object startValue, Object endValue, boolean match) {
-        return this.doBetween(ZealotConst.SPACE_PREFIX, field, startValue, endValue, match);
+        return this.doBetween(ZealotConst.ONE_SPACE, field, startValue, endValue, match);
     }
 
     /**
@@ -834,7 +834,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Object[] values) {
-        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true);
     }
 
     /**
@@ -845,7 +845,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Object[] values, boolean match) {
-        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match);
     }
 
     /**
@@ -855,7 +855,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Collection<?> values) {
-        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true);
     }
 
     /**
@@ -866,7 +866,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Collection<?> values, boolean match) {
-        return this.doIn(ZealotConst.SPACE_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match);
     }
 
     /**

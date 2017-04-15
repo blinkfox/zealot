@@ -329,7 +329,7 @@ public class ZealotKhalaTest {
                 .from("user AS u")
                 .leftJoin("user_detail AS d").on("u.id = d.user_id")
                 .where("u.id != ''")
-                .andLike("u.name", userName, userName != null)
+                .andLike("u.name", userName)
                 .doAnything(true, new ICustomAction() {
                     @Override
                     public void execute(final StringBuilder join, final List<Object> params) {
@@ -338,9 +338,9 @@ public class ZealotKhalaTest {
                         log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
                     }
                 })
-                .andGreaterThan("u.age", 21)
+                .andMoreThan("u.age", 21)
                 .andLessThan("u.age", 13)
-                .andGreaterEqual("d.birthday", startBirthday)
+                .andMoreEqual("d.birthday", startBirthday)
                 .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
                 .orderBy("d.birthday").desc()

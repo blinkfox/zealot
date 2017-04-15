@@ -12,6 +12,13 @@
         select * from user as u where
         <like field="u.nickname" value="nickName"/>
         <andEqual match="?state == 1" field="u.status" value="state"/>
+        and
+        <moreThan field="u.age" value="startAge"/>
+        <andLessThan field="u.age" value="endAge"/>
+        and
+        <moreEqual field="u.age" value="startAge"/>
+        <andMoreEqual field="u.age" value="startAge"/>
+        <andLessEqual field="u.age" value="endAge"/>
         <andLike match="?email != empty" field="u.email" value="email"/>
         <andBetween match="?startAge > 0 || ?endAge > 0" field="u.age" start="startAge" end="endAge"/>
         <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="u.birthday" start="startBirthday" end="endBirthday"/>

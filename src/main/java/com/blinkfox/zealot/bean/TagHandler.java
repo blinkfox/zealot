@@ -3,13 +3,10 @@ package com.blinkfox.zealot.bean;
 import com.blinkfox.zealot.consts.ZealotConst;
 
 /**
- * 标签和对应的动态sql生成的处理类.
+ * 标签对应的动态sql生成的处理类.
  * Created by blinkfox on 2016-11-01.
  */
 public class TagHandler {
-
-    // 标签名称
-    private String tagName;
 
     // 生成sql的前缀,如:and, or 等
     private String prefix;
@@ -17,40 +14,62 @@ public class TagHandler {
     // 生成动态sql的处理实现反射类型，如:EqualHandler
     private Class<?> handlerCls;
 
+    // 生成sql的后缀,如:>, <, = 等
+    private String suffix;
+
     /**
-     * 仅仅标签名称和其对应的处理类的构造方法.
-     * @param tagName 标签名称
+     * 仅标签对应处理类的构造方法.
      * @param handlerCls 动态处理类的反射类型
      */
-    public TagHandler(String tagName, Class<?> handlerCls) {
-        this.tagName = tagName;
-        this.prefix = ZealotConst.SPACE_PREFIX;
+    public TagHandler(Class<?> handlerCls) {
+        this.prefix = ZealotConst.ONE_SPACE;
         this.handlerCls = handlerCls;
     }
 
     /**
-     * 全构造方法.
-     * @param tagName 标签名称
+     * 含前缀、标签处理器的构造方法.
      * @param prefix sql前缀
      * @param handlerCls 动态处理类的反射类型
      */
-    public TagHandler(String tagName, String prefix, Class<?> handlerCls) {
-        this.tagName = tagName;
+    public TagHandler(String prefix, Class<?> handlerCls) {
         this.prefix = prefix;
         this.handlerCls = handlerCls;
     }
 
-    /* getter 和 setter 方法 */
-    public String getTagName() {
-        return tagName;
+    /**
+     * 含标签处理器、后缀的构造方法.
+     * @param handlerCls 动态处理类的反射类型
+     * @param suffix sql前后缀
+     */
+    public TagHandler(Class<?> handlerCls, String suffix) {
+        this.prefix = ZealotConst.ONE_SPACE;
+        this.handlerCls = handlerCls;
+        this.suffix = suffix;
     }
 
+    /**
+     * 全构造方法.
+     * @param prefix sql前缀
+     * @param suffix sql后缀
+     * @param handlerCls 动态处理类的反射类型
+     */
+    public TagHandler(String prefix, Class<?> handlerCls, String suffix) {
+        this.prefix = prefix;
+        this.handlerCls = handlerCls;
+        this.suffix = suffix;
+    }
+
+    /* getter 和 setter 方法 */
     public String getPrefix() {
         return prefix;
     }
 
     public Class<?> getHandlerCls() {
         return handlerCls;
+    }
+
+    public String getSuffix() {
+        return suffix;
     }
 
 }

@@ -57,7 +57,7 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建等值查询需要的SqlInfo信息.
+     * 构建普通查询需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
      * @param value 参数值
      * @param suffix 后缀，如：大于、等于、小于等

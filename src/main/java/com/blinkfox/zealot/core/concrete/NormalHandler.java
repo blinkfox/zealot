@@ -11,10 +11,11 @@ import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import org.dom4j.Node;
 
 /**
- * 等值查询动态sql生成的实现类.
+ * 普通查询动态sql生成的实现类.
+ * 如：等值、大于、小于、大于等于、小于等于 查询.
  * Created by blinkfox on 2016/10/30.
  */
-public class EqualHandler implements IConditHandler {
+public class NormalHandler implements IConditHandler {
 
     /**
      * 构建等值查询的动态条件sql.
@@ -24,6 +25,7 @@ public class EqualHandler implements IConditHandler {
     @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
         /* 获取拼接的参数 */
+        String suffix = source.getSuffix();
         SqlInfo sqlInfo = source.getSqlInfo();
         Node node = source.getNode();
 
@@ -35,15 +37,16 @@ public class EqualHandler implements IConditHandler {
         Node matchNode = node.selectSingleNode(ZealotConst.ATTR_MATCH);
         String matchText = XmlNodeHelper.getNodeText(matchNode);
         if (StringHelper.isBlank(matchText)) {
-            sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildEqualSql(fieldText, valueText);
+            sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildNormalSql(fieldText, valueText, suffix);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
             Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
-                sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildEqualSql(fieldText, valueText);
+                sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildNormalSql(fieldText, valueText, suffix);
             }
         }
 
+        source.resetPrefix();
         return sqlInfo;
     }
 

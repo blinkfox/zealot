@@ -31,14 +31,15 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建普通等值查询的sql信息.
+     * 构建普通类型查询的sql信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
+     * @param suffix 后缀，如：大于、等于、小于等
      * @return 返回SqlInfo信息
      */
-    public SqlInfo buildEqualSql(String fieldText, String valueText) {
+    public SqlInfo buildNormalSql(String fieldText, String valueText, String suffix) {
         Object value = ParseHelper.parseExpressWithException(valueText, context);
-        return super.buildNormalSql(fieldText, value, ZealotConst.EQUAL_SUFFIX);
+        return super.buildNormalSql(fieldText, value, suffix);
     }
 
     /**

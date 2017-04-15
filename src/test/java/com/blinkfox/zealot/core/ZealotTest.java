@@ -93,9 +93,10 @@ public class ZealotTest {
         log.info("testGetUsers测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
-        String expectedSql = "select * from user as u where u.nickname LIKE ? AND u.status = ? AND "
-                + "u.age BETWEEN ? AND ? AND u.birthday BETWEEN ? AND ? AND u.sex in (?, ?) order by u.id desc";
-        Object[] expectedParams = new Object[]{"%张%", 1, 23, 28, "1990-01-01 00:00:00",
+        String expectedSql = "select * from user as u where u.nickname LIKE ? AND u.status = ? and u.age > ? "
+                + "AND u.age < ? and u.age >= ? AND u.age >= ? AND u.age <= ? AND u.age BETWEEN ? AND ? "
+                + "AND u.birthday BETWEEN ? AND ? AND u.sex in (?, ?) order by u.id desc";
+        Object[] expectedParams = new Object[]{"%张%", 1, 23, 28, 23, 23, 28, 23, 28, "1990-01-01 00:00:00",
                 "1991-01-01 23:59:59", 0, 1};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
