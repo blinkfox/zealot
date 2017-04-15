@@ -5,6 +5,10 @@
     <zealot id="queryUserById">
         select * from user where
         <equal field="id" value="id"/>
+        <text match="" value="{name1, name2, email}">
+            and name in (?, ?)
+            and email = ?
+        </text>
     </zealot>
 
     <!-- 根据动态条件查询用户信息 -->

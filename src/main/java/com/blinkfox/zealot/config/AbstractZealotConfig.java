@@ -4,10 +4,7 @@ import static com.blinkfox.zealot.consts.ZealotConst.*;
 
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.core.concrete.BetweenHandler;
-import com.blinkfox.zealot.core.concrete.InHandler;
-import com.blinkfox.zealot.core.concrete.LikeHandler;
-import com.blinkfox.zealot.core.concrete.NormalHandler;
+import com.blinkfox.zealot.core.concrete.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,6 +64,8 @@ public abstract class AbstractZealotConfig {
         add(IN, InHandler.class);
         add(AND_IN, AND_PREFIX, InHandler.class);
         add(OR_IN, OR_PREFIX, InHandler.class);
+
+        add(TEXT, TextHandler.class);
     }
 
     /**

@@ -46,6 +46,8 @@ public final class ZealotConst {
     public static final String IN = "in";
     public static final String AND_IN = "andIn";
     public static final String OR_IN = "orIn";
+    // text文本
+    public static final String TEXT = "text";
 
     /* 节点相关的类型 */
     public static final String ZEALOT_TAG = "zealots/zealot";

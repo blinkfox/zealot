@@ -2,7 +2,6 @@ package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import java.util.Collection;
@@ -31,7 +30,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建普通类型查询的sql信息.
+     * 构建普通类型查询的sqlInfo信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @param suffix 后缀，如：大于、等于、小于等
@@ -43,7 +42,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建Like模糊查询的sql信息.
+     * 构建Like模糊查询的sqlInfo信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
@@ -53,7 +52,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建数字查询的sql信息.
+     * 构建between区间查询的sqlInfo信息.
      * @param fieldText 字段文本值
      * @param startText 参数开始值
      * @param endText 参数结束值
@@ -67,7 +66,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建Like模糊查询的sql信息.
+     * 构建in范围查询的sqlInfo信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
      * @return 返回SqlInfo信息
@@ -79,7 +78,34 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
         if (obj == null) {
             return sqlInfo;
         }
+        Object[] values = this.convertToArray(obj);
+        return super.buildInSql(fieldText, values);
+    }
 
+    /**
+     * 构建任意文本和自定义有序参数集合来构建的sqlInfo信息.
+     * @param valueText value参数值
+     * @return 返回SqlInfo信息
+     */
+    @SuppressWarnings("rawtypes")
+    public SqlInfo buildTextSqlParams(String valueText) {
+        // 获取value值，判断是否为空，若为空，则直接退出本方法
+        Object obj = ParseHelper.parseExpressWithException(valueText, context);
+        obj = obj == null ? new Object(){} : obj;
+
+        Object[] values = this.convertToArray(obj);
+        for (Object objVal: values) {
+            this.sqlInfo.getParams().add(objVal);
+        }
+        return sqlInfo;
+    }
+
+    /**
+     * 将对象转成数组.
+     * @param obj 对象
+     * @return 数组
+     */
+    private Object[] convertToArray(Object obj) {
         // 获取参数的集合信息，并转换成数组
         Object[] values;
         if (obj instanceof Collection) {
@@ -87,10 +113,9 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
         } else if (obj.getClass().isArray()) {
             values = (Object[]) obj;
         } else {
-            throw new NotCollectionOrArrayException("in查询xml标签中的值解析后不是有效的集合或数组!");
+            values = new Object[]{obj};
         }
-
-        return super.buildInSql(fieldText, values);
+        return values;
     }
 
 }

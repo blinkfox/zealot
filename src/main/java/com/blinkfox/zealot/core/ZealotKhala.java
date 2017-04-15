@@ -298,6 +298,17 @@ public final class ZealotKhala {
     }
 
     /**
+     * 在sql后追加任何文本字符串，后可追加自定义可变参数，如果match为true时，才生成此SQL文本和参数.
+     * @param match 匹配条件
+     * @param text 文本
+     * @param values 可变参数数组
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala text(boolean match, String text, Object... values) {
+        return match ? text(text, values) : this;
+    }
+
+    /**
      * 在sql的参数集合后追加任何的数组.
      * @param value 值
      * @param objType 对象类型那
@@ -327,17 +338,6 @@ public final class ZealotKhala {
      */
     public ZealotKhala param(Collection<?> values) {
         return this.appendParams(values, ZealotConst.OBJTYPE_COLLECTION);
-    }
-
-    /**
-     * 当匹配match条件为true时，即执行文本拼接和参数传递.
-     * @param match 匹配条件
-     * @param text 文本
-     * @param values 不定参数的值
-     * @return ZealotKhala实例
-     */
-    public ZealotKhala when(boolean match, String text, Object... values) {
-        return match ? text(text, values) : this;
     }
 
     /**

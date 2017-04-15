@@ -119,7 +119,7 @@ public class ZealotKhalaTest {
                 // .where("u.id = ?").param("3")
                 .where("u.id = ?", "3")
                 .and("u.nick_name like '%zhang%'")
-                .when(true, "AND u.email = ?", "san@163.com")
+                .text(true, "AND u.email = ?", "san@163.com")
                 .doAnything(true, new ICustomAction() {
                     @Override
                     public void execute(StringBuilder join, List<Object> params) {
