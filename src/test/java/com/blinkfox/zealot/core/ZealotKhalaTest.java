@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.core.inters.ICustomAction;
 import com.blinkfox.zealot.log.Log;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -118,6 +119,15 @@ public class ZealotKhalaTest {
                 // .where("u.id = ?").param("3")
                 .where("u.id = ?", "3")
                 .and("u.nick_name like '%zhang%'")
+                .when(true, "AND u.email = ?", "san@163.com")
+                .doAnything(true, new ICustomAction() {
+                    @Override
+                    public void execute(StringBuilder join, List<Object> params) {
+                        join.append(" abc111");
+                        params.add(5);
+                        log.info("执行了自定义操作，可拼接字符串和有序参数...");
+                    }
+                })
                 .groupBy("u.id").having("u.id")
                 .orderBy("u.id").desc().text(", u.nick_name", "zhang").asc()
                 .unionAll()
@@ -133,9 +143,9 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.nick_name, u.email FROM user AS u INNER JOIN corp as c ON u.corp_id = c.id "
                 + "LEFT JOIN dept AS d ON u.dept_id = d.id RIGHT JOIN office AS o ON u.office_id = o.id "
                 + "FULL JOIN user_detail AS ud ON u.detail_id = ud.id WHERE u.id = ? AND u.nick_name "
-                + "like '%zhang%' GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
+                + "like '%zhang%' AND u.email = ? abc111 GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
                 + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2 LIMIT 5 OFFSET 3", sql);
-        assertArrayEquals(new Object[]{"3", "zhang"}, arr);
+        assertArrayEquals(new Object[]{"3", "san@163.com", 5, "zhang"}, arr);
         log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
@@ -319,7 +329,19 @@ public class ZealotKhalaTest {
                 .from("user AS u")
                 .leftJoin("user_detail AS d").on("u.id = d.user_id")
                 .where("u.id != ''")
-                .andLike("u.id", userName, userName != null)
+                .andLike("u.name", userName, userName != null)
+                .doAnything(true, new ICustomAction() {
+                    @Override
+                    public void execute(final StringBuilder join, final List<Object> params) {
+                        join.append("abc111");
+                        params.add(5);
+                        log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+                    }
+                })
+                .andGreaterThan("u.age", 21)
+                .andLessThan("u.age", 13)
+                .andGreaterEqual("d.birthday", startBirthday)
+                .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
                 .orderBy("d.birthday").desc()
                 .end();
@@ -328,9 +350,11 @@ public class ZealotKhalaTest {
 
         // 断言并输出sql信息
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
-                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? "
+                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
+                + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
                 + "AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC", sql);
-        assertArrayEquals(new Object[]{"%zhang%", "1990-03-25", "2010-08-28"} ,arr);
+        assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
+                "1990-03-25", "2010-08-28"} ,arr);
         log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 

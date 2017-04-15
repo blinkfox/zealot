@@ -19,6 +19,7 @@ public final class SqlKeyConst {
     public static final String FROM = "FROM";
     public static final String WHERE = "WHERE";
     public static final String AND = "AND";
+    public static final String OR = "OR";
     public static final String INNER_JOIN = "INNER JOIN";
     public static final String LEFT_JOIN = "LEFT JOIN";
     public static final String RIGHT_JOIN = "RIGHT JOIN";

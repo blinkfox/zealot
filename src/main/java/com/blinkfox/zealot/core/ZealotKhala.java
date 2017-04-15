@@ -7,6 +7,7 @@ import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.builder.JavaSqlInfoBuilder;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
+import com.blinkfox.zealot.core.inters.ICustomAction;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.CollectionHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
@@ -19,14 +20,14 @@ import java.util.Collections;
  */
 public final class ZealotKhala {
 
-    // 封装了SqlInfo、应用中提供的上下文参数、前缀等信息.由于这里是纯Java拼接,所以就没有xml的Node节点信息，初始为为null即可
-    private static BuildSource source;
+    // 封装了SqlInfo、应用中提供的上下文参数、前缀等信息.由于这里是纯Java拼接,所以就没有xml的Node节点信息，初始为为null
+    private BuildSource source;
 
     /**
      * 私有构造方法，构造时就初始化BuildSource相应的参数信息.
      */
     private ZealotKhala() {
-        source = new BuildSource(SqlInfo.newInstance());
+        this.source = new BuildSource(SqlInfo.newInstance());
     }
 
     /**
@@ -42,7 +43,7 @@ public final class ZealotKhala {
      * @return sqlInfo
      */
     public SqlInfo end() {
-        SqlInfo sqlInfo = source.getSqlInfo();
+        SqlInfo sqlInfo = this.source.getSqlInfo();
         return sqlInfo.setSql(StringHelper.replaceBlank(sqlInfo.getJoin().toString()));
     }
 
@@ -52,10 +53,10 @@ public final class ZealotKhala {
      * @param params 其他若干字符串参数
      */
     private ZealotKhala concat(String sqlKey, String ... params) {
-        source.getSqlInfo().getJoin().append(SPACE).append(sqlKey).append(SPACE);
+        this.source.getSqlInfo().getJoin().append(SPACE).append(sqlKey).append(SPACE);
         if (params != null && params.length > 0) {
             for (String s: params) {
-                source.getSqlInfo().getJoin().append(s).append(SPACE);
+                this.source.getSqlInfo().getJoin().append(s).append(SPACE);
             }
         }
         return this;
@@ -133,6 +134,15 @@ public final class ZealotKhala {
      */
     public ZealotKhala and(String text) {
         return concat(AND, text);
+    }
+
+    /**
+     * 拼接并带上'OR'关键字的字符串.
+     * @param text 文本
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala or(String text) {
+        return concat(OR, text);
     }
 
     /**
@@ -276,24 +286,14 @@ public final class ZealotKhala {
     }
 
     /**
-     * 在sql后追加任何文本字符串.
-     * @param text 文本
-     * @return ZealotKhala实例
-     */
-    public ZealotKhala text(String text) {
-        source.getSqlInfo().getJoin().append(text);
-        return this;
-    }
-
-    /**
      * 在sql后追加任何文本字符串，后可追加自定义可变参数.
      * @param text 文本
-     * @param value 可变参数数组
+     * @param values 可变参数数组
      * @return ZealotKhala实例
      */
-    public ZealotKhala text(String text, Object... value) {
-        source.getSqlInfo().getJoin().append(text);
-        this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
+    public ZealotKhala text(String text, Object... values) {
+        this.source.getSqlInfo().getJoin().append(text);
+        this.appendParams(values, ZealotConst.OBJTYPE_ARRAY);
         return this;
     }
 
@@ -306,18 +306,18 @@ public final class ZealotKhala {
     private ZealotKhala appendParams(Object value, int objType) {
         Object[] values = CollectionHelper.toArray(value, objType);
         if (CollectionHelper.isNotEmpty(values)) {
-            Collections.addAll(source.getSqlInfo().getParams(), values);
+            Collections.addAll(this.source.getSqlInfo().getParams(), values);
         }
         return this;
     }
 
     /**
      * 在sql的参数集合后追加不定对象个数的数组.
-     * @param value 不定个数的值，也是数组
+     * @param values 不定个数的值，也是数组
      * @return ZealotKhala实例
      */
-    public ZealotKhala param(Object... value) {
-        return this.appendParams(value, ZealotConst.OBJTYPE_ARRAY);
+    public ZealotKhala param(Object... values) {
+        return this.appendParams(values, ZealotConst.OBJTYPE_ARRAY);
     }
 
     /**
@@ -330,17 +330,50 @@ public final class ZealotKhala {
     }
 
     /**
+     * 当匹配match条件为true时，即执行文本拼接和参数传递.
+     * @param match 匹配条件
+     * @param text 文本
+     * @param values 不定参数的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala when(boolean match, String text, Object... values) {
+        return match ? text(text, values) : this;
+    }
+
+    /**
+     * 执行自定义的任意操作.
+     * @param action 执行when条件中的方法
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala doAnything(ICustomAction action) {
+        SqlInfo sqlInfo = this.source.getSqlInfo();
+        action.execute(sqlInfo.getJoin(), sqlInfo.getParams());
+        return this;
+    }
+
+    /**
+     * 当匹配match条件为true时，才执行自定义的任意操作.
+     * @param match 匹配条件
+     * @param action 执行when条件中的方法
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala doAnything(boolean match, ICustomAction action) {
+        return match ? this.doAnything(action) : this;
+    }
+
+    /**
      * 执行生成等值查询SQL片段的方法.
      * @param prefix 前缀
      * @param field 数据库字段
      * @param value 值
+     * @param suffix 后缀
      * @param match 是否匹配
      * @return ZealotKhala实例的当前实例
      */
-    private ZealotKhala doEqual(String prefix, String field, Object value, boolean match) {
+    private ZealotKhala doNormal(String prefix, String field, Object value, String suffix, boolean match) {
         if (match) {
-            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildEqualSql(field, value);
-            source.resetPrefix();
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildNormalSql(field, value, suffix);
+            this.source.resetPrefix();
         }
         return this;
     }
@@ -355,8 +388,8 @@ public final class ZealotKhala {
      */
     private ZealotKhala doLike(String prefix, String field, Object value, boolean match) {
         if (match) {
-            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildLikeSql(field, value);
-            source.resetPrefix();
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildLikeSql(field, value);
+            this.source.resetPrefix();
         }
         return this;
     }
@@ -372,8 +405,8 @@ public final class ZealotKhala {
      */
     private ZealotKhala doBetween(String prefix, String field, Object startValue, Object endValue, boolean match) {
         if (match) {
-            SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildBetweenSql(field, startValue, endValue);
-            source.resetPrefix();
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildBetweenSql(field, startValue, endValue);
+            this.source.resetPrefix();
         }
         return this;
     }
@@ -393,16 +426,16 @@ public final class ZealotKhala {
             // 根据对象类型调用对应的生成in查询的sql片段方法,否则抛出类型不符合的异常
             switch (objType) {
                 case ZealotConst.OBJTYPE_ARRAY:
-                    SqlInfoBuilder.newInstace(source.setPrefix(prefix)).buildInSql(field, (Object[]) value);
+                    SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildInSql(field, (Object[]) value);
                     break;
                 case ZealotConst.OBJTYPE_COLLECTION:
-                    JavaSqlInfoBuilder.newInstace(source.setPrefix(prefix))
+                    JavaSqlInfoBuilder.newInstace(this.source.setPrefix(prefix))
                             .buildInSqlByCollection(field, (Collection<Object>) value);
                     break;
                 default:
                     throw new NotCollectionOrArrayException("in查询的值不是有效的集合或数组!");
             }
-            source.resetPrefix();
+            this.source.resetPrefix();
         }
         return this;
     }
@@ -438,7 +471,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala equal(String field, Object value) {
-        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, true);
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX,true);
     }
 
     /**
@@ -449,7 +482,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala equal(String field, Object value, boolean match) {
-        return this.doEqual(ZealotConst.SPACE_PREFIX, field, value, match);
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, match);
     }
 
     /**
@@ -459,7 +492,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andEqual(String field, Object value) {
-        return this.doEqual(ZealotConst.AND_PREFIX, field, value, true);
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, true);
     }
 
     /**
@@ -470,7 +503,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andEqual(String field, Object value, boolean match) {
-        return this.doEqual(ZealotConst.AND_PREFIX, field, value, match);
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, match);
     }
 
     /**
@@ -480,7 +513,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orEqual(String field, Object value) {
-        return this.doEqual(ZealotConst.OR_PREFIX, field, value, true);
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, true);
     }
 
     /**
@@ -491,7 +524,175 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orEqual(String field, Object value, boolean match) {
-        return this.doEqual(ZealotConst.OR_PREFIX, field, value, match);
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.EQUAL_SUFFIX, match);
+    }
+
+    /**
+     * 生成大于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala greaterThan(String field, Object value) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GT_SUFFIX, true);
+    }
+
+    /**
+     * 生成大于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala greaterThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GT_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" AND "前缀大于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andGreaterThan(String field, Object value) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GT_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" AND "前缀大于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andGreaterThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GT_SUFFIX, match);
+    }
+
+    /**
+     * 生成小于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala lessThan(String field, Object value) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LT_SUFFIX, true);
+    }
+
+    /**
+     * 生成小于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala lessThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LT_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" AND "前缀小于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLessThan(String field, Object value) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LT_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" AND "前缀小于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLessThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LT_SUFFIX, match);
+    }
+
+    /**
+     * 生成大于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala greaterEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成大于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala greaterEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.GTE_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" AND "前缀大于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andGreaterEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" AND "前缀大于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andGreaterEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.GTE_SUFFIX, match);
+    }
+
+    /**
+     * 生成小于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala lessEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成小于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala lessEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.SPACE_PREFIX, field, value, ZealotConst.LTE_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" AND "前缀小于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLessEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" AND "前缀小于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLessEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LTE_SUFFIX, match);
     }
 
     /**

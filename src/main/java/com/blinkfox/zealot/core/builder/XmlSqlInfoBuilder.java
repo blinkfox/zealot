@@ -2,6 +2,7 @@ package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import java.util.Collection;
@@ -36,7 +37,8 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildEqualSql(String fieldText, String valueText) {
-        return super.buildEqualSql(fieldText, ParseHelper.parseExpressWithException(valueText, context));
+        Object value = ParseHelper.parseExpressWithException(valueText, context);
+        return super.buildNormalSql(fieldText, value, ZealotConst.EQUAL_SUFFIX);
     }
 
     /**

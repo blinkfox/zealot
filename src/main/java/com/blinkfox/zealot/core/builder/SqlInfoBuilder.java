@@ -6,7 +6,7 @@ import com.blinkfox.zealot.consts.ZealotConst;
 import java.util.List;
 
 /**
- * 构建拼接sql片段工具类的父类.
+ * 构建拼接sql语句片段和参数的类.
  * Created by blinkfox on 2017-03-31.
  */
 public class SqlInfoBuilder {
@@ -57,19 +57,20 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建等值查询需要的StrinbBuider join信息.
+     * 构建等值查询需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
      * @param value 参数值
+     * @param suffix 后缀，如：大于、等于、小于等
      * @return sqlInfo
      */
-    public SqlInfo buildEqualSql(String fieldText, Object value) {
-        join.append(prefix).append(fieldText).append(ZealotConst.EQUAL_SUFFIX);
+    public SqlInfo buildNormalSql(String fieldText, Object value, String suffix) {
+        join.append(prefix).append(fieldText).append(suffix);
         params.add(value);
         return sqlInfo.setJoin(join).setParams(params);
     }
 
     /**
-     * 构建like模糊查询需要的StrinbBuider join信息.
+     * 构建like模糊查询需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
      * @param value 参数值
      * @return sqlInfo
@@ -81,7 +82,7 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建区间查询的sql信息.
+     * 构建区间查询的SqlInfo信息.
      * @param fieldText 数据库字段文本
      * @param startValue 参数开始值
      * @param endValue 参数结束值
@@ -90,10 +91,10 @@ public class SqlInfoBuilder {
     public SqlInfo buildBetweenSql(String fieldText, Object startValue, Object endValue) {
         /* 根据开始文本和结束文本判断执行是大于、小于还是区间的查询sql和参数的生成 */
         if (startValue != null && endValue == null) { // 开始不为空，结束为空的情况
-            join.append(prefix).append(fieldText).append(ZealotConst.GT_SUFFIX);
+            join.append(prefix).append(fieldText).append(ZealotConst.GTE_SUFFIX);
             params.add(startValue);
         } else if (startValue == null && endValue != null) { // 开始为空，结束不为空的情况
-            join.append(prefix).append(fieldText).append(ZealotConst.LT_SUFFIX);
+            join.append(prefix).append(fieldText).append(ZealotConst.LTE_SUFFIX);
             params.add(endValue);
         } else { // 开始、结束均不为空的情况
             join.append(prefix).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
@@ -105,7 +106,7 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建区间查询的sql信息.
+     * 构建区间查询的SqlInfo信息.
      * @param fieldText 数据库字段文本
      * @param values 对象数组的值
      * @return 返回SqlInfo信息
