@@ -4,6 +4,7 @@ import static com.blinkfox.zealot.consts.SqlKeyConst.*;
 
 /**
  * 数据库查询拼接sql及关键字的工具类.
+ * @deprecated 不推荐使用该类了，推荐使用ZealotKhala，功能更强大.
  * Created by blinkfox on 2016/11/12.
  */
 @Deprecated
