@@ -30,7 +30,7 @@ public final class ParseHelper {
         try {
             return MVEL.eval(exp, paramObj);
         } catch (Exception e) {
-            log.warn("解析表达式出错,表达式为:" + exp);
+            log.error("解析表达式出错,表达式为:" + exp, e);
             return null;
         }
     }
