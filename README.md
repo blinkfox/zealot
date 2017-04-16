@@ -37,11 +37,11 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
-## 四、Java链式之ZealotKhala
+## 四、Java链式式之ZealotKhala
 
 在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
 
@@ -49,21 +49,35 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 public class ZealotKhalaTest {
 
     /**
-     * 测试使用Khala书写的sql.
+     * 测试使用ZealotKhala书写的sql.
      */
     @Test
     public void testSql() {
         String userName = "zhang";
         String startBirthday = "1990-03-25";
         String endBirthday = "2010-08-28";
+        Integer[] sexs = new Integer[]{0, 1};
 
-        SqlInfo sqlInfo = Khala.start()
+        SqlInfo sqlInfo = ZealotKhala.start()
                 .select("u.id, u.name, u.email, d.birthday, d.address")
                 .from("user AS u")
                 .leftJoin("user_detail AS d").on("u.id = d.user_id")
                 .where("u.id != ''")
-                .andLike("u.id", userName, userName != null)
+                .andLike("u.name", userName)
+                .doAnything(true, new ICustomAction() {
+                    @Override
+                    public void execute(final StringBuilder join, final List<Object> params) {
+                        join.append("abc111");
+                        params.add(5);
+                        log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+                    }
+                })
+                .andMoreThan("u.age", 21)
+                .andLessThan("u.age", 13)
+                .andMoreEqual("d.birthday", startBirthday)
+                .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
+                .andIn("u.sex", sexs)
                 .orderBy("d.birthday").desc()
                 .end();
         String sql = sqlInfo.getSql();
@@ -71,9 +85,11 @@ public class ZealotKhalaTest {
 
         // 断言并输出sql信息
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
-                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? "
-                + "AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC", sql);
-        assertArrayEquals(new Object[]{"%zhang%", "1990-03-25", "2010-08-28"} ,arr);
+                + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
+                + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
+                + "AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC", sql);
+        assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
+                "1990-03-25", "2010-08-28", 0, 1} ,arr);
         log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
@@ -83,8 +99,8 @@ public class ZealotKhalaTest {
 打印结果如下：
 
 ```
-testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.id LIKE ? AND d.birthday BETWEEN ? AND ? ORDER BY d.birthday DESC
-参数为:[%zhang%, 1990-03-25, 2010-08-28]
+testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC
+参数为:[%zhang%, 5, 21, 13, 1990-03-25, 2010-08-28, 1990-03-25, 2010-08-28, 0, 1]
 ```
 
 ## 五、XML方式之Zealot
@@ -299,6 +315,21 @@ SQL片段的生成结果：AND email = ?
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
 
+#### (3). 与Equal类似的标签
+
+- moreThan 大于
+- andMoreThan 带and关键字的大于
+- orMoreThan 带or关键字的大于
+- lessThan 小于
+- andLessThan 带and关键字的小于
+- orLessThan 带or关键字的小于
+- moreEqual 大于等于
+- andMoreEqual 带and关键字的大于等于
+- orMoreEqual 带or关键字的大于等于
+- lessEqual 小于等于
+- andLessEqual 带and关键字的小于等于
+- orLessEqual 带or关键字的小于等于
+
 ### 2. like、andLike、orLike 标签介绍
 
 #### (1). 属性介绍
@@ -347,7 +378,7 @@ start为null,end为null，则不生成SQL片段
 
 - **match**，同上。
 - **field**，同上。
-- **value**，表示参数的集合，值可以是数组，也可以是Collection集合。必填
+- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
 
 #### (2). 使用生成示例
 
@@ -357,6 +388,28 @@ start为null,end为null，则不生成SQL片段
 SQL片段的生成结果：AND sex in (?, ?)
 
 解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
+```
+
+### 5. text 标签介绍
+
+text标签主要用于在标签内部自定义需要的文本和需要传递的各种参数，为SQL书写提供灵活性
+
+#### (1). 属性介绍
+
+- **match**，同上。
+- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
+
+#### (2). 使用生成示例
+
+```markup
+<text match="" value="{name1, name2, email}">
+    and name in (?, ?)
+    and email = ?
+</text>
+
+SQL片段的生成结果：and name in (?, ?) and email = ?
+
+解释：如果match为true、不填写或无match标签时，才生成此条SQL片段和自定义传递的参数，参数就是通过`name1`、`name2`和`email`组合成的数组或集合，或者直接传递集合或数组（此处组合而成的数组，如果是集合就把'{'换成'['即可）。
 ```
 
 ## 五、自定义标签和处理器
@@ -613,6 +666,11 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.0(2017-04-16)
+  - 新增了ZealotKhala和xml标签的常用API，如：大于、小于、大于等于、小于等于等功能。
+  - 新增了Zealot中xml的text标签，使灵活性SQL拼接灵活性更强
+  - 新增了ZealotKhala的ICustomAction接口，使自定义的逻辑也能够通过链式写法完成，使SQL拼接逻辑更紧凑
+  - 标记`Khala.java为推荐使用，即`@Deprecated`。推荐使用`ZealotKhala.java`，使SQL的动态性、灵活性更强。
 - v1.1.0(2017-04-04)
   - 新增了ZealotKhala，使ZealotKhala用Java也可以链式的书写动态SQL，和Zealot的XML标签相互应
 - v1.0.7(2017-03-31)

@@ -6,6 +6,7 @@ import static com.blinkfox.zealot.consts.SqlKeyConst.*;
  * 数据库查询拼接sql及关键字的工具类.
  * Created by blinkfox on 2016/11/12.
  */
+@Deprecated
 public class Khala {
 
     // sql拼接的StringBuilder对象
