@@ -7,7 +7,7 @@
 
 ### 创建初衷
 
-SQL对开发人员来说是核心的资产之一，在开发中经常需要书写冗长、动态的SQL，许多项目中仅仅采用Java来书写动态SQL，会导致SQL分散、不易调试和阅读。所谓易于维护的SQL应该兼有动态性和可调试性的双重特性。在Java中书写冗长的SQL，虽然能很好的做到动态性，却大大降低了SQL本身的可调试性，开发人员必须运行项目调试打印出SQL才能知道最终的SQL长什么样。所以为了做到可调试性，开发人员开始将SQL单独提取出来存放到配置文件中来维护，这样方便开发人员复制出来粘贴到SQL工具中来直接运行，但无逻辑功能的配置文件虽然解决了可调试性的问题，却又丧失了动态SQL的能力。所以，才不得不诞生出类似于Mybatis这样灵活的半ORM工具来解决这两个的问题，但众多的项目却并未集成mybaits这样的工具。
+SQL对开发人员来说是核心的资产之一，在开发中经常需要书写冗长、动态的SQL，许多项目中仅仅采用Java来书写动态SQL，会导致SQL分散、不易调试和阅读。所谓易于维护的SQL应该兼有动态性和可调试性的双重特性。在Java中书写冗长的SQL，虽然能很好的做到动态性，却大大降低了SQL本身的可调试性，开发人员必须运行项目调试打印出SQL才能知道最终的SQL长什么样。所以为了做到可调试性，开发人员开始将SQL单独提取出来存放到配置文件中来维护，这样方便开发人员复制出来粘贴到SQL工具中来直接运行，但无逻辑功能的配置文件虽然解决了可调试性的问题，却又丧失了动态SQL的能力。所以，才不得不诞生出类似于Mybatis这样灵活的半ORM工具来解决这两个的问题，但众多的项目却并未集成`mybaits`这样的工具。
 
 [Zealot][1]是基于Java语言开发的SQL及对应有序参数动态拼接生成的工具，其核心设计目标是帮助开发人员书写和生成出具有动态的、可复用逻辑的且易于维护的SQL。为了做到可调试性，就必须将SQL提取到配置文件中来单独维护；为了保证SQL根据某些条件，某些逻辑来动态生成，就必须引入表达式语法或者标签语法来达到动态生成SQL的能力。因此，两者结合才诞生了Zealot。为了便于开发人员书写一般情况下的动态SQL，zealot还提供了Java流式SQL的书写动态SQL，使SQL可读性和紧凑性更好，如果要书写静态或动态的中、长SQL，可使用xml方式，便于阅读、调试和维护。
 
@@ -16,7 +16,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 ### 主要特性
 
 - 轻量级，jar包仅仅44k大小，无侵入的集成和使用
-- 提供了纯Java代码I和XML两种方式书写维护SQL
+- 提供了纯Java代码和XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写和阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
 - 具有动态性、可复用逻辑和可半调试性的优点
@@ -34,8 +34,6 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 #### Maven
 
-以Maven为例，Maven的引入方式如下：
-
 ```xml
 <dependency>
     <groupId>com.blinkfox</groupId>
@@ -52,11 +50,26 @@ compile 'com.blinkfox:zealot:1.1.0'
 
 ## Java流式之ZealotKhala
 
-### 使用原因
+### 使用介绍
 
-在Java中书写中等长度的SQL，用"+"连接的字符串或`StringBuilder`等尤其是动态字符串，会导致SQL的可读性很差，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用了流式API的方式来书写“更流畅”的动态SQL，且会得到动态SQL的有序参数。其使用的总体示例如下：
+在Java中书写中等长度的SQL，用"+"连接的字符串或`StringBuilder`等尤其是动态字符串，会导致SQL的可读性很差，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用了流式API的方式来书写“更流畅”的动态SQL，且会得到动态SQL的有序参数。
+
+ZealotKhala 使用方式如下：
+
+```java
+SqlInfo sqlInfo = ZealotKhala.start()
+	    ...
+	    .end();
+
+String sql = sqlInfo.getSql();
+Object[] arr = sqlInfo.getParamsArr();
+```
+
+> **解释**：调用静态`start()`方法开始初始化拼接SQL，最后调用`end()`方法得到最终拼接的`SqlInfo`实例；其中，可以通过`SqlInfo`的`getSql()`和`getParamsArr()`分别得到拼接的带绑定参数的字符串和有序参数。
 
 ### 总体示例
+
+`ZealotKhala`的总体使用方式，可参看如下示例所示：
 
 ```java
 public class ZealotKhalaTest {
@@ -120,8 +133,184 @@ SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN use
 
 ### 主要方法
 
-#### select()
+#### 无参静态方法
 
+!> **注意**：这里的**无参静态方法**是指拼接SQL时仅仅拼接文本字符串，不会拼接SQL的有序参数，且无动态判断是否生成该段SQL片段的能。作用是和待拼接的字符串自动拼接在一起，“省去”了“SQL关键字”的书写，目的是用来提高SQL的可读性。
+
+SQL中的关键字很多，ZealotKhala封装了大多数常用的关键字作为连接SQL字符串的方法，如上面总体示例所列出的`select()`、`from()`、`select()`等，在流式拼接的过程中，使得SQL的可读性大大提高了。下面列出了大多数常用的关键字方法，来用于拼接字符串文本，但不能传递SQL参数。
+
+- insertInto(String text)
+- values(String text)
+- deleteFrom(String text)
+- update(String text)
+- select(String text)
+- from(String text)
+- and(String text)
+- or(String text)
+- as(String text)
+- set(String text)
+- innerJoin(String text)
+- leftJoin(String text)
+- rightJoin(String text)
+- fullJoin(String text)
+- on(String text)
+- orderBy(String text)
+- groupBy(String text)
+- having(String text)
+- limit(String text)
+- offset(String text)
+- asc()
+- desc()
+- union()
+- unionAll()
+
+> 以上方法主要作用是：用方法名所代表的关键字后追加空格，再拼接上`text`文本参数，其方法名称已经体现了具体用途和使用场景，这里不在赘述。
+
+#### 有参动态(或静态)方法
+
+- text(String text, Object... values) 
+
+> 拼接`text`字符串，并对`text`的SQL字符串中绑定变量追加有序参数，values是任意类型的不定参数，即可以传递数组或任意个数的变量，用来作为该SQL片段的有序参数。使用示例如下：
+
+```java
+SqlInfo sqlInfo = ZealotKhala.start()
+	    ...
+        .text("AND u.email = ? AND u.age >= ?", "san@163.com", 21)
+```
+
+- text(boolean match, String text, Object... values)
+
+> 该`text()`方法同前面的方法类似，其多出的第一个boolean型参数，用来表示是否生成该SQL片段及有序参数。即如果`match`的结果为`true`时，就同上一个`text()`方法，生成此SQL片段及参数，否则不生成。
+
+- param(Object... values)
+- param(Collection<?> values)
+
+> 只有一个纯粹的作用，那就是在当前拼接SQL的上下文中追加有序参数，值可以是任意类型不定个数的变量或常量，也可以是数组或Java的集合。
+
+#### equal系列方法
+
+##### 方法介绍
+
+equal系列是用来拼接SQL中等值查询的系列方法，主要包含如下方法：
+
+- equal(String field, Object value)
+- equal(String field, Object value, boolean match)
+- andEqual(String field, Object value)
+- andEqual(String field, Object value, boolean match)
+- orEqual(String field, Object value)
+- orEqual(String field, Object value, boolean match)
+
+**方法解释**：
+
+- equal、andEqual、orEqual，分别表示拼接等值查询SQL的前缀为""," AND "，" OR "
+- field，表示数据库字段
+- value，表示Java中的变量或常量值
+- match，表示是否生成该SQL片段，值为true时生成，否则不生成
+
+##### 使用示例如下：
+
+```java
+/**
+ * 初始化.
+ */
+@BeforeClass
+public static void init() {
+    context = new HashMap<String, Object>();
+    context.put("id", "3");
+    context.put("name", "zhagnsan");
+    context.put("myEmail", "zhagnsan@163.com");
+    context.put("myAge", 25);
+}
+
+/**
+ * equal相关方法测试.
+ */
+@Test
+public void testEqual() {
+    long start = System.currentTimeMillis();
+    SqlInfo sqlInfo = ZealotKhala.start()
+            .equal("u.id", context.get("id"), "4".equals(context.get("id")))
+            .equal("u.nick_name", context.get("name"))
+            .andEqual("u.true_age", context.get("myAge"))
+            .andEqual("u.true_age", context.get("myAge"), context.get("myAge") != null)
+            .andEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
+            .orEqual("u.email", context.get("myEmail"))
+            .end();
+	
+	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+}
+```
+
+打印生成的SQL片段信息如下：
+
+```sql
+-- testEqual()方法生成的sql信息:
+u.nick_name = ? AND u.true_age = ? AND u.true_age = ? OR u.email = ?
+-- 参数为:
+[zhagnsan, 25, 25, zhagnsan@163.com]
+```
+
+#### 同equal类似的系列
+
+同equal（等于）类似的系列还有大于、小于、大于等于、小于等于、模糊查询，各系列分别如下：
+
+- moreThan 大于
+- lessThan 小于
+- moreEqual 大于等于
+- lessEqual 小于等于
+- like 模糊查询
+
+!> 以上各系列的方法也同equal，这里就不再赘述了。
+
+#### between系列方法
+
+##### 方法介绍
+
+between系列是用来拼接SQL中区间查询的系列方法，生成如：` u.age BETWEEN ? AND ? `这样的区间查询功能，主要包含如下方法：
+
+- between(String field, Object startValue, Object endValue)
+- between(String field, Object startValue, Object endValue, boolean match)
+- andBetween(String field, Object startValue, Object endValue)
+- andBetween(String field, Object startValue, Object endValue, boolean match)
+- orBetween(String field, Object startValue, Object endValue)
+- orBetween(String field, Object startValue, Object endValue, boolean match)
+
+**方法解释**：
+
+- between、andBetween、orBetween，分别表示拼接等值查询SQL的前缀为""," AND "，" OR "
+- field，表示数据库字段
+- startValue，表示区间查询的开始值
+- endValue，表示区间查询的结束值
+- match，表示是否生成该SQL片段，值为true时生成，否则不生成
+
+##### 使用示例如下：
+
+```java
+/**
+ * 初始化.
+ */
+@BeforeClass
+public static void init() {
+    context = new HashMap<String, Object>();
+	context.put("startAge", 18);
+	context.put("endAge", 26);
+}
+
+/**
+ * between相关方法测试.
+ */
+@Test
+public void testBetween() {
+    long start = System.currentTimeMillis();
+    SqlInfo sqlInfo = ZealotKhala.start()
+            .between("u.age", startAge, endAge)
+            .andBetween("u.age", startAge, endAge, startAge != null && endAge != null)
+            .orBetween("u.age", startAge, endAge, startAge != null && endAge != null)
+            .end();
+	
+	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+}
+```
 
 
 ## 五、XML方式之Zealot

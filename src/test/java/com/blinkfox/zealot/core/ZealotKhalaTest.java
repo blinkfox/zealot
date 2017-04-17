@@ -203,7 +203,7 @@ public class ZealotKhalaTest {
                 + "u.nick_name = ? OR u.email = ? OR u.birthday = ? OR u.birthday = ? u.id = ?", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
                 "1990-03-31", "1990-03-31", "3"}, arr);
-        log.info("testEqual()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+        log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
     }
 
     /**
