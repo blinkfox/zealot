@@ -4,7 +4,7 @@
 
 > My life for Auir!
 
-![Zealot](http://static.blinkfox.com/zealot_bg.jpg)
+![Zealot](http://i2.muimg.com/567571/faee17c016c47601.jpg)
 
 ## 一、创建初衷
 
@@ -16,7 +16,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅39k大小，集成和使用简单
+- 轻量级，jar包仅仅44k大小，集成和使用简单
 - 提供了纯Java代码或XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
