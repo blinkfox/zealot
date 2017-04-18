@@ -187,7 +187,7 @@ SqlInfo sqlInfo = ZealotKhala.start()
 
 只有一个纯粹的作用，那就是在当前拼接SQL的上下文中追加有序参数，值可以是任意类型不定个数的变量或常量，也可以是数组或Java的集合。
 
-#### equal系列方法
+#### equal
 
 ##### 方法介绍
 
@@ -252,7 +252,7 @@ u.nick_name = ? AND u.true_age = ? AND u.true_age = ? OR u.email = ?
 [zhagnsan, 25, 25, zhagnsan@163.com]
 ```
 
-#### 同equal类似的系列
+#### 同equal类似的
 
 同equal（等于）类似的系列还有大于、小于、大于等于、小于等于、模糊查询，各系列分别如下：
 
@@ -264,7 +264,7 @@ u.nick_name = ? AND u.true_age = ? AND u.true_age = ? OR u.email = ?
 
 !> 以上各系列的方法也同equal，这里就不再赘述了。
 
-#### between系列方法
+#### between
 
 ##### 方法介绍
 
@@ -330,7 +330,7 @@ u.age BETWEEN ? AND ? AND u.age BETWEEN ? AND ? AND u.birthday <= ?
 !> **注意**：Zealot中会对start和end的值做null的空检测。区间查询中如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 
 
-#### in系列方法
+#### in
 
 ##### 方法介绍
 
@@ -390,11 +390,34 @@ u.sex in (?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?)
 [0, 1, 0, 1, 0, 1]
 ```
 
-## 五、XML方式之Zealot
+#### doAnything
 
-对于很长的动态或统计性的SQL采用Java书写会不易于维护和调试，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，易于维护和阅读。
+> doAnything(ICustomAction action)
+
+> doAnything(boolean match, ICustomAction action)
+
+这两个方法主要用来方便你在链式拼接的过程中，来完成更多自定义、灵活的操作。`match`意义和上面类似，值为true时才执行，`ICustomAction`是你自定义操作的接口，执行时调用`execute()`方法,使用示例如下：
+
+```java
+SqlInfo sqlInfo = ZealotKhala.start()
+		.doAnything(true, new ICustomAction() {
+		    @Override
+		    public void execute(final StringBuilder join, final List<Object> params) {
+		        join.append("abc111");
+		        params.add(5);
+		        log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+		    }
+		})
+		.end();
+```
+
+## XML方式之Zealot
+
+对于很长的动态或统计性的SQL采用Java书写不仅冗长，且不易于调试和维护，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，更易于维护和阅读。使用xml方式需要经过一些配置，使系统能读取到xml中的SQL信息到缓存中，使动态拼接更高效。
 
 ### 配置使用
+
+#### 创建Java配置类
 
 在你的Java web项目项目中，创建一个继承自AbstractZealotConfig的核心配置类，如以下示例：
 
@@ -429,7 +452,9 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 > (2). configTagHandler()方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
-然后，在你的web.xml中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
+#### web.xml读取配置
+
+然后，在你的`web.xml`中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
 
 ```xml
 <!-- zealot相关配置的配置 -->
@@ -443,6 +468,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
    <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
 </listener>
 ```
+
+#### 创建XML的SQL文件
 
 接下来，就开始创建我们业务中的SQL及存放的XML文件了，在你项目的资源文件目录中，不妨创建一个管理SQL的文件夹，我这里取名为`zealotxml`，然后在`zealotxml`文件夹下创建一个名为`zealot-user.xml`的XML文件，用来表示用户操作相关SQL的管理文件。在XML中你就可以创建自己的SQL啦，这里对`user`表的两种查询，示例如下：
 
@@ -484,6 +511,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 > (6). `?email != empty`前面的`?`表示属性的安全访问，即使email不存在的时候也不会抛出异常，仍会返回false。更详细的使用可以参考MVEL属性安全访问的表达式语法。
 
+#### 配置XML的命名空间
+
 回到你的Zealot核心配置类中，配置你Java代码中需要识别这个XML的标识和XML路径，我这里的示例如下：
 
 ```java
@@ -516,6 +545,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
 > **代码解释**：
 
 > (1). `ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");`代码中第一个参数`USER_ZEALOT`表示的是对XML做唯一标识的自定义静态常量，第二个参数就是你创建的对应的XML的资源路径。
+
+#### 调用并生成SQL
 
 最后，就是一个UserController的调用测试类，这里的目的用来调用执行，测试我们前面配置书写的SQL和参数，参考代码如下：
 
@@ -572,11 +603,15 @@ public class UserController extends Controller {
 
 > **生成SQL结果**：
 
-> ----生成sql的为:select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND ? AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc
+```sql
+--生成sql的为:
+select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND ? AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc
 
-> ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
+-- 生成sql的参数为:
+[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
+```
 
-## 六、Zealot SQL配置
+### Zealot的SQL标签介绍
 
 Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
 
