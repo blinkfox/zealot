@@ -1,6 +1,6 @@
 # Zealot
 
-一个轻量级的SQL和参数动态生成工具库
+一个轻量级的SQL和参数动态生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
 > My life for Auir!
 
