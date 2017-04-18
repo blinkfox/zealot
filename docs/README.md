@@ -227,7 +227,6 @@ public static void init() {
  */
 @Test
 public void testEqual() {
-    long start = System.currentTimeMillis();
     SqlInfo sqlInfo = ZealotKhala.start()
             .equal("u.id", context.get("id"), "4".equals(context.get("id")))
             .equal("u.nick_name", context.get("name"))
@@ -305,7 +304,6 @@ public static void init() {
  */
 @Test
 public void testBetween() {
-    long start = System.currentTimeMillis();
     SqlInfo sqlInfo = ZealotKhala.start()
             .between("u.age", startAge, endAge)
             .andBetween("u.age", startAge, endAge, startAge != null && endAge != null)
@@ -611,21 +609,29 @@ select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND 
 [%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
 ```
 
-### Zealot的SQL标签介绍
+### 常用动态SQL标签
 
 Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
 
 Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、`between`、`in`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件以及范围匹配条件；四类条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形，这两者更为常用，目前还未加入`非`的情形。所以，zealot中总共带有12个条件标签，各标签的属性和生成SQL的示例如下：
 
-### 1. equal、andEqual、orEqual 标签介绍
+#### equal
 
-#### (1). 属性介绍
+##### 标签
+
+```xml
+<equal match="" field="" value=""/>
+<andEqual match="" field="" value=""/>
+<orEqual match="" field="" value=""/>
+```
+
+##### 属性介绍
 
 - **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。匹配规则使用`MVEL2`表达式，关于[MVEL的语法文档][4]参考这里。
 - **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
 - **value**，表示参数值，对应Java中的名称。必要（填）属性，值也是使用`MVEL2`做解析。
 
-#### (2). 生成示例
+##### 生成示例
 
 ```markup
 标签:<equal field="nickname" value="nickName"></equal>
@@ -637,7 +643,7 @@ SQL片段的生成结果：AND email = ?
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
 
-#### (3). 与Equal类似的标签
+##### 与Equal类似的标签
 
 - moreThan 大于
 - andMoreThan 带and关键字的大于
@@ -652,15 +658,23 @@ SQL片段的生成结果：AND email = ?
 - andLessEqual 带and关键字的小于等于
 - orLessEqual 带or关键字的小于等于
 
-### 2. like、andLike、orLike 标签介绍
+#### like
 
-#### (1). 属性介绍
+##### 标签
+
+```xml
+<like match="" field="" value=""/>
+<andLike match="" field="" value=""/>
+<orLike match="" field="" value=""/>
+```
+
+##### 属性介绍
 
 - **match**，同上。
 - **field**，同上。
 - **value**，同上。
 
-#### (2). 生成示例
+##### 生成示例
 
 ```markup
 <andLike match="?email != empty" field="email" value="email"></andLike>
@@ -670,18 +684,26 @@ SQL片段的生成结果：AND email LIKE ?
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
 
-### 3. between、andBetween、orBetween 标签介绍
+#### between
 
-#### (1). 属性介绍
+##### 标签
+
+```xml
+<between match="" field="" start="" end=""/>
+<andBetween match="" field="" start="" end=""/>
+<orBetween match="" field="" start="" end=""/>
+```
+
+##### 属性介绍
 
 - **match**，同上。
 - **field**，同上。
 - **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
 - **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
 
-> **注意**：Zealot中对start和end的空判断是检测是否是null,而不是空字符串，0等情况。所以，对start和end的空处理应该是null。
+!> **注意**：Zealot中对start和end的空判断是检测是否是null,而不是空字符串，0等情况。所以，对start和end的空处理应该是null。
 
-#### (2). 生成示例
+##### 生成示例
 
 ```markup
 <andBetween match="?startAge != null || ?endAge != null" field="age" start="startAge" end="endAge"></andBetween>
@@ -694,15 +716,23 @@ start为null,end为null，则不生成SQL片段
 **解释**：match标签是非必填的，区间查询中，靠start和end两种条件也可以组成一个简单的动态情形。如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 ```
 
-### 4. in、andIn、orIn 标签介绍
+#### in
 
-#### (1). 属性介绍
+##### 标签
+
+```xml
+<in match="" field="" value=""/>
+<andIn match="" field="" value=""/>
+<orIn match="" field="" value=""/>
+```
+
+##### 属性介绍
 
 - **match**，同上。
 - **field**，同上。
 - **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
 
-#### (2). 使用生成示例
+##### 使用生成示例
 
 ```markup
 <andIn match="?sexs != empty" field="sex" value="sexs"></andIn>
@@ -712,16 +742,24 @@ SQL片段的生成结果：AND sex in (?, ?)
 解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
 ```
 
-### 5. text 标签介绍
+#### text
 
-text标签主要用于在标签内部自定义需要的文本和需要传递的各种参数，为SQL书写提供灵活性
+text标签主要用于在标签内部自定义需要的文本和需要传递的各种参数，为SQL书写提供灵活性。
 
-#### (1). 属性介绍
+##### 标签
+
+```xml
+<text match="" value="">
+    ...
+</text>
+```
+
+##### 属性介绍
 
 - **match**，同上。
 - **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
 
-#### (2). 使用生成示例
+##### 使用生成示例
 
 ```markup
 <text match="" value="{name1, name2, email}">
@@ -734,17 +772,17 @@ SQL片段的生成结果：and name in (?, ?) and email = ?
 解释：如果match为true、不填写或无match标签时，才生成此条SQL片段和自定义传递的参数，参数就是通过`name1`、`name2`和`email`组合成的数组或集合，或者直接传递集合或数组（此处组合而成的数组，如果是集合就把'{'换成'['即可）。
 ```
 
-## 五、自定义标签和处理器
+### 自定义标签和处理器
 
 从前面所知,条件标签是生成动态SQL和参数的核心，但是项目开发的过程中往往有更多多复杂的逻辑来生成某些SQL，甚至那些逻辑还要被多处使用到，默认的一些标签不能够满足开发需求，那么自定义自己的动态条件标签来实现就显得很重要了。所谓自定义标签和处理器就是设置自定义的标签名称、匹配条件、参数和数据库字段等,再通过自定义的处理器来控制生成SQL的逻辑，这样就可以达到生成我们需要的SQL的功能，这样的标签重大的意义在于能够最大化简化sql的书写和功能的复用。
 
-### 1. 假设查询需求
+#### 假设查询需求
 
 假设user表中有id、email两个字段，后台封装了一个User的参数，其中包含userId和usermail的属性。如果userId不为空时，则根据id来等值查询；如果userId为空,usermail不为空时，则根据email来做模糊查询；此处也隐含的说明了如果userId和usermail均不为空时，仍然以id来做等值查询。对此需求查询我们仍然可以用前面的标签组合来实现。假如很多地方都需要这种逻辑的查询，那我们可以使用自定义的标签来实现和复用这种查询逻辑。
 
-### 2. 使用方式示例
+#### 使用方式示例
 
-#### (1). 在XML中定义标签及属性
+##### 在XML中定义标签及属性
 
 根据上面的查询需求，可以分析出标签属性具有有`id`、`email`两个数据库字段，userId和userEmail的两个Java参数值，可设置其标签属性分别为`idValue`和`emailValue`，因此标签为：
 
@@ -755,7 +793,7 @@ SQL片段的生成结果：and name in (?, ?) and email = ?
 </zealot>
 ```
 
-#### (2). 自定义标签处理器
+##### 自定义标签处理器
 
 在你项目的某个package中，新建一个`UserIdEmailHandler.java`的文件，并让它实现`IConditHandler`接口，细节的代码处理逻辑和注释说明如下：
 
@@ -844,7 +882,7 @@ public class UserIdEmailHandler implements IConditHandler {
 }
 ```
 
-#### (3). 配置自定义的标签和处理器
+##### 配置自定义的标签和处理器
 
 在你继承的Zealot Java配置文件方法中添加配置自定义的标签和处理器，重启即可，代码示例如下：
 
@@ -873,7 +911,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 }
 ```
 
-#### (4). 测试生成结果
+#####  测试生成结果
 
 测试代码和结果如下：
 
@@ -886,8 +924,8 @@ public void queryUserIdEmail() {
     SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserWithIdEmail", user);
     String sql = sqlInfo.getSql();
     Object[] params = sqlInfo.getParamsArr();
-    System.out.println("----生成sql的为:" + sql);
-    System.out.println("----生成sql的参数为:" + Arrays.toString(params));
+    System.out.println("-- 生成sql的为:\n" + sql);
+    System.out.println("-- 生成sql的参数为:\n" + Arrays.toString(params));
 
     List<User> users = User.userDao.find(sql, params);
     renderJson(users);
@@ -896,23 +934,27 @@ public void queryUserIdEmail() {
 
 打印的sql结果：
 
-```markup
-----生成sql的为:select * from user where id = ?
-----生成sql的参数为:[3]
+```sql
+-- 生成sql的为:
+select * from user where id = ?
+-- 生成sql的参数为:
+[3]
 ```
 
 当把userId的值设为null时，打印的sql结果：
 
-```markup
-----生成sql的为:select * from user where email LIKE ?
-----生成sql的参数为:[%san%]
+```sql
+-- 生成sql的为:
+select * from user where email LIKE ?
+-- 生成sql的参数为:
+[%san%]
 ```
 
-## 七、流程控制标签
+### 流程控制标签
 
 由于Zealot中SQL片段生成的标签大多是工具库预设或自定义的，但是在实现更为灵活的逻辑控制时就显得力不从心了，如果都通过自定义标签去实现更灵活多变的逻辑会显得很麻烦。因此，决定在1.0.6的版本中增加更为强大灵活的流程逻辑控制标签。自由的流程逻辑控制方式就意味着难以实现绑定变量参数的方式来生成SQL，而是即时生成替换变量值后的SQL。
 
-### 1. 使用示例
+#### 使用示例
 
 Zealot中SQL片段标签和流程控制标签是可以混合使用的，看下面的SQL书写方式即可容易理解：
 
@@ -934,11 +976,11 @@ Zealot中SQL片段标签和流程控制标签是可以混合使用的，看下�
 select * from user where nickname LIKE ? AND email like '%zhang%' order by id desc
 ```
 
-### 2. 常用流程控制标签介绍
+#### 常用标签
 
 Zealot的流程控制标签使用的是MVEL模板标签，所以，支持所有MVEL2.0的模板标签，这也正体现了Zealot动态SQL的强大特性。关于MVEL2.x的模板更详细的介绍请参考[这里][5]。
 
-#### (1). @{} 表达式
+##### @{} 表达式
 
 @{}表达式是最基本的形式。它包含一个对字符串求值的值表达式，并附加到输出模板中。例如：
 
@@ -946,7 +988,7 @@ Zealot的流程控制标签使用的是MVEL模板标签，所以，支持所有M
 Hello, my name is @{person.name}
 ```
 
-#### (2). @code{} 静默代码标签
+##### @code{} 静默代码标签
 
 静默代码标记允许您在模板中执行MVEL表达式代码。它不返回值，并且不以任何方式影响模板的格式。
 
@@ -956,7 +998,7 @@ Hello, my name is @{person.name}
 ```
 该模板将计算出：John Doe is 23 years old。
 
-#### (3). @if{}@else{} 控制流标签
+##### @if{}@else{} 控制流标签
 
 @if{}和@else{}标签在MVEL模板中提供了完全的if-then-else功能。 例如：
 
@@ -972,7 +1014,7 @@ Hello, my name is @{person.name}
 
 MVEL模板中的所有块必须用`@end{}`标签来终止，除非是`if-then-else`结构，其中`@else{}`标记表示前一个控制语句的终止。
 
-#### (4). @foreach{} Foreach迭代
+##### @foreach{} Foreach迭代
 
 foreach标签允许您在模板中迭代集合或数组。 注意：foreach的语法已经在MVEL模板2.0中改变，以使用foreach符号来标记MVEL语言本身的符号。
 
