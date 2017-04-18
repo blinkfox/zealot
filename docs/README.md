@@ -236,7 +236,9 @@ public void testEqual() {
             .andEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
             .orEqual("u.email", context.get("myEmail"))
             .end();
-	
+	String sql = sqlInfo.getSql();
+    Object[] arr = sqlInfo.getParamsArr();
+
 	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
 }
 ```
@@ -277,7 +279,7 @@ between系列是用来拼接SQL中区间查询的系列方法，生成如：` u.
 
 **方法解释**：
 
-- between、andBetween、orBetween，分别表示拼接等值查询SQL的前缀为""," AND "，" OR "
+- between、andBetween、orBetween，分别表示拼接区间查询SQL的前缀为""," AND "，" OR "
 - field，表示数据库字段
 - startValue，表示区间查询的开始值
 - endValue，表示区间查询的结束值
@@ -309,7 +311,9 @@ public void testBetween() {
             .andBetween("u.age", startAge, endAge, startAge != null && endAge != null)
             .orBetween("u.age", startAge, endAge, startAge != null && endAge != null)
             .end();
-	
+	String sql = sqlInfo.getSql();
+    Object[] arr = sqlInfo.getParamsArr();
+
 	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
 }
 ```
@@ -324,6 +328,67 @@ u.age BETWEEN ? AND ? AND u.age BETWEEN ? AND ? AND u.birthday <= ?
 ```
 
 !> **注意**：Zealot中会对start和end的值做null的空检测。区间查询中如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
+
+
+#### in系列方法
+
+##### 方法介绍
+
+in系列是用来拼接SQL中范围查询的系列方法，生成如：` u.sex in (?, ?) `这样的范围查询功能，主要包含如下方法：
+
+- in(String field, Object[] values)
+- in(String field, Object[] values, boolean match)
+- andIn(String field, Object[] values)
+- andIn(String field, Object[] values, boolean match)
+- orIn(String field, Object[] values)
+- orIn(String field, Object[] values, boolean match)
+
+**方法解释**：
+
+- in、andIn、orIn，分别表示拼接范围查询SQL的前缀为""," AND "，" OR "
+- field，表示数据库字段
+- values，表示范围查询需要的参数的数组
+- match，表示是否生成该SQL片段，值为true时生成，否则不生成
+
+##### 使用示例如下：
+
+```java
+/**
+ * 初始化.
+ */
+@BeforeClass
+public static void init() {
+    context = new HashMap<String, Object>();
+	context.put("sexs", new Integer[] {0, 1});
+}
+
+/**
+ * between相关方法测试.
+ */
+@Test
+public void testBetween() {
+	Integer[] sexs = (Integer[]) context.get("sexs");
+    
+    SqlInfo sqlInfo = ZealotKhala.start()
+            .in("u.sex", sexs)
+            .andIn("u.sex", sexs, sexs != null)
+			.orIn("u.sex", sexs)
+            .end();
+	String sql = sqlInfo.getSql();
+    Object[] arr = sqlInfo.getParamsArr();
+	
+	log.info("-- testIn()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+}
+```
+
+打印的SQL如下：
+
+```sql
+-- testIn()方法生成的sql信息:
+u.sex in (?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?)
+-- 参数为:
+[0, 1, 0, 1, 0, 1]
+```
 
 ## 五、XML方式之Zealot
 
