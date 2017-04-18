@@ -168,9 +168,9 @@ SQL中的关键字很多，ZealotKhala封装了大多数常用的关键字作为
 
 #### 有参动态(或静态)方法
 
-- text(String text, Object... values) 
+> text(String text, Object... values) 
 
-> 拼接`text`字符串，并对`text`的SQL字符串中绑定变量追加有序参数，values是任意类型的不定参数，即可以传递数组或任意个数的变量，用来作为该SQL片段的有序参数。使用示例如下：
+拼接`text`字符串，并对`text`的SQL字符串中绑定变量追加有序参数，values是任意类型的不定参数，即可以传递数组或任意个数的变量，用来作为该SQL片段的有序参数。使用示例如下：
 
 ```java
 SqlInfo sqlInfo = ZealotKhala.start()
@@ -178,20 +178,20 @@ SqlInfo sqlInfo = ZealotKhala.start()
         .text("AND u.email = ? AND u.age >= ?", "san@163.com", 21)
 ```
 
-- text(boolean match, String text, Object... values)
+> text(boolean match, String text, Object... values)
 
-> 该`text()`方法同前面的方法类似，其多出的第一个boolean型参数，用来表示是否生成该SQL片段及有序参数。即如果`match`的结果为`true`时，就同上一个`text()`方法，生成此SQL片段及参数，否则不生成。
+该`text()`方法同前面的方法类似，其多出的第一个boolean型参数，用来表示是否生成该SQL片段及有序参数。即如果`match`的结果为`true`时，就同上一个`text()`方法，生成此SQL片段及参数，否则不生成。
 
-- param(Object... values)
-- param(Collection<?> values)
+> param(Object... values)
+> param(Collection<?> values)
 
-> 只有一个纯粹的作用，那就是在当前拼接SQL的上下文中追加有序参数，值可以是任意类型不定个数的变量或常量，也可以是数组或Java的集合。
+只有一个纯粹的作用，那就是在当前拼接SQL的上下文中追加有序参数，值可以是任意类型不定个数的变量或常量，也可以是数组或Java的集合。
 
 #### equal系列方法
 
 ##### 方法介绍
 
-equal系列是用来拼接SQL中等值查询的系列方法，主要包含如下方法：
+equal系列是用来拼接SQL中等值查询的系列方法，生成如：` u.email = ? `这样的等值查询且附带绑定参数的功能，其主要包含如下方法：
 
 - equal(String field, Object value)
 - equal(String field, Object value, boolean match)
@@ -294,6 +294,8 @@ public static void init() {
     context = new HashMap<String, Object>();
 	context.put("startAge", 18);
 	context.put("endAge", 26);
+	context.put("startBirthday", null);
+    context.put("endBirthday", "2010-05-28");
 }
 
 /**
@@ -312,6 +314,16 @@ public void testBetween() {
 }
 ```
 
+打印的SQL如下：
+
+```sql
+-- testBetween()方法生成的sql信息:
+u.age BETWEEN ? AND ? AND u.age BETWEEN ? AND ? AND u.birthday <= ?
+-- 参数为:
+[18, 26, 18, 26, 2010-05-28]
+```
+
+!> **注意**：Zealot中会对start和end的值做null的空检测。区间查询中如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 
 ## 五、XML方式之Zealot
 
