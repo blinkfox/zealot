@@ -8,4 +8,4 @@
 - 支持 Java 流式 API 和 xml 两种方式书写SQL
 
 [GitHub](https://github.com/blinkfox/zealot/)
-[开始使用](#开始使用)
+[开始使用](introduction)
