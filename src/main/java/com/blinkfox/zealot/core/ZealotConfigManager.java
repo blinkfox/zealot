@@ -8,6 +8,7 @@ import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
+import com.blinkfox.zealot.loader.BannerLoader;
 import com.blinkfox.zealot.log.Log;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ZealotConfigManager {
         // 加载ZealotConfig配置信息
         this.loadZealotConfig(configClass);
         this.cachingXmlZealots();
+        BannerLoader.newInstance().print();
         this.testFirstEvaluate();
     }
 
