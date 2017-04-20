@@ -120,7 +120,7 @@ public class SqlInfoBuilder {
         join.append(prefix).append(fieldText).append(ZealotConst.IN_SUFFIX).append("(");
         int len = values.length;
         for (int i = 0; i < len; i++) {
-            if (i == (len - 1)) {
+            if (i == len - 1) {
                 join.append("?) ");
             } else {
                 join.append("?, ");

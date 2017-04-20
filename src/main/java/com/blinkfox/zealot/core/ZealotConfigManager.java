@@ -81,7 +81,7 @@ public class ZealotConfigManager {
         }
 
         // 判断获取到的类是否是AbstractZealotConfig的子类
-        if ((temp != null) && (temp instanceof AbstractZealotConfig)) {
+        if (temp != null && temp instanceof AbstractZealotConfig) {
             AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
             zealotConfig.configXml(XmlContext.INSTANCE);
             zealotConfig.configTagHandler();
