@@ -13,7 +13,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 /**
  * Zealot单元测试类.
  * Created by blinkfox on 2016/12/26.
@@ -22,15 +21,12 @@ public class ZealotTest {
 
     private static final Log log = Log.get(ZealotTest.class);
 
-    // 自定义的配置类路径
-    private static final String CONFIG_CLASS = "com.blinkfox.zealot.config.MyZealotConfig";
-
     /**
      * 初始化zealot信息到缓存中.
      */
     @BeforeClass
     public static void before() {
-        ZealotConfigManager.getInstance().initLoad(CONFIG_CLASS);
+        ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         log.info("加载Zealot缓存信息成功!");
     }
 

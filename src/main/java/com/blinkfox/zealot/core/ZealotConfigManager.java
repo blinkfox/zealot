@@ -47,11 +47,17 @@ public class ZealotConfigManager {
      */
     public void initLoad(String configClass) {
         // 加载ZealotConfig配置信息
-        loadZealotConfig(configClass);
+        this.loadZealotConfig(configClass);
+        this.cachingXmlZealots();
+        this.testFirstEvaluate();
+    }
 
-        // 获取遍历每个zealotxml配置文件，将其key和文档缓存到ConcurrentHashMap内存缓存中
-        cachingXmlZealots();
-        testFirstEvaluate();
+    /**
+     * 初始化加载Zealot的配置信息到缓存中.
+     * @param clazz 配置类
+     */
+    public void initLoad(Class<? extends AbstractZealotConfig> clazz) {
+        this.initLoad(clazz.getName());
     }
 
     /**
@@ -64,7 +70,7 @@ public class ZealotConfigManager {
     }
 
     /**
-     * 初始化zealotConfig的之类，并执行初始化mapper到缓存中.
+     * 初始化zealotConfig的子类，并加载配置信息.
      * @param configClass 配置类的class路径
      */
     private void loadZealotConfig(String configClass) {
@@ -80,13 +86,20 @@ public class ZealotConfigManager {
             throw new ConfigNotFoundException("初始化zealotConfig实例失败,配置名称为:" + configClass, e);
         }
 
-        // 判断获取到的类是否是AbstractZealotConfig的子类
+        // 判断获取到的类是否是AbstractZealotConfig的子类，如果是，则加载xml和自定义标签
         if (temp != null && temp instanceof AbstractZealotConfig) {
-            AbstractZealotConfig zealotConfig = (AbstractZealotConfig) temp;
-            zealotConfig.configXml(XmlContext.INSTANCE);
-            zealotConfig.configTagHandler();
-            log.info("zealot的xml文件和tagHandler加载完成");
+            this.loadZealotConfig((AbstractZealotConfig) temp);
         }
+    }
+
+    /**
+     * 加载初始化zealotConfig的子类信息，并执行初始化mapper到缓存中.
+     * @param zealotConfig 配置类
+     */
+    private void loadZealotConfig(AbstractZealotConfig zealotConfig) {
+        zealotConfig.configXml(XmlContext.INSTANCE);
+        zealotConfig.configTagHandler();
+        log.info("zealot的xml文件和tagHandler加载完成");
     }
 
     /**
