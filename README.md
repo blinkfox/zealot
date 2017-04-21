@@ -18,7 +18,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅44k大小，集成和使用简单
+- 轻量级，jar包仅仅47k大小，集成和使用简单
 - 提供了纯Java代码或XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
@@ -39,7 +39,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -157,6 +157,12 @@ public class MyZealotConfig extends AbstractZealotConfig {
 <listener>
    <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
 </listener>
+```
+
+如果你不是Java web项目，或者你就想通过Java代码来初始化加载zealot的配置信息，可以这样来做：
+
+```java
+ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```
 
 接下来，就开始创建我们业务中的SQL及存放的XML文件了，在你项目的资源文件目录中，不妨创建一个管理SQL的文件夹，我这里取名为`zealotxml`，然后在`zealotxml`文件夹下创建一个名为`zealot-user.xml`的XML文件，用来表示用户操作相关SQL的管理文件。在XML中你就可以创建自己的SQL啦，这里对`user`表的两种查询，示例如下：
