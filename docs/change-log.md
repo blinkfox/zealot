@@ -1,4 +1,8 @@
-- v1.1.0(2017-04-16)
+- v1.1.2(2017-04-22)
+  - 新增了zealot加载完成时的banner显示
+  - 新增或升级了一些pom文件中的插件，如：pmd、reports等
+  - 其他代码小细节修改
+- v1.1.1(2017-04-16)
   - 新增了ZealotKhala和xml标签的常用API，如：大于、小于、大于等于、小于等于等功能。
   - 新增了Zealot中xml的text标签，使灵活性SQL拼接灵活性更强
   - 新增了ZealotKhala的`ICustomAction`接口，使自定义的逻辑也能够通过链式写法完成，使SQL拼接逻辑更紧凑
