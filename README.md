@@ -1,6 +1,6 @@
 # Zealot
 
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Codecov](https://img.shields.io/codecov/c/github/blinkfox/zealot.svg)](https://codecov.io/gh/Steppschuh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.2%7CN%2FA)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Codecov](https://img.shields.io/codecov/c/github/blinkfox/zealot.svg)](https://codecov.io/gh/Steppschuh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.2%7CN%2FA) [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.blinkfox/zealot/badge.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
 
 一个轻量级的SQL和参数动态生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
