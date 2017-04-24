@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Codecov](https://img.shields.io/codecov/c/github/blinkfox/zealot.svg)](https://codecov.io/gh/Steppschuh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.2%7CN%2FA) [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.blinkfox/zealot/badge.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.2%7CN%2FA) [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.blinkfox/zealot/badge.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
 
 > Zealot是一个轻量级的SQL和参数动态生成工具库，目的是帮助Java开发者书写复杂、动态且易于维护的SQL，它只专注于动态构造和生成SQL，不做SQL执行器，也更不做ORM。所以，能集成到任何ORM、Java DAO工具以及原生的JDBC中。
 
