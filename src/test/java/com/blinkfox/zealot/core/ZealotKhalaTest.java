@@ -60,6 +60,7 @@ public class ZealotKhalaTest {
     public void testInsert() {
         SqlInfo sqlInfo = ZealotKhala.start()
                 .insertInto("user").values("('3', 'lisi')")
+                .text(false, ";")
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
@@ -220,7 +221,7 @@ public class ZealotKhalaTest {
                 .andMoreThan("u.birthday", "1990-02-17", false)
                 .or("")
                 .and("").lessThan("u.age", 19)
-                .and("").lessThan("u.age", 27)
+                .and("").lessThan("u.age", 27, true)
                 .andLessThan("u.birthday", "1990-07-15", false)
                 .union()
                 .select("*")
@@ -230,7 +231,7 @@ public class ZealotKhalaTest {
                 .and("").moreEqual("u.age", 25, false)
                 .andMoreEqual("u.birthday", "1990-02-17", false)
                 .and("").lessEqual("u.age", 19)
-                .and("").lessEqual("u.age", 27)
+                .and("").lessEqual("u.age", 27, true)
                 .andLessEqual("u.birthday", "1990-07-15", false)
                 .end();
         String sql = sqlInfo.getSql();
@@ -373,6 +374,12 @@ public class ZealotKhalaTest {
                         join.append("abc111");
                         params.add(5);
                         log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+                    }
+                })
+                .doAnything(false, new ICustomAction() {
+                    @Override
+                    public void execute(StringBuilder join, List<Object> params) {
+                        log.info("不会执行该自定义操作");
                     }
                 })
                 .andMoreThan("u.age", 21)
