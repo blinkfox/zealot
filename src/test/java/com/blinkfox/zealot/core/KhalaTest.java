@@ -40,6 +40,10 @@ public class KhalaTest {
         String oldSql = "   SELECT name, email FROM user \n WHERE id = '2'   ";
         String sql = Khala.newInstance().start().add(oldSql).end();
         assertEquals("SELECT name, email FROM user WHERE id = '2'", sql);
+
+        // 测试sql为null的情形
+        String nullSql = Khala.newInstance().end();
+        assertEquals("", nullSql);
     }
 
     /**

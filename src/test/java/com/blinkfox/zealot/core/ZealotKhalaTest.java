@@ -207,6 +207,42 @@ public class ZealotKhalaTest {
     }
 
     /**
+     * 测试moreThan等系列方法.
+     */
+    @Test
+    public void testThan() {
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .select("*")
+                .from("user")
+                .where("")
+                .moreThan("u.age", 18)
+                .and("").moreThan("u.age", 25, false)
+                .andMoreThan("u.birthday", "1990-02-17", false)
+                .or("")
+                .and("").lessThan("u.age", 19)
+                .and("").lessThan("u.age", 27)
+                .andLessThan("u.birthday", "1990-07-15", false)
+                .union()
+                .select("*")
+                .from("user_bak")
+                .where("1 = 1")
+                .moreEqual("u.age", 18)
+                .and("").moreEqual("u.age", 25, false)
+                .andMoreEqual("u.birthday", "1990-02-17", false)
+                .and("").lessEqual("u.age", 19)
+                .and("").lessEqual("u.age", 27)
+                .andLessEqual("u.birthday", "1990-07-15", false)
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("SELECT * FROM user WHERE u.age > ? AND OR AND u.age < ? AND u.age < ? "
+                + "UNION SELECT * FROM user_bak WHERE 1 = 1 u.age >= ? AND AND u.age <= ? AND u.age <= ?", sql);
+        assertArrayEquals(new Object[]{18, 19, 27, 18, 19, 27}, arr);
+    }
+
+    /**
      * equal相关方法测试.
      */
     @Test
