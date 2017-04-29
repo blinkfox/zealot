@@ -4,10 +4,9 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.consts.ZealotConst;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
 /**
  * 集合工具类的单元测试类.
