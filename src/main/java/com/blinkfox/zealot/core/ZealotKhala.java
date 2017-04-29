@@ -528,6 +528,69 @@ public final class ZealotKhala {
     }
 
     /**
+     * 生成不等查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.NOT_EQUAL_SUFFIX,true);
+    }
+
+    /**
+     * 生成不等查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.ONE_SPACE, field, value, ZealotConst.NOT_EQUAL_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" AND "前缀不等查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.NOT_EQUAL_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" AND "前缀不等查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.NOT_EQUAL_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" OR "前缀不等查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.NOT_EQUAL_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" OR "前缀不等查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.NOT_EQUAL_SUFFIX, match);
+    }
+
+    /**
      * 生成大于查询的SQL片段.
      * @param field 数据库字段
      * @param value 值

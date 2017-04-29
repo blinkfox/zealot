@@ -3,13 +3,14 @@
 
     <!-- 根据Id查询用户信息 -->
     <zealot id="queryUserById">
-        select * from user where
-        <equal field="id" value="id"/>
+        select * from user as u where
+        <equal field="u.id" value="id"/>
+        <andNotEqual field="u.age" value="age"/>
         <text match="" value="{name1, name2, email}">
-            and name in (?, ?)
-            and email = ?
+            and u.name in (?, ?)
+            and u.email = ?
         </text>
-        <andLike match="?email != empty" field="email" value="email"/>
+        <andLike match="?email != empty" field="u.email" value="email"/>
     </zealot>
 
     <!-- 根据动态条件查询用户信息 -->

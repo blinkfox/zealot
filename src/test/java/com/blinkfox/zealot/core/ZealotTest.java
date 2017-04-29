@@ -47,6 +47,7 @@ public class ZealotTest {
         // 构造查询的参数
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", "2");
+        paramMap.put("age", 21);
         paramMap.put("name1", "张三");
         paramMap.put("name2", "李思");
         paramMap.put("email", "hello@gmail.com");
@@ -61,8 +62,9 @@ public class ZealotTest {
         log.info("----testGetUserById测试方法的params:" + Arrays.toString(params));
 
         // 测试结果断言
-        String expectedSql = "select * from user where id = ? and name in (?, ?) and email = ? AND email LIKE ?";
-        Object[] expectedParams = new Object[]{"2", "张三", "李思", "hello@gmail.com", "%hello@gmail.com%"};
+        String expectedSql = "select * from user as u where u.id = ? AND u.age <> ? and u.name in (?, ?) "
+                + "and u.email = ? AND u.email LIKE ?";
+        Object[] expectedParams = new Object[]{"2", 21, "张三", "李思", "hello@gmail.com", "%hello@gmail.com%"};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
     }

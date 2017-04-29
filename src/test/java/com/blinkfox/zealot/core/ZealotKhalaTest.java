@@ -208,6 +208,37 @@ public class ZealotKhalaTest {
     }
 
     /**
+     * notEqual相关方法测试.
+     */
+    @Test
+    public void testNotEqual() {
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .notEqual("u.id", context.get("id"), "4".equals(context.get("id")))
+                .notEqual("u.nick_name", context.get("name"))
+                .notEqual("u.email", context.get("myEmail"), context.get("myEmail") != null)
+                .andNotEqual("u.age", context.get("myAge"))
+                .andNotEqual("u.true_age", context.get("myAge"))
+                .andNotEqual("u.true_age", context.get("myAge"), context.get("myAge") != null)
+                .andNotEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
+                .notEqual("u.nick_name", context.get("name"))
+                .orNotEqual("u.email", context.get("myEmail"))
+                .orNotEqual("u.birthday", context.get("myBirthday"))
+                .orNotEqual("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
+                .orNotEqual("u.nick_name", context.get("myBirthday"), context.get("name") == null)
+                .notEqual("u.id", context.get("id"))
+                .end();
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("u.nick_name <> ? u.email <> ? AND u.age <> ? AND u.true_age <> ? AND u.true_age <> ? "
+                + "u.nick_name <> ? OR u.email <> ? OR u.birthday <> ? OR u.birthday <> ? u.id <> ?", sql);
+        assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
+                "1990-03-31", "1990-03-31", "3"}, arr);
+        log.info("-- testNotEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+    }
+
+    /**
      * 测试moreThan等系列方法.
      */
     @Test

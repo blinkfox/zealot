@@ -18,6 +18,10 @@ public final class ZealotConst {
     public static final String EQUAL = "equal";
     public static final String AND_EQUAL = "andEqual";
     public static final String OR_EQUAL = "orEqual";
+    // 不等于
+    public static final String NOT_EQUAL = "notEqual";
+    public static final String AND_NOT_EQUAL = "andNotEqual";
+    public static final String OR_NOT_EQUAL = "orNotEqual";
     // 大于
     public static final String MORE = "moreThan";
     public static final String AND_MORE = "andMoreThan";
@@ -70,6 +74,7 @@ public final class ZealotConst {
     public static final String LT_SUFFIX = " < ? ";
     public static final String GTE_SUFFIX = " >= ? ";
     public static final String LTE_SUFFIX = " <= ? ";
+    public static final String NOT_EQUAL_SUFFIX = " <> ? ";
     public static final String LIEK_SUFFIX = " LIKE ? ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " in ";

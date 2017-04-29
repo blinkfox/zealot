@@ -30,6 +30,11 @@ public abstract class AbstractZealotConfig {
         add(AND_EQUAL, AND_PREFIX, NormalHandler.class, EQUAL_SUFFIX);
         add(OR_EQUAL, OR_PREFIX, NormalHandler.class, EQUAL_SUFFIX);
 
+        // 不等于相关标签：notEqual、andNotEqual、orNotEqual
+        add(NOT_EQUAL, NormalHandler.class, NOT_EQUAL_SUFFIX);
+        add(AND_NOT_EQUAL, AND_PREFIX, NormalHandler.class, NOT_EQUAL_SUFFIX);
+        add(OR_NOT_EQUAL, OR_PREFIX, NormalHandler.class, NOT_EQUAL_SUFFIX);
+
         // 大于相关标签：greaterThan、andGreaterThan、orGreaterThan
         add(MORE, NormalHandler.class, GT_SUFFIX);
         add(AND_MORE, AND_PREFIX, NormalHandler.class, GT_SUFFIX);
