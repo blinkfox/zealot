@@ -25,6 +25,7 @@ public final class CollectionHelper {
     /**
      * 将对象转成数组，如果对象类型是数组或集合，则直接转换，否则构造成数组.
      * @param obj 对象
+     * @param objType 对象类型
      * @return 数组
      */
     @SuppressWarnings("unchecked")

@@ -39,7 +39,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 
@@ -674,6 +674,9 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.3(2017-05-01)
+  - 新增了不等于的情况
+  - 完善单元测试和代码覆盖率
 - v1.1.2(2017-04-22)
   - 新增了zealot加载完成时的banner显示
   - 新增或升级了一些pom文件中的插件，如：pmd、reports等
