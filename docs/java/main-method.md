@@ -118,8 +118,9 @@ u.nick_name = ? AND u.true_age = ? AND u.true_age = ? OR u.email = ?
 
 ### 同equal类似的
 
-同equal（等于）类似的系列还有大于、小于、大于等于、小于等于、模糊查询，各系列分别如下：
+同equal（等于）类似的系列还有不等于、大于、小于、大于等于、小于等于、模糊查询，各系列分别如下：
 
+- `notEqual` 不等于
 - `moreThan` 大于
 - `lessThan` 小于
 - `moreEqual` 大于等于

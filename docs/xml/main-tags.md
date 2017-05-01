@@ -32,6 +32,9 @@ SQL片段的生成结果：AND email = ?
 
 #### 与Equal类似的标签
 
+- `notEqual` 不等于
+- `andNotEqual` 带and关键字的不等于
+- `orNotEqual` 带or关键字的不等于
 - `moreThan` 大于
 - `andMoreThan` 带and关键字的大于
 - `orMoreThan` 带or关键字的大于
