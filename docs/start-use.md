@@ -1,6 +1,6 @@
 ## 支持场景
 
-适用于Java项目，`JDK1.6`及以上
+适用于Java (web)项目，`JDK1.6`及以上
 
 ## 安装集成
 
@@ -12,12 +12,12 @@
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```
-compile 'com.blinkfox:zealot:1.1.3'
+compile 'com.blinkfox:zealot:1.1.4'
 ```

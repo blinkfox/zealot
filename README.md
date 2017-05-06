@@ -18,7 +18,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅47k大小，集成和使用简单
+- 轻量级，jar包仅仅46k大小，集成和使用简单
 - 提供了纯Java代码或XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
@@ -29,7 +29,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ### 1. 支持场景
 
-适用于Java web项目，JDK1.6及以上
+适用于Java (web)项目，JDK1.6及以上
 
 ### 2. 安装集成
 
@@ -39,7 +39,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 
@@ -674,6 +674,8 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.4(2017-05-06)
+  - 修复了启动时打印banner出错的问题
 - v1.1.3(2017-05-01)
   - 新增了不等于的情况
   - 完善单元测试和代码覆盖率
