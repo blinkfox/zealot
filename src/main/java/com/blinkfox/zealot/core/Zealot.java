@@ -6,7 +6,9 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
+
 import java.util.List;
+
 import org.dom4j.Node;
 
 /**

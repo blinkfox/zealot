@@ -8,6 +8,7 @@ import com.blinkfox.zealot.core.builder.XmlSqlInfoBuilder;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
+
 import org.dom4j.Node;
 
 /**
@@ -38,7 +39,7 @@ public class BetweenHandler implements IConditHandler {
             sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildBetweenSql(fieldText,
                     valueTextArr[0], valueTextArr[1]);
         } else {
-            /* 如果match匹配成功，则生成数据库sql条件和参数 */
+            /* 如果match匹配成功，则生成数据库sql条件和参数. */
             Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildBetweenSql(fieldText,

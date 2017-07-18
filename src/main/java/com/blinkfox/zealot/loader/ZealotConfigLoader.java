@@ -2,6 +2,7 @@ package com.blinkfox.zealot.loader;
 
 import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.core.ZealotConfigManager;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 

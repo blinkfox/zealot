@@ -3,7 +3,9 @@ package com.blinkfox.zealot.helpers;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.log.Log;
+
 import java.io.InputStream;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;

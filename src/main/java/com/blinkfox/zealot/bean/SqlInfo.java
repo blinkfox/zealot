@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class SqlInfo {
 
-    // 拼接sql的StringBuilder对象
+    /** 拼接sql的StringBuilder对象. */
     private StringBuilder join;
 
-    // sql语句对应的有序参数
+    /** sql语句对应的有序参数. */
     private List<Object> params;
 
-    // 最终生成的可用sql
+    /** 最终生成的可用sql. */
     private String sql;
 
     /**
@@ -45,7 +45,7 @@ public class SqlInfo {
         return params == null ? new Object[]{} : this.params.toArray();
     }
 
-    /* 以下是 getter 和 setter 方法*/
+    /* -------------- 以下是 getter 和 setter 方法 ------------- */
 
     public StringBuilder getJoin() {
         return join;

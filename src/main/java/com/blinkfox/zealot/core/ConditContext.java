@@ -6,13 +6,14 @@ import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.log.Log;
+
 import java.util.Map;
 
 /**
  * 构建动态条件查询的协调类.
  * Created by blinkfox on 2016/10/30.
  */
-class ConditContext {
+final class ConditContext {
 
     private static final Log log = Log.get(ConditContext.class);
 
@@ -51,7 +52,7 @@ class ConditContext {
     private static SqlInfo doBuildSqlInfo(BuildSource source, TagHandler th) {
         try {
             // 使用反射获取该Handler对应的实例，并执行方法
-            IConditHandler handler = (IConditHandler) th.getHandlerCls().newInstance();
+            IConditHandler handler = th.getHandlerCls().newInstance();
             return handler.buildSqlInfo(source);
         } catch (InstantiationException e) {
             log.error("实例化IConditHandler的实现类出错!", e);

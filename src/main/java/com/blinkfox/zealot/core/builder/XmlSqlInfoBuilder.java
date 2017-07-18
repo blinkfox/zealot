@@ -3,6 +3,7 @@ package com.blinkfox.zealot.core.builder;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.helpers.ParseHelper;
+
 import java.util.Collection;
 
 /**
@@ -21,7 +22,8 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     /**
      * 获取XmlSqlInfoBuilder的实例，并初始化属性信息.
      * @param source BuildSource实例
-     * @return XmlSqlInfoBuilder实例     */
+     * @return XmlSqlInfoBuilder实例
+     */
     public static XmlSqlInfoBuilder newInstace(BuildSource source) {
         XmlSqlInfoBuilder builder = new XmlSqlInfoBuilder();
         builder.init(source);

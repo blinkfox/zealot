@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.consts.ZealotConst;
+
 import java.util.Collection;
 
 /**

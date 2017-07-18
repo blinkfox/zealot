@@ -4,10 +4,17 @@ import static com.blinkfox.zealot.consts.ZealotConst.*;
 
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.core.concrete.*;
+import com.blinkfox.zealot.core.IConditHandler;
+import com.blinkfox.zealot.core.concrete.BetweenHandler;
+import com.blinkfox.zealot.core.concrete.InHandler;
+import com.blinkfox.zealot.core.concrete.LikeHandler;
+import com.blinkfox.zealot.core.concrete.NormalHandler;
+import com.blinkfox.zealot.core.concrete.TextHandler;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.dom4j.Node;
 
 /**
@@ -16,11 +23,13 @@ import org.dom4j.Node;
  */
 public abstract class AbstractZealotConfig {
 
-    // 所有zealots XML文档的缓存map，
-    // key是资源的路径（将xml命名空间和zealotId用"@"符号分割），value是dom4j文档节点Node
+    /**
+     * 所有zealots XML文档的缓存map.
+     * <p>key是资源的路径（将xml命名空间和zealotId用"@"符号分割），value是dom4j文档节点Node.</p>
+     */
     private static Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
 
-    // 初始化默认的一些标签和tagHandlers到HashMap集合中,key是标签字符串,value是TagHandler对象
+    /** 初始化默认的一些标签和tagHandlers到HashMap集合中,key是标签字符串,value是TagHandler对象. */
     private static Map<String, TagHandler> tagHandlerMap = new HashMap<String, TagHandler>();
     
     /* 添加默认的标签和对应的handler处理器，主要是普通条件,like,between,in等 */
@@ -94,7 +103,7 @@ public abstract class AbstractZealotConfig {
      * @param tagName 标签名称
      * @param handlerCls 动态处理类的反射类型
      */
-    protected static void add(String tagName, Class<?> handlerCls) {
+    protected static void add(String tagName, Class<? extends IConditHandler> handlerCls) {
         tagHandlerMap.put(tagName, new TagHandler(handlerCls));
     }
 
@@ -104,7 +113,7 @@ public abstract class AbstractZealotConfig {
      * @param prefix 前缀
      * @param handlerCls 动态处理类的反射类型
      */
-    protected static void add(String tagName, String prefix, Class<?> handlerCls) {
+    protected static void add(String tagName, String prefix, Class<? extends IConditHandler> handlerCls) {
         tagHandlerMap.put(tagName, new TagHandler(prefix, handlerCls));
     }
 
@@ -114,7 +123,7 @@ public abstract class AbstractZealotConfig {
      * @param handlerCls 动态处理类的反射类型
      * @param suffix 后缀
      */
-    protected static void add(String tagName, Class<?> handlerCls, String suffix) {
+    protected static void add(String tagName, Class<? extends IConditHandler> handlerCls, String suffix) {
         tagHandlerMap.put(tagName, new TagHandler(handlerCls, suffix));
     }
 
@@ -125,7 +134,8 @@ public abstract class AbstractZealotConfig {
      * @param handlerCls 动态处理类的反射类型
      * @param suffix 后缀
      */
-    protected static void add(String tagName, String prefix, Class<?> handlerCls, String suffix) {
+    protected static void add(String tagName, String prefix,
+            Class<? extends IConditHandler> handlerCls, String suffix) {
         tagHandlerMap.put(tagName, new TagHandler(prefix, handlerCls, suffix));
     }
 

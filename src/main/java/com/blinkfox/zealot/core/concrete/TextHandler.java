@@ -9,7 +9,9 @@ import com.blinkfox.zealot.exception.ContainXmlTagException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
+
 import java.util.List;
+
 import org.dom4j.Node;
 
 /**

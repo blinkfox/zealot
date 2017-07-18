@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.bean;
 
 import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.core.IConditHandler;
 
 /**
  * 标签对应的动态sql生成的处理类.
@@ -8,20 +9,20 @@ import com.blinkfox.zealot.consts.ZealotConst;
  */
 public class TagHandler {
 
-    // 生成sql的前缀,如:and, or 等
+    /** 生成sql的前缀,如:and, or 等. */
     private String prefix;
 
-    // 生成动态sql的处理实现反射类型，如:EqualHandler
-    private Class<?> handlerCls;
+    /** 生成动态sql的处理实现反射类型，如:EqualHandler. */
+    private Class<? extends IConditHandler> handlerCls;
 
-    // 生成sql的后缀,如:>, <, = 等
+    /** 生成sql的后缀,如:>, <, = 等. */
     private String suffix;
 
     /**
      * 仅标签对应处理类的构造方法.
      * @param handlerCls 动态处理类的反射类型
      */
-    public TagHandler(Class<?> handlerCls) {
+    public TagHandler(Class<? extends IConditHandler> handlerCls) {
         this.prefix = ZealotConst.ONE_SPACE;
         this.handlerCls = handlerCls;
     }
@@ -31,7 +32,7 @@ public class TagHandler {
      * @param prefix sql前缀
      * @param handlerCls 动态处理类的反射类型
      */
-    public TagHandler(String prefix, Class<?> handlerCls) {
+    public TagHandler(String prefix, Class<? extends IConditHandler> handlerCls) {
         this.prefix = prefix;
         this.handlerCls = handlerCls;
     }
@@ -41,7 +42,7 @@ public class TagHandler {
      * @param handlerCls 动态处理类的反射类型
      * @param suffix sql前后缀
      */
-    public TagHandler(Class<?> handlerCls, String suffix) {
+    public TagHandler(Class<? extends IConditHandler> handlerCls, String suffix) {
         this.prefix = ZealotConst.ONE_SPACE;
         this.handlerCls = handlerCls;
         this.suffix = suffix;
@@ -53,18 +54,19 @@ public class TagHandler {
      * @param suffix sql后缀
      * @param handlerCls 动态处理类的反射类型
      */
-    public TagHandler(String prefix, Class<?> handlerCls, String suffix) {
+    public TagHandler(String prefix, Class<? extends IConditHandler> handlerCls, String suffix) {
         this.prefix = prefix;
         this.handlerCls = handlerCls;
         this.suffix = suffix;
     }
 
-    /* getter 和 setter 方法 */
+    /* ------------ getter 和 setter 方法 ------------- */
+
     public String getPrefix() {
         return prefix;
     }
 
-    public Class<?> getHandlerCls() {
+    public Class<? extends IConditHandler> getHandlerCls() {
         return handlerCls;
     }
 

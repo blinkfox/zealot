@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.log.Log;
+
 import java.io.IOException;
 import java.io.Reader;
 

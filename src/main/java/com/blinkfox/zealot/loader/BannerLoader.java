@@ -9,7 +9,7 @@ import com.blinkfox.zealot.log.Log;
 public class BannerLoader {
 
     /* banner文本 */
-    private static final String bannerText = "\n"
+    private static final String BANNER_TEXT = "\n"
             + "__________               .__           __\n"
             + "\\____    / ____  _____   |  |    _____/  |_\n"
             + "  /     /_/ __ \\ \\__  \\  |  |   /  _ \\   __\\\n"
@@ -38,7 +38,7 @@ public class BannerLoader {
      * 打印banner文件中的内容.
      */
     public void print() {
-        log.info(bannerText);
+        log.info(BANNER_TEXT);
     }
 
 }

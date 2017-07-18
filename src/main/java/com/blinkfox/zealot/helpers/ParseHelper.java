@@ -2,6 +2,7 @@ package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.exception.ParseExpressionException;
 import com.blinkfox.zealot.log.Log;
+
 import org.mvel2.MVEL;
 import org.mvel2.templates.TemplateRuntime;
 
