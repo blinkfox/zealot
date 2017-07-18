@@ -1,27 +1,28 @@
 package com.blinkfox.zealot.bean;
 
 import com.blinkfox.zealot.consts.ZealotConst;
+
 import org.dom4j.Node;
 
 /**
- * 构建动态sql和参数相关的参数封装bean.
+ * 构建动态sql和参数相关的封装实体类.
  * Created by blinkfox on 2016/10/30.
  */
-public class BuildSource {
+public final class BuildSource {
 
-    // sql拼接信息
+    /** SQL拼接信息. */
     private SqlInfo sqlInfo;
 
-    // xml节点
+    /** XML节点. */
     private Node node;
 
-    // 参数对象
+    /** 参数对象上下文，一般为Bean或者Map. */
     private Object paramObj;
 
-    // 前缀
+    /** 拼接SQL片段的前缀，如:and、or等. */
     private String prefix;
 
-    // 后缀，如：> = <=等
+    /** 拼接SQL片段的后缀，如：> = <=等. */
     private String suffix;
 
     /**
@@ -36,7 +37,7 @@ public class BuildSource {
     }
 
     /**
-     * 全构造方法.
+     * 含SqlInfo、Node节点、参数上下文的构造方法.
      * @param sqlInfo SQL拼接和参数对象
      * @param node 某查询zealot的dom4j的节点
      * @param paramObj 参数对象
@@ -66,43 +67,83 @@ public class BuildSource {
         this.suffix = ZealotConst.ONE_SPACE;
     }
 
-    /* getter 和 setter 方法 */
+    /* --------------- 以下是 getter 和 setter 方法. ---------------- */
 
+    /**
+     * 获取sqlInfo的getter方法.
+     * @return SqlInfo实例
+     */
     public SqlInfo getSqlInfo() {
         return sqlInfo;
     }
 
+    /**
+     * 设置sqlInfo的setter方法.
+     * @param sqlInfo SqlInfo实例
+     * @return 当前BuildSource的实例
+     */
     public BuildSource setSqlInfo(SqlInfo sqlInfo) {
         this.sqlInfo = sqlInfo;
         return this;
     }
 
+    /**
+     * 获取node的getter方法.
+     * @return Node实例
+     */
     public Node getNode() {
         return node;
     }
 
+    /**
+     * 设置node的setter方法.
+     * @param node Node实例
+     * @return 当前BuildSource的实例
+     */
     public BuildSource setNode(Node node) {
         this.node = node;
         return this;
     }
 
+    /**
+     * 获取paramObj的getter方法.
+     * @return paramObj对象
+     */
     public Object getParamObj() {
         return paramObj;
     }
 
+    /**
+     * 获取前缀prefix的getter方法.
+     * @return prefix对象
+     */
     public String getPrefix() {
         return prefix;
     }
 
+    /**
+     * 设置prefix的setter方法.
+     * @param prefix prefix对象
+     * @return 当前BuildSource的实例
+     */
     public BuildSource setPrefix(String prefix) {
         this.prefix = prefix;
         return this;
     }
 
+    /**
+     * 获取后缀suffix的getter方法.
+     * @return suffix对象
+     */
     public String getSuffix() {
         return suffix;
     }
 
+    /**
+     * 设置后缀suffix的setter方法.
+     * @param suffix suffix对象
+     * @return 当前BuildSource的实例
+     */
     public BuildSource setSuffix(String suffix) {
         this.suffix = suffix;
         return this;
