@@ -7,7 +7,6 @@ import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.builder.JavaSqlInfoBuilder;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
-import com.blinkfox.zealot.core.inters.ICustomAction;
 import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
 import com.blinkfox.zealot.helpers.CollectionHelper;
 import com.blinkfox.zealot.helpers.StringHelper;

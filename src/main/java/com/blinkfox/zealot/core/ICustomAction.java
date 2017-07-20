@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.core.inters;
+package com.blinkfox.zealot.core;
 
 import java.util.List;
 

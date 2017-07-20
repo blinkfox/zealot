@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.core.inters.ICustomAction;
 import com.blinkfox.zealot.log.Log;
 import java.util.Arrays;
 import java.util.HashMap;
