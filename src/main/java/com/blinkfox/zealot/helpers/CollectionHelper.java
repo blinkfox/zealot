@@ -29,7 +29,6 @@ public final class CollectionHelper {
      * @param objType 对象类型
      * @return 数组
      */
-    @SuppressWarnings("unchecked")
     public static Object[] toArray(Object obj, int objType) {
         Object[] values;
         switch (objType) {

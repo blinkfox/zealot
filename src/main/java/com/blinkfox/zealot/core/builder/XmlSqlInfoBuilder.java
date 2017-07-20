@@ -72,7 +72,6 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
-    @SuppressWarnings("rawtypes")
     public SqlInfo buildInSql(String fieldText, String valueText) {
         // 获取value值，判断是否为空，若为空，则直接退出本方法
         Object obj = ParseHelper.parseExpressWithException(valueText, context);
@@ -88,7 +87,6 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @param valueText value参数值
      * @return 返回SqlInfo信息
      */
-    @SuppressWarnings("rawtypes")
     public SqlInfo buildTextSqlParams(String valueText) {
         // 获取value值，判断是否为空，若为空，则直接退出本方法
         Object obj = ParseHelper.parseExpressWithException(valueText, context);
@@ -106,6 +104,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @param obj 对象
      * @return 数组
      */
+    @SuppressWarnings("rawtypes")
     private Object[] convertToArray(Object obj) {
         // 获取参数的集合信息，并转换成数组
         Object[] values;

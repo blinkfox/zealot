@@ -2,7 +2,6 @@ package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.log.Log;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,8 +10,6 @@ import org.junit.Test;
  * Created by blinkfox on 2017/4/29.
  */
 public class SqlInfoBuilderTest {
-
-    private static final Log log = Log.get(SqlInfoBuilderTest.class);
 
     /**
      * 构建区间查询的测试方法.
