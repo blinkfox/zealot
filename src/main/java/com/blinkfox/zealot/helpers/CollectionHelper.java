@@ -10,6 +10,9 @@ import java.util.Collection;
  */
 public final class CollectionHelper {
 
+    /**
+     * 私有构造方法.
+     */
     private CollectionHelper() {
         super();
     }

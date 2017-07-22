@@ -7,7 +7,9 @@ import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
+
 import java.util.List;
+
 import org.dom4j.Node;
 
 /**
@@ -16,6 +18,11 @@ import org.dom4j.Node;
  */
 public class UserIdEmailHandler implements IConditHandler {
 
+    /**
+     * 构建用户ID、邮箱的SQL片段.
+     * @param source 构造资源对象
+     * @return SqlInfo实例.
+     */
     @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
         /* 获取拼接的参数和Zealot节点 */

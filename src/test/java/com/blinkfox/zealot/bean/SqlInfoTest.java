@@ -13,6 +13,7 @@ import org.junit.Test;
  */
 public class SqlInfoTest {
 
+    /** sqlInfo对象. */
     private static SqlInfo sqlInfo = null;
 
     /**

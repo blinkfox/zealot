@@ -4,14 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 加载zealot banner.txt文件的加载器类.
+ * 加载 zealot banner 加载器类.
  * Created by blinkfox on 2017/4/21.
  */
 public class BannerLoader {
     
     private static final Logger log = LoggerFactory.getLogger(BannerLoader.class);
 
-    /** banner文本. */
+    /** zealot 的 banner 文本. */
     private static final String BANNER_TEXT = "\n"
             + "__________               .__           __\n"
             + "\\____    / ____  _____   |  |    _____/  |_\n"

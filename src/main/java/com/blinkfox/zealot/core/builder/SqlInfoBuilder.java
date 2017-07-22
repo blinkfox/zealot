@@ -12,19 +12,19 @@ import java.util.List;
  */
 public class SqlInfoBuilder {
 
-    // sqlInfo对象
+    /** sqlInfo对象. */
     SqlInfo sqlInfo;
 
-    // sql拼接器，sqlInfo对象的属性
+    /** sql拼接器，sqlInfo对象的属性. */
     private StringBuilder join;
 
-    // 有序的参数集合，sqlInfo对象的属性
+    /** 有序的参数集合，sqlInfo对象的属性. */
     private List<Object> params;
 
-    // 上下文参数
+    /** 上下文参数. */
     Object context;
 
-    // 前缀
+    /** 前缀. */
     private String prefix;
 
     /**

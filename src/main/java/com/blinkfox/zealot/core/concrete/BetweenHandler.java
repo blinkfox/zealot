@@ -12,7 +12,7 @@ import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import org.dom4j.Node;
 
 /**
- * 数字查询动态sql生成的实现类
+ * 数字查询动态sql生成的实现类.
  * Created by blinkfox on 2016/10/30.
  */
 public class BetweenHandler implements IConditHandler {

@@ -24,6 +24,7 @@ public class ZealotKhalaTest {
     
     private static final Logger log = LoggerFactory.getLogger(ZealotKhalaTest.class);
 
+    /** 上下文参数对象. */
     private static Map<String, Object> context;
 
     /**

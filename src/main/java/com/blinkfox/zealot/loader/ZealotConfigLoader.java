@@ -12,15 +12,15 @@ import javax.servlet.ServletContextListener;
  */
 public class ZealotConfigLoader implements ServletContextListener {
 
-    // zealotConfig对应的类全路径常量字符串
+    /** zealotConfig对应的类全路径常量字符串. */
     private static final String CONFIG_CLASS = "zealotConfigClass";
 
     /**
      * ZealotConfig销毁时执行的方法.
-     * @param arg0 上下文事件对象
+     * @param event 上下文事件对象
      */
     @Override
-    public void contextDestroyed(ServletContextEvent arg0) {
+    public void contextDestroyed(ServletContextEvent event) {
         XmlContext.INSTANCE.getXmlMap().clear();
     }
 

@@ -9,6 +9,7 @@ import com.blinkfox.zealot.handler.UserIdEmailHandler;
  */
 public class MyZealotConfig extends AbstractZealotConfig {
 
+    /** xml命名空间标识. */
     public static final String USER_ZEALOT = "user_zealot";
 
     /**

@@ -20,7 +20,7 @@ import java.util.Collections;
  */
 public final class ZealotKhala {
 
-    // 封装了SqlInfo、应用中提供的上下文参数、前缀等信息.由于这里是纯Java拼接,所以就没有xml的Node节点信息，初始为为null
+    /** 封装了SqlInfo、应用中提供的上下文参数、前缀等信息.由于这里是纯Java拼接,所以就没有xml的Node节点信息，初始为为null. */
     private BuildSource source;
 
     /**

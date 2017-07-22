@@ -27,7 +27,7 @@ public class ZealotConfigManager {
     
     private static final Logger log = LoggerFactory.getLogger(ZealotConfigManager.class);
 
-    // 初始化的单例
+    /** 初始化的单实例. */
     private static final ZealotConfigManager confManager = new ZealotConfigManager();
 
     /**

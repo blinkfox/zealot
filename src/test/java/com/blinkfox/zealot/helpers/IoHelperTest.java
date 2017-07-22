@@ -3,6 +3,7 @@ package com.blinkfox.zealot.helpers;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import org.junit.Test;
 
 /**

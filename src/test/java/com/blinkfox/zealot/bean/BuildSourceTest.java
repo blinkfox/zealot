@@ -3,6 +3,7 @@ package com.blinkfox.zealot.bean;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.consts.ZealotConst;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ import org.junit.Test;
  */
 public class BuildSourceTest {
 
+    /** 构建SQL的资源. */
     private static BuildSource source;
 
     /**
