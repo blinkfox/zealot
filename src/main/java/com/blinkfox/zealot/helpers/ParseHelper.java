@@ -1,10 +1,11 @@
 package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.exception.ParseExpressionException;
-import com.blinkfox.zealot.log.Log;
 
 import org.mvel2.MVEL;
 import org.mvel2.templates.TemplateRuntime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MVEL表达式相关的工具类.
@@ -12,7 +13,7 @@ import org.mvel2.templates.TemplateRuntime;
  */
 public final class ParseHelper {
 
-    private static final Log log = Log.get(ParseHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(ParseHelper.class);
 
     /**
      * 私有构造方法.
@@ -31,7 +32,7 @@ public final class ParseHelper {
         try {
             return MVEL.eval(exp, paramObj);
         } catch (Exception e) {
-            log.error("解析表达式出错,表达式为:" + exp, e);
+            log.error("解析表达式出错,表达式为:{}", exp, e);
             return null;
         }
     }

@@ -5,13 +5,16 @@ import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.MyZealotConfig;
-import com.blinkfox.zealot.log.Log;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Zealot单元测试类.
@@ -19,7 +22,7 @@ import org.junit.Test;
  */
 public class ZealotTest {
 
-    private static final Log log = Log.get(ZealotTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ZealotTest.class);
 
     /**
      * 初始化zealot信息到缓存中.

@@ -5,9 +5,11 @@ import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
-import com.blinkfox.zealot.log.Log;
 
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 构建动态条件查询的协调类.
@@ -15,7 +17,7 @@ import java.util.Map;
  */
 final class ConditContext {
 
-    private static final Log log = Log.get(ConditContext.class);
+    private static final Logger log = LoggerFactory.getLogger(ConditContext.class);
 
     /**
      * 私有构造方法.

@@ -55,7 +55,7 @@ public class TextHandler implements IConditHandler {
     }
 
     /**
-     * 构建<text></text>标签中sqlInfo中的SQL文本信息，如果有非文本节点则抛出异常.
+     * 构建'<text></text>'标签中sqlInfo中的SQL文本信息，如果有非文本节点则抛出异常.
      * 即text节点中的内容不能包含其他标签
      * @param node xml标签节点
      */
