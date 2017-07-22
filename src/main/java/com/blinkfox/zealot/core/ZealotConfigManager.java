@@ -104,7 +104,7 @@ public class ZealotConfigManager {
     private void loadZealotConfig(AbstractZealotConfig zealotConfig) {
         zealotConfig.configXml(XmlContext.INSTANCE);
         zealotConfig.configTagHandler();
-        log.info("zealot的xml文件和tagHandler加载完成");
+        log.warn("zealot的xml文件和tagHandler加载完成");
     }
 
     /**
@@ -129,7 +129,7 @@ public class ZealotConfigManager {
                 Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
                 String zealotId = XmlNodeHelper.getNodeText(idNode);
                 if (StringHelper.isBlank(zealotId)) {
-                    throw new NodeNotFoundException("未获取到zealot节点,zealotId为:" + zealotId);
+                    throw new NodeNotFoundException("未获取到zealot节点,zealotId为空!");
                 }
 
                 // zealot节点缓存到Map中，key是由nameSpace和zealot id组成,用"@"符号分隔,value是zealotNode
