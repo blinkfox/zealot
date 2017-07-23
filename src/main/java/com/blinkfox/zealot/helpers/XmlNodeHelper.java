@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * xml和xml节点相关的工具类
+ * xml和xml节点相关的工具类.
  * Created by blinkfox on 2016/10/30.
  */
 public final class XmlNodeHelper {
