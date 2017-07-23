@@ -21,7 +21,7 @@ public class ZealotConfigLoader implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        XmlContext.INSTANCE.getXmlMap().clear();
+        XmlContext.INSTANCE.getXmlDocMap().clear();
     }
 
     /**

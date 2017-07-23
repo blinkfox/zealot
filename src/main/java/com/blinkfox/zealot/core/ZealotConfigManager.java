@@ -70,7 +70,7 @@ public class ZealotConfigManager {
      * 包括xml命名空间路径缓存、xml节点缓存
      */
     public void clear() {
-        XmlContext.INSTANCE.getXmlMap().clear();
+        XmlContext.INSTANCE.getXmlDocMap().clear();
         AbstractZealotConfig.getZealots().clear();
     }
 
@@ -112,19 +112,15 @@ public class ZealotConfigManager {
      */
     @SuppressWarnings("unchecked")
     private void cachingXmlZealots() {
-        Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlMap();
+        Map<String, Document> xmlMaps = XmlContext.INSTANCE.getXmlDocMap();
 
         // 遍历所有的xml文档，将每个zealot节点缓存到ConcurrentHashMap内存缓存中
-        for (Map.Entry<String, String> entry: xmlMaps.entrySet()) {
+        for (Map.Entry<String, Document> entry: xmlMaps.entrySet()) {
             String nameSpace = entry.getKey();
-            String value = entry.getValue();
-            Document document = XmlNodeHelper.getDocument(value);
-            if (document == null) {
-                throw new ConfigNotFoundException("未找到zealot xml的配置文件，nameSpace为:" + nameSpace);
-            }
+            Document doc = entry.getValue();
 
             // 获取该文档下所有的zealot元素,
-            List<Node> zealotNodes = document.selectNodes(ZealotConst.ZEALOT_TAG);
+            List<Node> zealotNodes = doc.selectNodes(ZealotConst.ZEALOT_TAG);
             for (Node zealotNode: zealotNodes) {
                 Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
                 String zealotId = XmlNodeHelper.getNodeText(idNode);

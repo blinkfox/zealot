@@ -28,7 +28,7 @@ public final class XmlNodeHelper {
     }
 
     /**
-     * 读取xml文档.
+     * 读取xml文件为dom4j的Docment文档.
      * @param xmlPath 定位xml文件的路径，如：com/blinkfox/test.xml
      * @return 返回dom4j文档
      */
