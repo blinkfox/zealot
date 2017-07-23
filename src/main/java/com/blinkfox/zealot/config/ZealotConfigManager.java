@@ -1,7 +1,6 @@
-package com.blinkfox.zealot.core;
+package com.blinkfox.zealot.config;
 
 import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.exception.NodeNotFoundException;

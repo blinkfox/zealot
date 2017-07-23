@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.blinkfox.zealot.config.ZealotConfigManager;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

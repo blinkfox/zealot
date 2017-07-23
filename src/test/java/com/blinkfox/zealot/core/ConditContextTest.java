@@ -3,6 +3,7 @@ package com.blinkfox.zealot.core;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.MyZealotConfig;
+import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
 
 import org.junit.AfterClass;
