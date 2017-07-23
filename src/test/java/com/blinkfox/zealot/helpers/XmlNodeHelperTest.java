@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.helpers;
 
 import org.dom4j.Document;
+import org.dom4j.Node;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -35,12 +36,24 @@ public class XmlNodeHelperTest {
     }
 
     /**
+     * 测试根据xml文件docment中的zealot节点id值获取对应的第一个节点的方法.
+     */
+    @Test
+    public void testGetZealotNodeById() {
+        Node node = XmlNodeHelper.getZealotNodeById(doc, "queryUserInfos");
+        Assert.assertNotNull(node);
+    }
+
+    /**
      * 测试获取Document文档中的Node节点文本值的方法.
      */
     @Test
     public void testGetNodeText() {
-        Document doc = XmlNodeHelper.getDocument(xmlPath);
-        Assert.assertNotNull(doc);
+        Node node = XmlNodeHelper.getZealotNodeById(doc, "queryUserById");
+        Assert.assertNotNull(node);
+
+        String text = XmlNodeHelper.getNodeText(node);
+        Assert.assertNotNull(text);
     }
 
     /**

@@ -45,6 +45,16 @@ public final class XmlNodeHelper {
     }
 
     /**
+     * 根据xml文件docment中的zealot节点id值获取对应的第一个节点.
+     * @param doc docment文档
+     * @param id zealotId
+     * @return dom4j的Node节点
+     */
+    public static Node getZealotNodeById(Document doc, String id) {
+        return doc.selectSingleNode("/zealots/zealot[@id='" + id + "']");
+    }
+
+    /**
      * 获取xml节点的文本值，如果对象是空的，则转为空字符串.
      * @param node dom4j节点
      * @return 返回节点文本值
