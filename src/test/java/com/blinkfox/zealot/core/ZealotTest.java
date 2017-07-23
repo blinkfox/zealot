@@ -5,12 +5,12 @@ import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.MyZealotConfig;
+import com.blinkfox.zealot.config.ZealotConfigManager;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.blinkfox.zealot.config.ZealotConfigManager;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
