@@ -100,7 +100,7 @@ public class ZealotKhalaTest {
 
 打印结果如下：
 
-```
+```sql
 testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC
 参数为:[%zhang%, 5, 21, 13, 1990-03-25, 2010-08-28, 1990-03-25, 2010-08-28, 0, 1]
 ```
@@ -111,7 +111,7 @@ testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.ad
 
 ### 配置使用
 
-在你的Java web项目项目中，创建一个继承自AbstractZealotConfig的核心配置类，如以下示例：
+在你的`Java web`项目项目中，创建一个继承自`AbstractZealotConfig`的核心配置类，如以下示例：
 
 ```java
 package com.blinkfox.config;
@@ -126,8 +126,13 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 public class MyZealotConfig extends AbstractZealotConfig {
 
     @Override
+    public void configNormal(NormalConfig normalConfig) {
+
+    }
+
+    @Override
     public void configXml(XmlContext ctx) {
-        
+
     }
 
     @Override
@@ -139,10 +144,9 @@ public class MyZealotConfig extends AbstractZealotConfig {
 ```
 
 > **代码解释**：
-
-> (1). configXml()方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
-
-> (2). configTagHandler()方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
+> (1). `configNormal()`方法是`1.1.5`版本新增的实现,主要用来配置Zealot的通用配置信息，包括是否开启`debug`模式，加载完毕之后是否打印`banner`等；
+> (2). `configXml()`方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
+> (3). `configTagHandler()`方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
 然后，在你的web.xml中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
 
@@ -176,7 +180,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         select * from user where
         <equal field="id" value="id"/>
     </zealot>
-    
+
     <!-- 根据动态条件查询用户信息 -->
     <zealot id="queryUserInfo">
         select * from user where
@@ -185,9 +189,9 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"/>
         <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"/>
         <andIn match="?sexs != empty" field="sex" value="sexs"/>
-        order by id desc 
+        order by id desc
     </zealot>
-    
+
 </zealots>
 ```
 
@@ -220,6 +224,13 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 public class MyZealotConfig extends AbstractZealotConfig {
 
     public static final String USER_ZEALOT = "user_zealot";
+
+    @Override
+    public void configNormal(NormalConfig normalConfig) {
+        normalConfig.setDebug(true) // 是否开启debug模式，默认为false
+                .setPrintBanner(true) // 加载配置信息完毕后是否打印Banner，默认为true
+                .setPrintSqlInfo(true); // 是否打印Sql信息，默认为true，注意日志级别为info时才打印，如果是warn、error则不打印
+    }
 
     @Override
     public void configXml(XmlContext ctx) {
@@ -663,7 +674,7 @@ MVEL模板中的所有块必须用`@end{}`标签来终止，除非是`if-then-el
 foreach标签允许您在模板中迭代集合或数组。 注意：foreach的语法已经在MVEL模板2.0中改变，以使用foreach符号来标记MVEL语言本身的符号。
 
 ```java
-@foreach{item : products} 
+@foreach{item : products}
  - @{item.serialNumber}
 @end{}
 ```
@@ -674,6 +685,11 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.5(2017-07-24)
+  - 新增通用配置功能，包括debug模式、是否打印Sql信息、是否打印Banner等
+  - 新增依赖了`slf4j`的日志接口，各系统引入`slf4j`的日志实现即可
+  - 去掉了被标注为`@Deprecated`的过时类`ZealotKhala`
+  - 一些类的代码重构和JavaDoc完善
 - v1.1.4(2017-05-06)
   - 修复了启动时打印banner出错的问题
 - v1.1.3(2017-05-01)
@@ -687,7 +703,7 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
   - 新增了ZealotKhala和xml标签的常用API，如：大于、小于、大于等于、小于等于等功能。
   - 新增了Zealot中xml的text标签，使灵活性SQL拼接灵活性更强
   - 新增了ZealotKhala的ICustomAction接口，使自定义的逻辑也能够通过链式写法完成，使SQL拼接逻辑更紧凑
-  - 标记`Khala.java为推荐使用，即`@Deprecated`。推荐使用`ZealotKhala.java`，使SQL的动态性、灵活性更强。
+  - 标记`Khala.java`为推荐使用，即`@Deprecated`。推荐使用`ZealotKhala.java`，使SQL的动态性、灵活性更强。
 - v1.1.0(2017-04-04)
   - 新增了ZealotKhala，使ZealotKhala用Java也可以链式的书写动态SQL，和Zealot的XML标签相互应
 - v1.0.7(2017-03-31)
