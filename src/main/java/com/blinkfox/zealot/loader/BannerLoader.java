@@ -36,10 +36,13 @@ public class BannerLoader {
     }
 
     /**
-     * 打印banner文件中的内容.
+     * 是否打印Banner信息，如果参数为true,则打印否则不打印.
+     * @param isPrint 是否打印
      */
-    public void print() {
-        log.info(BANNER_TEXT);
+    public void print(boolean isPrint) {
+        if (isPrint) {
+            log.warn(BANNER_TEXT);
+        }
     }
 
 }

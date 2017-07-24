@@ -53,7 +53,7 @@ public class ZealotConfigManager {
         // 加载ZealotConfig配置信息
         this.loadZealotConfig(configClass);
         this.cachingXmlZealots();
-        BannerLoader.newInstance().print();
+        BannerLoader.newInstance().print(NormalConfig.getInstance().isPrintBanner());
         this.testFirstEvaluate();
     }
 
@@ -105,7 +105,7 @@ public class ZealotConfigManager {
         zealotConfig.configNormal(NormalConfig.getInstance());
         zealotConfig.configXml(XmlContext.INSTANCE);
         zealotConfig.configTagHandler();
-        log.warn("zealot的xml文件和tagHandler加载完成");
+        log.warn("zealot的配置信息加载完成!");
     }
 
     /**

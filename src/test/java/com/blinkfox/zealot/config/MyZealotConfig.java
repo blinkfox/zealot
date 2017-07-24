@@ -21,7 +21,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
     @Override
     public void configNormal(NormalConfig normalConfig) {
         normalConfig.setDebug(true, DebugType.ALL_FILE)
-                .setPrintBanner(true)
+                .setPrintBanner(false)
                 .setPrintSqlInfo(true);
     }
 

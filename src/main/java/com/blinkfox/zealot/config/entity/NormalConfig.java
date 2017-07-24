@@ -25,7 +25,7 @@ public class NormalConfig {
      * 私有构造方法.
      */
     private NormalConfig() {
-        super();
+        this.setDebug(false).setPrintBanner(true).setPrintSqlInfo(true);
     }
 
     /**
@@ -34,7 +34,7 @@ public class NormalConfig {
      * @return NormalConfig实例.
      */
     public static NormalConfig getInstance() {
-        return normalConfig.setDebug(false).setPrintBanner(true).setPrintSqlInfo(true);
+        return normalConfig;
     }
 
     /**
