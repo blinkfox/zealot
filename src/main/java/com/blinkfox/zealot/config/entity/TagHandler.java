@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.bean;
+package com.blinkfox.zealot.config.entity;
 
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.IConditHandler;

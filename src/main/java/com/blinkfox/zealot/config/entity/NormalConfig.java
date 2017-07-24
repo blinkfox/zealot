@@ -9,9 +9,6 @@ public class NormalConfig {
     /** 是否开发调试模式. */
     private boolean isDebug;
 
-    /** 开发调试模式枚举类型. */
-    private DebugType debugType;
-
     /** 是否打印Banner信息. */
     private boolean isPrintBanner;
 
@@ -46,33 +43,13 @@ public class NormalConfig {
     }
 
     /**
-     * 设置是否开启debug模式,并设置debug类型为`DebugType.SINGLE_FILE`.
+     * 设置是否开启debug模式.
      * @param debug 是否开启debug模式
      * @return NormalConfig实例
      */
     public NormalConfig setDebug(boolean debug) {
-        this.setDebug(debug, DebugType.SINGLE_FILE);
-        return this;
-    }
-
-    /**
-     * 设置是否开启debug模式.
-     * @param debug 是否开启debug模式
-     * @param debugType debug模式
-     * @return NormalConfig实例
-     */
-    public NormalConfig setDebug(boolean debug, DebugType debugType) {
         this.isDebug = debug;
-        this.debugType = debugType;
         return this;
-    }
-
-    /**
-     * 获取debug类型枚举值.
-     * @return 枚举值
-     */
-    public DebugType getDebugType() {
-        return this.debugType;
     }
 
     /**

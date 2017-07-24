@@ -7,7 +7,7 @@
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 
 /**
@@ -107,7 +107,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 
 /**

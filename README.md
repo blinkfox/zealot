@@ -116,7 +116,7 @@ testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.ad
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 
 /**
@@ -210,7 +210,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 
 /**

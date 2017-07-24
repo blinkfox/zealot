@@ -3,10 +3,14 @@ package com.blinkfox.zealot.core;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.SqlInfoPrinter;
 import com.blinkfox.zealot.helpers.StringHelper;
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 import java.util.List;
 
@@ -33,9 +37,21 @@ public final class Zealot {
      * @return 返回SqlInfo对象
      */
     public static SqlInfo getSqlInfo(String nameSpace, String zealotId, Object paramObj) {
-        // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点
-        Node zealotNode = AbstractZealotConfig.getZealots()
-                .get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
+        // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点，如果是debug模式，则实时获取；否则从缓存中获取.
+        Node zealotNode;
+        if (NormalConfig.getInstance().isDebug()) {
+            String filePath = XmlContext.INSTANCE.getXmlPathMap().get(nameSpace);
+            zealotNode = XmlNodeHelper.getZealotNodeById(XmlNodeHelper.getDocument(filePath), zealotId);
+        } else {
+            zealotNode = AbstractZealotConfig.getZealots()
+                    .get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
+        }
+
+        if (zealotNode == null) {
+            throw new NodeNotFoundException("未找到nameSpace为:" + nameSpace + ",zealotId为:" + zealotId + "的节点!");
+        }
+
+        // 生成SqlInfo信息.
         SqlInfo sqlInfo = buildSqlInfo(zealotNode, paramObj);
         SqlInfoPrinter.newInstance().printZealotSqlInfo(sqlInfo, true, nameSpace, zealotId);
         return sqlInfo;

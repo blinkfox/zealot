@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.bean;
+package com.blinkfox.zealot.config.entity;
 
 import com.blinkfox.zealot.helpers.StringHelper;
 

@@ -1,8 +1,7 @@
 package com.blinkfox.zealot.config;
 
-import com.blinkfox.zealot.bean.XmlContext;
-import com.blinkfox.zealot.config.entity.DebugType;
 import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.handler.UserIdEmailHandler;
 
 /**
@@ -20,8 +19,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
      */
     @Override
     public void configNormal(NormalConfig normalConfig) {
-        normalConfig.setDebug(true, DebugType.ALL_FILE)
-                .setPrintBanner(false)
+        normalConfig.setDebug(true)
+                .setPrintBanner(true)
                 .setPrintSqlInfo(true);
     }
 

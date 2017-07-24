@@ -2,8 +2,8 @@ package com.blinkfox.zealot.core;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.config.entity.TagHandler;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
 
 import java.util.Map;

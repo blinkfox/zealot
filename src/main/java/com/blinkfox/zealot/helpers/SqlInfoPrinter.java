@@ -1,8 +1,8 @@
 package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.XmlContext;
 
 import java.util.Arrays;
 
@@ -62,7 +62,7 @@ public class SqlInfoPrinter {
 
             sb.append("-------- SQL: ").append(sqlInfo.getSql()).append(LINE_BREAK)
                     .append("----- Params: ").append(Arrays.toString(sqlInfo.getParamsArr())).append(LINE_BREAK);
-            sb.append(PRINT_END);
+            sb.append(PRINT_END).append(LINE_BREAK);
             log.info(sb.toString());
         }
     }

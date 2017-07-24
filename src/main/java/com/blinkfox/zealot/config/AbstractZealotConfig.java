@@ -2,9 +2,9 @@ package com.blinkfox.zealot.config;
 
 import static com.blinkfox.zealot.consts.ZealotConst.*;
 
-import com.blinkfox.zealot.bean.TagHandler;
-import com.blinkfox.zealot.bean.XmlContext;
 import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.TagHandler;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.core.concrete.BetweenHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
