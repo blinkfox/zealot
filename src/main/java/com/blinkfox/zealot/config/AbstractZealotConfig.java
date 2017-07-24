@@ -4,6 +4,7 @@ import static com.blinkfox.zealot.consts.ZealotConst.*;
 
 import com.blinkfox.zealot.bean.TagHandler;
 import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.core.concrete.BetweenHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
@@ -138,6 +139,12 @@ public abstract class AbstractZealotConfig {
             Class<? extends IConditHandler> handlerCls, String suffix) {
         tagHandlerMap.put(tagName, new TagHandler(prefix, handlerCls, suffix));
     }
+
+    /**
+     * 配置Zealot的普通配置信息.
+     * @param normalConfig 普通配置实例
+     */
+    public abstract void configNormal(NormalConfig normalConfig);
 
     /**
      * 配置xml文件的标识和资源路径.

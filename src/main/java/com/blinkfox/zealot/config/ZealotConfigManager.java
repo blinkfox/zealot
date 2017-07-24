@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.config;
 
 import com.blinkfox.zealot.bean.XmlContext;
+import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
@@ -97,10 +98,11 @@ public class ZealotConfigManager {
     }
 
     /**
-     * 加载初始化zealotConfig的子类信息，并执行初始化mapper到缓存中.
+     * 加载初始化zealotConfig的子类信息，并执行初始化zealot配置信息到缓存中.
      * @param zealotConfig 配置类
      */
     private void loadZealotConfig(AbstractZealotConfig zealotConfig) {
+        zealotConfig.configNormal(NormalConfig.getInstance());
         zealotConfig.configXml(XmlContext.INSTANCE);
         zealotConfig.configTagHandler();
         log.warn("zealot的xml文件和tagHandler加载完成");
