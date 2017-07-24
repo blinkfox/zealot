@@ -1,6 +1,6 @@
 ## 支持场景
 
-适用于Java (web)项目，`JDK1.6`及以上
+适用于`Java (web)`项目，`JDK1.6`及以上
 
 ## 安装集成
 
@@ -18,6 +18,6 @@
 
 ### Gradle
 
-```
+```bash
 compile 'com.blinkfox:zealot:1.1.4'
 ```

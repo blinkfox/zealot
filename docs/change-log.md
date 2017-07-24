@@ -1,3 +1,8 @@
+- v1.1.5(2017-07-24)
+  - 新增通用配置功能，包括debug模式、是否打印Sql信息、是否打印Banner等
+  - 新增依赖了`slf4j`的日志接口，各系统引入`slf4j`的日志实现即可
+  - 去掉了被标注为`@Deprecated`的过时类`ZealotKhala`
+  - 一些类的代码重构和JavaDoc完善
 - v1.1.4(2017-05-06)
   - 修复了启动时打印banner出错的问题
 - v1.1.3(2017-05-01)
@@ -11,7 +16,7 @@
   - 新增了ZealotKhala和xml标签的常用API，如：大于、小于、大于等于、小于等于等功能。
   - 新增了Zealot中xml的text标签，使灵活性SQL拼接灵活性更强
   - 新增了ZealotKhala的`ICustomAction`接口，使自定义的逻辑也能够通过链式写法完成，使SQL拼接逻辑更紧凑
-  - 标记`Khala.java为推荐使用，即`@Deprecated`。推荐使用`ZealotKhala.java`，使SQL的动态性、灵活性更强。
+  - 标记`Khala.java`为推荐使用，即`@Deprecated`。推荐使用`ZealotKhala.java`，使SQL的动态性、灵活性更强。
 - v1.1.0(2017-04-04)
   - 新增了`ZealotKhala`，使ZealotKhala用Java也可以链式的书写动态SQL，和Zealot的XML标签相互应
 - v1.0.7(2017-03-31)

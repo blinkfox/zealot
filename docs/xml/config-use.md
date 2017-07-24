@@ -17,8 +17,13 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 public class MyZealotConfig extends AbstractZealotConfig {
 
     @Override
+    public void configNormal(NormalConfig normalConfig) {
+        // 1.1.5版本新增的方法
+    }
+
+    @Override
     public void configXml(XmlContext ctx) {
-        
+
     }
 
     @Override
@@ -31,9 +36,11 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 > **代码解释**：
 
-> (1). configXml()方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
+> (1). `configNormal()`方法是`1.1.5`版本新增的方法,主要用来配置Zealot的通用配置信息，包括是否开启`debug`模式，加载完毕之后是否打印`banner`等；
 
-> (2). configTagHandler()方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
+> (2). `configXml()`方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
+
+> (3). `configTagHandler()`方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
 ### web.xml读取配置
 
@@ -119,6 +126,13 @@ public class MyZealotConfig extends AbstractZealotConfig {
     public static final String USER_ZEALOT = "user_zealot";
 
     @Override
+    public void configNormal(NormalConfig normalConfig) {
+        normalConfig.setDebug(true) // 是否开启debug模式，默认为false
+                .setPrintBanner(true) // 加载配置信息完毕后是否打印Banner，默认为true
+                .setPrintSqlInfo(true); // 是否打印Sql信息，默认为true，注意日志级别为info时才打印，如果是warn、error则不打印
+    }
+
+    @Override
     public void configXml(XmlContext ctx) {
         ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");
     }
@@ -149,7 +163,7 @@ public class UserController extends Controller {
     public void queryUserById() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", "2");
-        
+
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserById", paramMap);
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
@@ -168,7 +182,7 @@ public class UserController extends Controller {
         paramMap.put("startBirthday", "1990-01-01 00:00:00");
         paramMap.put("endBirthday", "1991-01-01 23:59:59");
         paramMap.put("sexs", new Integer[]{0, 1});
-        
+
         // 执行Zealot方法，得到完整的SQL和对应的有序参数
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfo", paramMap);
         String sql = sqlInfo.getSql();

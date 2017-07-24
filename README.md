@@ -144,8 +144,11 @@ public class MyZealotConfig extends AbstractZealotConfig {
 ```
 
 > **代码解释**：
+
 > (1). `configNormal()`方法是`1.1.5`版本新增的实现,主要用来配置Zealot的通用配置信息，包括是否开启`debug`模式，加载完毕之后是否打印`banner`等；
+
 > (2). `configXml()`方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
+
 > (3). `configTagHandler()`方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
 然后，在你的web.xml中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
@@ -261,7 +264,7 @@ public class UserController extends Controller {
     public void queryUserById() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", "2");
-        
+
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserById", paramMap);
         String sql = sqlInfo.getSql();
         Object[] params = sqlInfo.getParamsArr();
@@ -280,7 +283,7 @@ public class UserController extends Controller {
         paramMap.put("startBirthday", "1990-01-01 00:00:00");
         paramMap.put("endBirthday", "1991-01-01 23:59:59");
         paramMap.put("sexs", new Integer[]{0, 1});
-        
+
         // 执行Zealot方法，得到完整的SQL和对应的有序参数
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.USER_ZEALOT, "queryUserInfo", paramMap);
         String sql = sqlInfo.getSql();
