@@ -71,7 +71,6 @@ public class ZealotKhalaTest {
         // 断言并输出sql信息
         assertEquals("INSERT INTO user VALUES ('3', 'lisi')", sql);
         assertArrayEquals(new Object[]{}, arr);
-        log.info("testDelete()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -88,7 +87,6 @@ public class ZealotKhalaTest {
         // 断言并输出sql信息
         assertEquals("DELETE FROM user", sql);
         assertArrayEquals(new Object[]{}, arr);
-        log.info("testDelete()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -105,7 +103,6 @@ public class ZealotKhalaTest {
         // 断言并输出sql信息
         assertEquals("UPDATE user SET nick_name = 'wangwu'", sql);
         assertArrayEquals(new Object[]{}, arr);
-        log.info("testUpdate()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -150,7 +147,6 @@ public class ZealotKhalaTest {
                 + "like '%zhang%' AND u.email = ? hi GROUP BY u.id HAVING u.id ORDER BY u.id DESC , u.nick_name ASC "
                 + "UNION ALL SELECT u.id, u.nick_name, u.email FROM user2 LIMIT 5 OFFSET 3", sql);
         assertArrayEquals(new Object[]{"3", "san@163.com", 5, "zhang"}, arr);
-        log.info("testNormal()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -174,7 +170,6 @@ public class ZealotKhalaTest {
         assertEquals("select u.id, u.nick_name from user as u where u.id = ? and u.nick_name like ? "
                 + "and u.sex in (?, ?, ?, ?, ?) and u.city in (?, ?, ?)", sql);
         assertArrayEquals(new Object[]{5, "lisi", 0, 1, 2, 3, 4, "四川", "北京", "上海"}, arr);
-        log.info("testAny方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -207,7 +202,6 @@ public class ZealotKhalaTest {
                 + "u.nick_name = ? OR u.email = ? OR u.birthday = ? OR u.birthday = ? u.id = ?", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
                 "1990-03-31", "1990-03-31", "3"}, arr);
-        log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
     }
 
     /**
@@ -238,7 +232,6 @@ public class ZealotKhalaTest {
                 + "u.nick_name <> ? OR u.email <> ? OR u.birthday <> ? OR u.birthday <> ? u.id <> ?", sql);
         assertArrayEquals(new Object[]{"zhagnsan", "zhagnsan@163.com", 25, 25, 25, "zhagnsan", "zhagnsan@163.com",
                 "1990-03-31", "1990-03-31", "3"}, arr);
-        log.info("-- testNotEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
     }
 
     /**
@@ -308,7 +301,6 @@ public class ZealotKhalaTest {
                 + "OR u.birthday LIKE ? u.id LIKE ?", sql);
         assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%", "%25%", "%zhagnsan%",
                 "%zhagnsan@163.com%", "%1990-03-31%", "%1990-03-31%", "%3%"}, arr);
-        log.info("testLike()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -345,7 +337,6 @@ public class ZealotKhalaTest {
                 + "AND u.birthday <= ? OR u.age BETWEEN ? AND ? OR u.age BETWEEN ? AND ? OR u.birthday <= ?", sql);
         assertArrayEquals(new Object[]{18, 26, "2010-05-28", 18, 26, 18, 26, "2010-05-28", 18, 26, 18, 26,
                 "2010-05-28"}, arr);
-        log.info("testBetween()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -383,7 +374,6 @@ public class ZealotKhalaTest {
                 + "OR u.sex in (?, ?)", sql);
         assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
                 0, 1, "四川", "北京", "上海", 0, 1} ,arr);
-        log.info("testIn()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
     /**
@@ -434,7 +424,6 @@ public class ZealotKhalaTest {
                 + "AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
-        log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
     }
 
 }

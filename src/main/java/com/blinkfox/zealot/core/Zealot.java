@@ -5,6 +5,7 @@ import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.SqlInfoPrinter;
 import com.blinkfox.zealot.helpers.StringHelper;
 
 import java.util.List;
@@ -35,7 +36,9 @@ public final class Zealot {
         // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点
         Node zealotNode = AbstractZealotConfig.getZealots()
                 .get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
-        return buildSqlInfo(zealotNode, paramObj);
+        SqlInfo sqlInfo = buildSqlInfo(zealotNode, paramObj);
+        SqlInfoPrinter.newInstance().printZealotSqlInfo(sqlInfo, true, nameSpace, zealotId);
+        return sqlInfo;
     }
 
     /**
