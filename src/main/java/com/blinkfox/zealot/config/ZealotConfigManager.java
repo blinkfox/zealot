@@ -69,7 +69,7 @@ public class ZealotConfigManager {
      * 包括xml命名空间路径缓存、xml节点缓存
      */
     public void clear() {
-        XmlContext.INSTANCE.getXmlDocMap().clear();
+        XmlContext.INSTANCE.getXmlPathMap().clear();
         AbstractZealotConfig.getZealots().clear();
     }
 
@@ -111,12 +111,18 @@ public class ZealotConfigManager {
      */
     @SuppressWarnings("unchecked")
     private void cachingXmlZealots() {
-        Map<String, Document> xmlMaps = XmlContext.INSTANCE.getXmlDocMap();
+        Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlPathMap();
 
         // 遍历所有的xml文档，将每个zealot节点缓存到ConcurrentHashMap内存缓存中
-        for (Map.Entry<String, Document> entry: xmlMaps.entrySet()) {
+        for (Map.Entry<String, String> entry: xmlMaps.entrySet()) {
             String nameSpace = entry.getKey();
-            Document doc = entry.getValue();
+            String filePath = entry.getValue();
+
+            // 根据文件路径获取对应的dom4j Document对象.
+            Document doc = XmlNodeHelper.getDocument(filePath);
+            if (doc == null) {
+                throw new ConfigNotFoundException("注意：未找到配置文件中xml对应的dom4j Document文档,nameSpace为:" + nameSpace);
+            }
 
             // 获取该文档下所有的zealot元素,
             List<Node> zealotNodes = doc.selectNodes(ZealotConst.ZEALOT_TAG);
@@ -127,7 +133,7 @@ public class ZealotConfigManager {
                     throw new NodeNotFoundException("未获取到zealot节点,zealotId为空!");
                 }
 
-                // zealot节点缓存到Map中，key是由nameSpace和zealot id组成,用"@"符号分隔,value是zealotNode
+                // zealot节点缓存到Map中，key是由nameSpace和zealot id组成,用"@@"符号分隔,value是zealotNode
                 String zealotKey = StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId);
                 AbstractZealotConfig.getZealots().put(zealotKey, zealotNode);
             }

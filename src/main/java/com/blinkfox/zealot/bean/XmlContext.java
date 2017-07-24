@@ -1,13 +1,10 @@
 package com.blinkfox.zealot.bean;
 
-import com.blinkfox.zealot.exception.ConfigNotFoundException;
 import com.blinkfox.zealot.helpers.StringHelper;
-import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.dom4j.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +19,8 @@ public enum XmlContext {
      */
     INSTANCE {
 
-        /** 所有zealots XML文档的缓存上下文的map,key是文件命名空间标识，value是dom4j的Document文档. */
-        private final Map<String, Document> xmlDocMap = new ConcurrentHashMap<String, Document>();
+        /** 所有zealots XML文档的缓存上下文的map,key是文件命名空间标识，value是xml文件资源路径. */
+        private final Map<String, String> xmlPathMap = new ConcurrentHashMap<String, String>();
 
         /**
          * 添加xml命名空间和文件路径到`ConcurrentHashMap`中.
@@ -37,23 +34,17 @@ public enum XmlContext {
                 return;
             }
 
-            // 根据文件路径获取对应的dom4j Document
-            Document doc = XmlNodeHelper.getDocument(filePath);
-            if (doc == null) {
-                throw new ConfigNotFoundException("注意：未找到配置文件中xml对应的dom4j Document文档,nameSpace为:" + nameSpace);
-            }
-
             // 将XML命名空间的标识和其对应的document文档,用单例缓存起来.
-            xmlDocMap.put(nameSpace, doc);
+            xmlPathMap.put(nameSpace, filePath);
         }
 
         /**
-         * 获取key为xml命名空间,value为Document配置信息的Map.
+         * 获取key为xml命名空间,value为xml文件资源路径字符串的Map.
          * @return map
          */
         @Override
-        public Map<String, Document> getXmlDocMap() {
-            return xmlDocMap;
+        public Map<String, String> getXmlPathMap() {
+            return xmlPathMap;
         }
 
     };
@@ -68,9 +59,9 @@ public enum XmlContext {
     public abstract void add(String nameSpace, String filePath);
 
     /**
-     * 获取key为xml命名空间,value为Document配置信息的Map.
+     * 获取key为xml命名空间,value为xml文件资源路径字符串的Map.
      * @return map
      */
-    public abstract Map<String, Document> getXmlDocMap();
+    public abstract Map<String, String> getXmlPathMap();
 
 }
