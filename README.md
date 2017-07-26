@@ -1,6 +1,6 @@
 # Zealot
 
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.5%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.6%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
 
 一个轻量级的SQL和参数动态生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
@@ -18,7 +18,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅46k大小，集成和使用简单
+- 轻量级，jar包仅仅48k大小，集成和使用简单
 - 提供了纯Java代码或XML两种方式书写维护SQL
 - Java的方式采用流式API的方式书写动态SQL，易于书写阅读
 - XML的方式让SQL和Java代码解耦和，易于维护
@@ -39,7 +39,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 
@@ -688,6 +688,8 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 九、版本更新记录
 
+- v1.1.6(2017-07-27)
+  - 将`slf4j`的日志改为了`JDK`的日志
 - v1.1.5(2017-07-24)
   - 新增通用配置功能，包括debug模式、是否打印Sql信息、是否打印Banner等
   - 新增依赖了`slf4j`的日志接口，各系统引入`slf4j`的日志实现即可
