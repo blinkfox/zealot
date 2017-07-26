@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.log.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,8 +13,6 @@ import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ZealotKhala的单元测试类.
@@ -22,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ZealotKhalaTest {
     
-    private static final Logger log = LoggerFactory.getLogger(ZealotKhalaTest.class);
+    private static final Log log = Log.get(ZealotKhalaTest.class);
 
     /** 上下文参数对象. */
     private static Map<String, Object> context;

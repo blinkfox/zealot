@@ -1,7 +1,6 @@
 package com.blinkfox.zealot.loader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.blinkfox.zealot.log.Log;
 
 /**
  * 加载 zealot banner 加载器类.
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BannerLoader {
     
-    private static final Logger log = LoggerFactory.getLogger(BannerLoader.class);
+    private static final Log log = Log.get(BannerLoader.class);
 
     /** zealot 的 banner 文本. */
     private static final String BANNER_TEXT = "\n"

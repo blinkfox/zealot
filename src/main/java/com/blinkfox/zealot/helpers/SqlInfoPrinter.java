@@ -3,11 +3,9 @@ package com.blinkfox.zealot.helpers;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.config.entity.XmlContext;
+import com.blinkfox.zealot.log.Log;
 
 import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 打印SqlInfo信息的工具类.
@@ -15,7 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SqlInfoPrinter {
 
-    private static final Logger log = LoggerFactory.getLogger(SqlInfoPrinter.class);
+    private static final Log log = Log.get(SqlInfoPrinter.class);
 
     private static final String PRINT_START = "------------------------------------------------------------ "
             + "Zealot生成的SQL信息 ---------------------------------------------------------";
@@ -50,7 +48,7 @@ public class SqlInfoPrinter {
      */
     public void printZealotSqlInfo(SqlInfo sqlInfo, boolean hasXml, String nameSpace, String zealotId) {
         // 如果可以配置的打印SQL信息，且日志级别是info级别,则打印SQL信息.
-        if (NormalConfig.getInstance().isPrintSqlInfo() && log.isInfoEnabled()) {
+        if (NormalConfig.getInstance().isPrintSqlInfo()) {
             StringBuilder sb = new StringBuilder(LINE_BREAK);
             sb.append(PRINT_START).append(LINE_BREAK);
 

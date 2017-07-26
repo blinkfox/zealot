@@ -9,6 +9,7 @@ import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import com.blinkfox.zealot.loader.BannerLoader;
+import com.blinkfox.zealot.log.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +17,6 @@ import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Zealot配置缓存管理器，用于加载Zealot Config配置信息到缓存中
@@ -25,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ZealotConfigManager {
     
-    private static final Logger log = LoggerFactory.getLogger(ZealotConfigManager.class);
+    private static final Log log = Log.get(ZealotConfigManager.class);
 
     /** 初始化的单实例. */
     private static final ZealotConfigManager confManager = new ZealotConfigManager();
@@ -83,7 +82,7 @@ public class ZealotConfigManager {
             throw new ConfigNotFoundException("未获取到ZealotConfig配置信息");
         }
 
-        log.info("zealot加载器开始加载，Zealot配置类为:{}", configClass);
+        log.info("zealot加载器开始加载，Zealot配置类为:" + configClass);
         Object temp;
         try {
             temp = Class.forName(configClass).newInstance();

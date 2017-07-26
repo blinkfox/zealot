@@ -1,12 +1,10 @@
 package com.blinkfox.zealot.config.entity;
 
 import com.blinkfox.zealot.helpers.StringHelper;
+import com.blinkfox.zealot.log.Log;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 枚举单例的XML文件对应的Document配置的上下文.
@@ -49,7 +47,7 @@ public enum XmlContext {
 
     };
 
-    private static final Logger log = LoggerFactory.getLogger(XmlContext.class);
+    private static final Log log = Log.get(XmlContext.class);
 
     /**
      * 添加xml命名空间和文件路径到 ConcurrentHashMap 中.

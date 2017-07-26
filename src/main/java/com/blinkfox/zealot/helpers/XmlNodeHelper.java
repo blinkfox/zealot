@@ -2,6 +2,7 @@ package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
+import com.blinkfox.zealot.log.Log;
 
 import java.io.InputStream;
 
@@ -9,8 +10,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * xml和xml节点相关的工具类.
@@ -18,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class XmlNodeHelper {
 
-    private static final Logger log = LoggerFactory.getLogger(XmlNodeHelper.class);
+    private static final Log log = Log.get(XmlNodeHelper.class);
 
     /**
      * 私有构造方法.
@@ -39,13 +38,14 @@ public final class XmlNodeHelper {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlPath);
             document = reader.read(is);
         } catch (DocumentException e) {
-            log.error("读取或解析xml文件失败，xmlPath是:{}", xmlPath, e);
+            log.error("读取或解析xml文件失败，xmlPath是:" + xmlPath, e);
         }
         return document;
     }
 
     /**
      * 根据xml文件docment中的zealot节点id值获取对应的第一个节点.
+     * <p>使用xPath语法获取第一个符合条件的节点.</p>
      * @param doc docment文档
      * @param id zealotId
      * @return dom4j的Node节点
