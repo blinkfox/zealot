@@ -1,12 +1,12 @@
 package com.blinkfox.zealot.test.handler;
 
-import com.blinkfox.zealot.test.bean.BuildSource;
-import com.blinkfox.zealot.test.bean.SqlInfo;
-import com.blinkfox.zealot.test.consts.ZealotConst;
-import com.blinkfox.zealot.test.core.IConditHandler;
-import com.blinkfox.zealot.test.helpers.ParseHelper;
-import com.blinkfox.zealot.test.helpers.StringHelper;
-import com.blinkfox.zealot.test.helpers.XmlNodeHelper;
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.core.IConditHandler;
+import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 import java.util.List;
 

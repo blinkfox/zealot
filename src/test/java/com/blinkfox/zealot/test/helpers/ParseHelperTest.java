@@ -2,6 +2,8 @@ package com.blinkfox.zealot.test.helpers;
 
 import static org.junit.Assert.assertEquals;
 
+import com.blinkfox.zealot.helpers.ParseHelper;
+
 import java.util.HashMap;
 import java.util.Map;
 

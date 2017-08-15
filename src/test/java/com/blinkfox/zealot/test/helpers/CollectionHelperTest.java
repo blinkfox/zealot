@@ -3,7 +3,8 @@ package com.blinkfox.zealot.test.helpers;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import com.blinkfox.zealot.test.consts.ZealotConst;
+import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.helpers.CollectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;

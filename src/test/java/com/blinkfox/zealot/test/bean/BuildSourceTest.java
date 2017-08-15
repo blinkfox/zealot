@@ -2,7 +2,9 @@ package com.blinkfox.zealot.test.bean;
 
 import static org.junit.Assert.assertEquals;
 
-import com.blinkfox.zealot.test.consts.ZealotConst;
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;

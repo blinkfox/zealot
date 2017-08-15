@@ -1,7 +1,8 @@
 package com.blinkfox.zealot.test.core.builder;
 
-import com.blinkfox.zealot.test.bean.BuildSource;
-import com.blinkfox.zealot.test.bean.SqlInfo;
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
 
 import org.junit.Assert;
 import org.junit.Test;

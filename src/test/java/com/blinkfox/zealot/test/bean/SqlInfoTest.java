@@ -3,6 +3,8 @@ package com.blinkfox.zealot.test.bean;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import com.blinkfox.zealot.bean.SqlInfo;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.test.helpers;
 
+import com.blinkfox.zealot.helpers.IoHelper;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;

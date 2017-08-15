@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.test.log;
 
+import com.blinkfox.zealot.log.Log;
+
 import org.junit.Test;
 
 /**

@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.test.exception;
 
+import com.blinkfox.zealot.exception.NotCollectionOrArrayException;
+
 import org.junit.Test;
 
 /**

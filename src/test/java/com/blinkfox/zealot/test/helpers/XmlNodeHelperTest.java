@@ -1,5 +1,7 @@
 package com.blinkfox.zealot.test.helpers;
 
+import com.blinkfox.zealot.helpers.XmlNodeHelper;
+
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.junit.AfterClass;

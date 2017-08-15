@@ -1,7 +1,8 @@
 package com.blinkfox.zealot.test.config;
 
-import com.blinkfox.zealot.test.config.entity.NormalConfig;
-import com.blinkfox.zealot.test.config.entity.XmlContext;
+import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.test.handler.UserIdEmailHandler;
 
 /**

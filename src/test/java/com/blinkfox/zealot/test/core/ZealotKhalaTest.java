@@ -3,8 +3,10 @@ package com.blinkfox.zealot.test.core;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import com.blinkfox.zealot.test.bean.SqlInfo;
-import com.blinkfox.zealot.test.log.Log;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.core.ICustomAction;
+import com.blinkfox.zealot.core.ZealotKhala;
+import com.blinkfox.zealot.log.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;

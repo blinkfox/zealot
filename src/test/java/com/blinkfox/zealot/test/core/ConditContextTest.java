@@ -1,10 +1,11 @@
 package com.blinkfox.zealot.test.core;
 
-import com.blinkfox.zealot.test.bean.BuildSource;
-import com.blinkfox.zealot.test.bean.SqlInfo;
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.ZealotConfigManager;
+import com.blinkfox.zealot.core.ConditContext;
+import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.test.config.MyZealotConfig;
-import com.blinkfox.zealot.test.config.ZealotConfigManager;
-import com.blinkfox.zealot.test.exception.NodeNotFoundException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -37,8 +38,7 @@ public class ConditContextTest {
      */
     @Test(expected = NodeNotFoundException.class)
     public void testBuildSqlInfo() {
-        BuildSource source = new BuildSource(SqlInfo.newInstance());
-        ConditContext.buildSqlInfo(source, "abcd");
+        ConditContext.buildSqlInfo(new BuildSource(SqlInfo.newInstance()), "abcd");
     }
 
 }
