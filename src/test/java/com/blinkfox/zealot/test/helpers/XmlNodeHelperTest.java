@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.test.helpers;
 
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 import org.dom4j.Document;
@@ -9,14 +10,14 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**的
+/**
  * xml和xml节点相关工具类的单元测试类.
  * Created by blinkfox on 2017/7/23.
  */
 public class XmlNodeHelperTest {
 
     /** zealot-user.xml文件的路径. */
-    private static final String xmlPath = "zealot-user.xml";
+    private static final String XML_PATH = "zealot-user.xml";
 
     /** 全局XML格式的Document文档. */
     private static Document doc;
@@ -26,7 +27,7 @@ public class XmlNodeHelperTest {
      */
     @BeforeClass
     public static void init() {
-        doc = XmlNodeHelper.getDocument(xmlPath);
+        doc = XmlNodeHelper.getDocument(XML_PATH);
     }
 
     /**
@@ -38,12 +39,21 @@ public class XmlNodeHelperTest {
     }
 
     /**
+     * 测试根据xml文件的命名空间和zealot节点id值获取对应的第一个节点的方法.
+     */
+    @Test
+    public void testGetNodeBySpaceAndId() {
+        String userZealot = "user_zealot";
+        XmlContext.INSTANCE.getXmlPathMap().put(userZealot, XML_PATH);
+        Assert.assertNotNull(XmlNodeHelper.getNodeBySpaceAndId(userZealot, "queryUserById"));
+    }
+
+    /**
      * 测试根据xml文件docment中的zealot节点id值获取对应的第一个节点的方法.
      */
     @Test
     public void testGetZealotNodeById() {
-        Node node = XmlNodeHelper.getZealotNodeById(doc, "queryUserInfos");
-        Assert.assertNotNull(node);
+        Assert.assertNotNull(XmlNodeHelper.getZealotNodeById(doc, "queryUserInfos"));
     }
 
     /**

@@ -10,6 +10,9 @@ import org.dom4j.Node;
  */
 public final class BuildSource {
 
+    /** xml文件对应的命名空间. */
+    private String nameSpace;
+
     /** SQL拼接信息. */
     private SqlInfo sqlInfo;
 
@@ -38,11 +41,12 @@ public final class BuildSource {
 
     /**
      * 含SqlInfo、Node节点、参数上下文的构造方法.
+     * @param nameSpace 命名空间
      * @param sqlInfo SQL拼接和参数对象
      * @param node 某查询zealot的dom4j的节点
      * @param paramObj 参数对象
      */
-    public BuildSource(SqlInfo sqlInfo, Node node, Object paramObj) {
+    public BuildSource(String nameSpace, SqlInfo sqlInfo, Node node, Object paramObj) {
         super();
         this.sqlInfo = sqlInfo;
         this.node = node;

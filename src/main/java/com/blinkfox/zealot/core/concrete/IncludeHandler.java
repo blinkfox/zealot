@@ -20,10 +20,12 @@ public class IncludeHandler implements IConditHandler {
      */
     @Override
     public SqlInfo buildSqlInfo(BuildSource source) {
+        // 判断是否生成，如果不匹配则不生成SQL片段
         String matchText = XmlNodeHelper.getNodeAttrText(source.getNode(), ZealotConst.ATTR_MATCH);
         if (ParseHelper.isNotMatch(matchText, source.getParamObj())) {
             return source.getSqlInfo();
         }
+
 
         return source.getSqlInfo();
     }

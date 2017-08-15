@@ -1,5 +1,6 @@
 package com.blinkfox.zealot.helpers;
 
+import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.log.Log;
@@ -41,6 +42,18 @@ public final class XmlNodeHelper {
             log.error("读取或解析xml文件失败，xmlPath是:" + xmlPath, e);
         }
         return document;
+    }
+
+    /**
+     * 根据xml文件的nameSpace及zealot节点id值获取对应的第一个dom4j节点.
+     * @param nameSpace xml文件对应命名空间
+     * @param zealotId ZealotId
+     * @return dom4j的Node节点
+     */
+    public static Node getNodeBySpaceAndId(String nameSpace, String zealotId) {
+        String filePath = XmlContext.INSTANCE.getXmlPathMap().get(nameSpace);
+        Document doc = XmlNodeHelper.getDocument(filePath);
+        return doc == null ? null : XmlNodeHelper.getZealotNodeById(doc, zealotId);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.config.entity.NormalConfig;
-import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
 import com.blinkfox.zealot.helpers.ParseHelper;
@@ -40,8 +39,7 @@ public final class Zealot {
         // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点，如果是debug模式，则实时获取；否则从缓存中获取.
         Node zealotNode;
         if (NormalConfig.getInstance().isDebug()) {
-            String filePath = XmlContext.INSTANCE.getXmlPathMap().get(nameSpace);
-            zealotNode = XmlNodeHelper.getZealotNodeById(XmlNodeHelper.getDocument(filePath), zealotId);
+            zealotNode = XmlNodeHelper.getNodeBySpaceAndId(nameSpace, zealotId);
         } else {
             zealotNode = AbstractZealotConfig.getZealots()
                     .get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
@@ -52,7 +50,7 @@ public final class Zealot {
         }
 
         // 生成新的SqlInfo信息并打印出来.
-        SqlInfo sqlInfo = buildNewSqlInfo(zealotNode, paramObj);
+        SqlInfo sqlInfo = buildNewSqlInfo(nameSpace, zealotNode, paramObj);
         SqlInfoPrinter.newInstance().printZealotSqlInfo(sqlInfo, true, nameSpace, zealotId);
         return sqlInfo;
     }
@@ -65,7 +63,7 @@ public final class Zealot {
      * @return 返回SqlInfo对象
      */
     @SuppressWarnings("unchecked")
-    private static SqlInfo buildSqlInfo(SqlInfo sqlInfo, Node node, Object paramObj) {
+    private static SqlInfo buildSqlInfo(String nameSpace, SqlInfo sqlInfo, Node node, Object paramObj) {
         // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
         for (Node n: nodes) {
@@ -74,7 +72,7 @@ public final class Zealot {
                 sqlInfo.getJoin().append(n.getText());
             } else if (ZealotConst.NODETYPE_ELEMENT.equals(n.getNodeTypeName())) {
                 // 如果子节点node 是元素节点，则再判断其是什么元素，动态判断条件和参数
-                ConditContext.buildSqlInfo(new BuildSource(sqlInfo, n, paramObj), n.getName());
+                ConditContext.buildSqlInfo(new BuildSource(nameSpace, sqlInfo, n, paramObj), n.getName());
             }
         }
 
@@ -87,8 +85,8 @@ public final class Zealot {
      * @param paramObj 参数对象
      * @return 返回SqlInfo对象
      */
-    private static SqlInfo buildNewSqlInfo(Node node, Object paramObj) {
-        return buildSqlInfo(SqlInfo.newInstance(), node, paramObj);
+    private static SqlInfo buildNewSqlInfo(String nameSpace, Node node, Object paramObj) {
+        return buildSqlInfo(nameSpace, SqlInfo.newInstance(), node, paramObj);
     }
 
     /**
