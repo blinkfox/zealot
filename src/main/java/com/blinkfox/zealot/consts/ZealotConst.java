@@ -64,6 +64,8 @@ public final class ZealotConst {
     public static final String ATTR_VALUE = "attribute::value";
     public static final String ATTR_START = "attribute::start";
     public static final String ATTR_ENT = "attribute::end";
+    public static final String ATTR_NAME_SPACE = "attribute::namespace";
+    public static final String ATTR_ZEALOT_ID = "attribute::zealotid";
 
     /* sql中前缀常量 */
     public static final String ONE_SPACE = " ";

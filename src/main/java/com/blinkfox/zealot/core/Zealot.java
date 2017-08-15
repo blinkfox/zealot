@@ -63,7 +63,7 @@ public final class Zealot {
      * @return 返回SqlInfo对象
      */
     @SuppressWarnings("unchecked")
-    private static SqlInfo buildSqlInfo(String nameSpace, SqlInfo sqlInfo, Node node, Object paramObj) {
+    public static SqlInfo buildSqlInfo(String nameSpace, SqlInfo sqlInfo, Node node, Object paramObj) {
         // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
         for (Node n: nodes) {

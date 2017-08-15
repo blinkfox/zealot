@@ -48,6 +48,7 @@ public final class BuildSource {
      */
     public BuildSource(String nameSpace, SqlInfo sqlInfo, Node node, Object paramObj) {
         super();
+        this.nameSpace = nameSpace;
         this.sqlInfo = sqlInfo;
         this.node = node;
         this.paramObj = paramObj;
@@ -72,6 +73,14 @@ public final class BuildSource {
     }
 
     /* --------------- 以下是 getter 和 setter 方法. ---------------- */
+
+    /**
+     * 获取nameSpace的getter方法.
+     * @return nameSpace
+     */
+    public String getNameSpace() {
+        return nameSpace;
+    }
 
     /**
      * 获取sqlInfo的getter方法.
