@@ -32,7 +32,7 @@ public final class Zealot {
     /**
      * 获取sqlInfo信息.
      * @param nameSpace xml命名空间
-     * @param zealotId xml中的zealot id
+     * @param zealotId xml中的zealotId
      * @param paramObj 参数对象
      * @return 返回SqlInfo对象
      */
@@ -51,22 +51,21 @@ public final class Zealot {
             throw new NodeNotFoundException("未找到nameSpace为:" + nameSpace + ",zealotId为:" + zealotId + "的节点!");
         }
 
-        // 生成SqlInfo信息.
-        SqlInfo sqlInfo = buildSqlInfo(zealotNode, paramObj);
+        // 生成新的SqlInfo信息并打印出来.
+        SqlInfo sqlInfo = buildNewSqlInfo(zealotNode, paramObj);
         SqlInfoPrinter.newInstance().printZealotSqlInfo(sqlInfo, true, nameSpace, zealotId);
         return sqlInfo;
     }
 
     /**
      * 构建完整的SqlInfo对象.
+     * @param sqlInfo SqlInfo对象
      * @param node dom4j对象节点
      * @param paramObj 参数对象
      * @return 返回SqlInfo对象
      */
     @SuppressWarnings("unchecked")
-    private static SqlInfo buildSqlInfo(Node node, Object paramObj) {
-        SqlInfo sqlInfo = SqlInfo.newInstance();
-
+    private static SqlInfo buildSqlInfo(SqlInfo sqlInfo, Node node, Object paramObj) {
         // 获取所有子节点，并分别将其使用StringBuilder拼接起来
         List<Node> nodes = node.selectNodes(ZealotConst.ATTR_CHILD);
         for (Node n: nodes) {
@@ -81,6 +80,16 @@ public final class Zealot {
         }
 
         return buildFinalSql(sqlInfo, paramObj);
+    }
+
+    /**
+     * 构建新的、完整的SqlInfo对象.
+     * @param node dom4j对象节点
+     * @param paramObj 参数对象
+     * @return 返回SqlInfo对象
+     */
+    private static SqlInfo buildNewSqlInfo(Node node, Object paramObj) {
+        return buildSqlInfo(SqlInfo.newInstance(), node, paramObj);
     }
 
     /**
