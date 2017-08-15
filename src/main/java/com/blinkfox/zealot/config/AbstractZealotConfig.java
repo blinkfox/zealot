@@ -6,11 +6,7 @@ import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.config.entity.TagHandler;
 import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.core.IConditHandler;
-import com.blinkfox.zealot.core.concrete.BetweenHandler;
-import com.blinkfox.zealot.core.concrete.InHandler;
-import com.blinkfox.zealot.core.concrete.LikeHandler;
-import com.blinkfox.zealot.core.concrete.NormalHandler;
-import com.blinkfox.zealot.core.concrete.TextHandler;
+import com.blinkfox.zealot.core.concrete.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +76,9 @@ public abstract class AbstractZealotConfig {
         add(AND_IN, AND_PREFIX, InHandler.class);
         add(OR_IN, OR_PREFIX, InHandler.class);
 
+        // 其他标签：text、include
         add(TEXT, TextHandler.class);
+        add(INCLUDE, IncludeHandler.class);
     }
 
     /**

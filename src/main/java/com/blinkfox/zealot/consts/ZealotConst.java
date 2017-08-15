@@ -6,14 +6,14 @@ package com.blinkfox.zealot.consts;
  */
 public final class ZealotConst {
 
-    /* 分隔符常量,SP是Separate的简称 */
+    /** 分隔符常量,SP是Separate的简称. */
     public static final String SP_AT = "@@"; // @@分隔符
 
     /* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点
 
-    /* 自定义的zealot的元素节点类型 ElementType->ET */
+    /* 自定义的zealot的元素节点类型. */
     // 等于
     public static final String EQUAL = "equal";
     public static final String AND_EQUAL = "andEqual";
@@ -52,6 +52,8 @@ public final class ZealotConst {
     public static final String OR_IN = "orIn";
     // text文本
     public static final String TEXT = "text";
+    // include文本
+    public static final String INCLUDE = "include";
 
     /* 节点相关的类型 */
     public static final String ZEALOT_TAG = "zealots/zealot";
