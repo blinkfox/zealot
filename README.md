@@ -116,8 +116,8 @@ testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.ad
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.config.entity.XmlContext;
-import com.blinkfox.zealot.config.AbstractZealotConfig;
+import XmlContext;
+import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类
@@ -162,7 +162,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
-   <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
+   <listener-class>ZealotConfigLoader</listener-class>
 </listener>
 ```
 
@@ -217,8 +217,8 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.config.entity.XmlContext;
-import com.blinkfox.zealot.config.AbstractZealotConfig;
+import XmlContext;
+import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类
@@ -462,13 +462,13 @@ SQL片段的生成结果：and name in (?, ?) and email = ?
 ```java
 package com.blinkfox.handler;
 
-import com.blinkfox.zealot.bean.BuildSource;
-import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.consts.ZealotConst;
-import com.blinkfox.zealot.core.IConditHandler;
-import com.blinkfox.zealot.helpers.ParseHelper;
-import com.blinkfox.zealot.helpers.StringHelper;
-import com.blinkfox.zealot.helpers.XmlNodeHelper;
+import BuildSource;
+import SqlInfo;
+import ZealotConst;
+import IConditHandler;
+import ParseHelper;
+import StringHelper;
+import XmlNodeHelper;
 import org.dom4j.Node;
 import java.util.List;
 

@@ -7,8 +7,8 @@
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.config.entity.XmlContext;
-import com.blinkfox.zealot.config.AbstractZealotConfig;
+import XmlContext;
+import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类
@@ -55,7 +55,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
-   <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
+   <listener-class>ZealotConfigLoader</listener-class>
 </listener>
 ```
 
@@ -114,8 +114,8 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.config.entity.XmlContext;
-import com.blinkfox.zealot.config.AbstractZealotConfig;
+import XmlContext;
+import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类

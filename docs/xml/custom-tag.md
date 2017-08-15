@@ -24,13 +24,13 @@
 ```java
 package com.blinkfox.handler;
 
-import com.blinkfox.zealot.bean.BuildSource;
-import com.blinkfox.zealot.bean.SqlInfo;
-import com.blinkfox.zealot.consts.ZealotConst;
-import com.blinkfox.zealot.core.IConditHandler;
-import com.blinkfox.zealot.helpers.ParseHelper;
-import com.blinkfox.zealot.helpers.StringHelper;
-import com.blinkfox.zealot.helpers.XmlNodeHelper;
+import BuildSource;
+import SqlInfo;
+import ZealotConst;
+import IConditHandler;
+import ParseHelper;
+import StringHelper;
+import XmlNodeHelper;
 import org.dom4j.Node;
 import java.util.List;
 
