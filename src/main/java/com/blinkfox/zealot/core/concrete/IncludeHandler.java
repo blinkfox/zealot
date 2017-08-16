@@ -36,7 +36,7 @@ public class IncludeHandler implements IConditHandler {
 
         // 获取ZealotId的文本值.
         String zealotIdText = XmlNodeHelper.getNodeAttrText(source.getNode(), ZealotConst.ATTR_ZEALOT_ID);
-        Node node = XmlNodeHelper.getNodeBySpaceAndId(source.getNameSpace(), zealotIdText);
+        Node node = XmlNodeHelper.getNodeBySpaceAndId(nameSpace, zealotIdText);
 
         // 获取valueText值，如果valueText不为空，则视为将此valueText的解析值再次传入到引入的模板中作为新的上下文参数.
         String valueText = XmlNodeHelper.getNodeAttrText(source.getNode(), ZealotConst.ATTR_VALUE);

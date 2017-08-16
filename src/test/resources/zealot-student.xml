@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zealots>
+
+    <zealot id="commonStuCondition">
+        <andMoreEqual match="?age > 0" field="s.n_age" value="age"/>
+        <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday"/>
+    </zealot>
+
+    <!-- 根据Id查询用户信息 -->
+    <zealot id="queryStudents">
+        SELECT
+            *
+        FROM
+            t_student AS s
+        INNER JOIN t_teacher AS t ON s.c_tid = t.c_id
+        WHERE s.n_valid = 1
+        <andLike match="?stuName != empty" field="s.c_name" value="stuName"/>
+        <include zealotid="commonStuCondition" />
+        <include match="?stuName == empty" zealotid="commonStuCondition" />
+        <include namespace="userZealot" zealotid="queryTeacherCondition" value="teacher" />
+        <andIn match="?sexs != empty" field="s.n_sex" value="sexs"/>
+        ORDER BY s.c_id
+        LIMIT 20 OFFSET 0
+    </zealot>
+
+</zealots>

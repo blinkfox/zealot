@@ -370,9 +370,9 @@ public class ZealotKhalaTest {
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals("u.sex in (?, ?) u.city in (?, ?, ?) u.sex in (?, ?) AND u.sex in (?, ?) "
-                + "AND u.city in (?, ?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?) OR u.city in (?, ?, ?) "
-                + "OR u.sex in (?, ?)", sql);
+        assertEquals("u.sex IN (?, ?) u.city IN (?, ?, ?) u.sex IN (?, ?) AND u.sex IN (?, ?) "
+                + "AND u.city IN (?, ?, ?) AND u.sex IN (?, ?) OR u.sex IN (?, ?) OR u.city IN (?, ?, ?) "
+                + "OR u.sex IN (?, ?)", sql);
         assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
                 0, 1, "四川", "北京", "上海", 0, 1} ,arr);
     }
@@ -422,7 +422,7 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
                 + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
                 + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
-                + "AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC", sql);
+                + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
     }

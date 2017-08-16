@@ -7,7 +7,7 @@
         <equal field="u.id" value="id"/>
         <andNotEqual field="u.age" value="age"/>
         <text match="" value="{name1, name2, email}">
-            and u.name in (?, ?)
+            and u.name IN (?, ?)
             and u.email = ?
         </text>
         <andLike match="?email != empty" field="u.email" value="email"/>
@@ -46,6 +46,14 @@
     <zealot id="queryUserWithIdEmail">
         select * from user where
         <userIdEmail match="?userId != empty || ?userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"/>
+    </zealot>
+
+    <!-- 动态查询teacher信息的SQL片段 -->
+    <zealot id="queryTeacherCondition">
+        <andEqual match="?id != empty" field="t.c_id" value="id"/>
+        <andLike match="?name != empty" field="t.c_name" value="name"/>
+        <andLessEqual match="?age > 0" field="t.n_age" value="age"/>
+        <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="t.d_birthday" start="startBirthday" end="endBirthday"/>
     </zealot>
 
 </zealots>

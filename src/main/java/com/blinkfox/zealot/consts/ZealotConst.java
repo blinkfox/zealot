@@ -81,7 +81,7 @@ public final class ZealotConst {
     public static final String NOT_EQUAL_SUFFIX = " <> ? ";
     public static final String LIEK_SUFFIX = " LIKE ? ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
-    public static final String IN_SUFFIX = " in ";
+    public static final String IN_SUFFIX = " IN ";
 
     /* 集合类型的常量,0表示单个对象，1表示普通数组，2表示Java集合 */
     public static final int OBJTYPE_ARRAY = 1;

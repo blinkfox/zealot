@@ -12,7 +12,8 @@ import com.blinkfox.zealot.test.handler.UserIdEmailHandler;
 public class MyZealotConfig extends AbstractZealotConfig {
 
     /** xml命名空间标识. */
-    public static final String USER_ZEALOT = "user_zealot";
+    public static final String USER_ZEALOT = "userZealot";
+    public static final String STUDENT_ZEALOT = "studentZealot";
 
     /**
      * 配置Zealot的普通配置信息.
@@ -32,6 +33,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
     @Override
     public void configXml(XmlContext ctx) {
         ctx.add(USER_ZEALOT, "zealot-user.xml");
+        ctx.add(STUDENT_ZEALOT, "zealot-student.xml");
     }
 
     /**

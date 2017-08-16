@@ -57,6 +57,8 @@ public class ParseHelperTest {
      */
     @Test
     public void testIsMatch() {
+        assertEquals(true, ParseHelper.isMatch(null, context));
+        assertEquals(true, ParseHelper.isMatch("", context));
         assertEquals(true, ParseHelper.isMatch("hello != null", context));
         assertEquals(false, ParseHelper.isMatch("?hello != 'world'", context));
     }
