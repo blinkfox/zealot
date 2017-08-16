@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * case标签对应的动态条件选择标签，用来生成SqlInfo片段处理器的实现类.
- * <p>case标签的主要内容：`<case when="" then="" when2="" then2="" ... whenx="" thenx="" else="" />`</p>
+ * <p>case标签的主要内容：'<case when="" then="" when2="" then2="" whenx="" thenx="" else="" />'</p>
  * Created by blinkfox on 2017/8/16.
  */
 public class CaseHandler implements IConditHandler {
