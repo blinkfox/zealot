@@ -70,22 +70,32 @@ public final class ParseHelper {
 
     /**
      * 判断Zealot标签中`match`中的表达式是否匹配通过.
-     * @param exp 表达式
+     * @param match match表达式
      * @param paramObj 参数上下文对象
      * @return 布尔值
      */
-    public static boolean isMatch(String exp, Object paramObj) {
-        return StringHelper.isBlank(exp) || Boolean.TRUE.equals(ParseHelper.parseExpressWithException(exp, paramObj));
+    public static boolean isMatch(String match, Object paramObj) {
+        return StringHelper.isBlank(match) || isTrue(match, paramObj);
     }
 
     /**
      * 判断Zealot标签中`match`中的表达式是否`不`匹配通过.
+     * @param match match表达式
+     * @param paramObj 参数上下文对象
+     * @return 布尔值
+     */
+    public static boolean isNotMatch(String match, Object paramObj) {
+        return !isMatch(match, paramObj);
+    }
+
+    /**
+     * 判断Zealot标签中`match`中的表达式是否匹配通过.
      * @param exp 表达式
      * @param paramObj 参数上下文对象
      * @return 布尔值
      */
-    public static boolean isNotMatch(String exp, Object paramObj) {
-        return !isMatch(exp, paramObj);
+    public static boolean isTrue(String exp, Object paramObj) {
+        return Boolean.TRUE.equals(ParseHelper.parseExpressWithException(exp, paramObj));
     }
 
 }

@@ -29,4 +29,9 @@
         <equal field="s.c_id" value="stuId"/>
     </zealot>
 
+    <!-- 测试case标签的使用查询示例. -->
+    <zealot id="queryByCaseTag">
+        <case when="" then="" when2="" then2="" else="" />
+    </zealot>
+
 </zealots>

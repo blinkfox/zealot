@@ -92,6 +92,24 @@ public class ParseHelperTest {
     }
 
     /**
+     * 测试解析普通字符串的方法.
+     */
+    @Test
+    public void testParseStr2() {
+        Boolean result = (Boolean) ParseHelper.parseExpress("sex == 1", new ParamWrapper("sex", "1").toMap());
+        assertEquals(true, result);
+    }
+
+    /**
+     * 测试解析普通字符串的方法.
+     */
+    @Test
+    public void testParseSpaceStr() {
+        Boolean result = (Boolean) ParseHelper.parseExpress("", new ParamWrapper("bb", "1").toMap());
+        assertEquals(null, result);
+    }
+
+    /**
      * 测试计算模版的值.
      */
     @Test
