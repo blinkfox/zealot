@@ -2,6 +2,7 @@ package com.blinkfox.zealot.test.core;
 
 import static org.junit.Assert.assertEquals;
 
+import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.log.Log;
 
@@ -30,6 +31,16 @@ public class ParseHelperTest {
         String result = (String) ParseHelper.parseExpressWithException("foo + bar", context);
         log.info("testParseWithMvel 结果:" + result);
         assertEquals("HelloWorld", result);
+    }
+
+    /**
+     * 测试解析普通字符串的方法.
+     */
+    @Test
+    public void testParseStr() {
+        String result = ParseHelper.parseTemplate("zhangsan", ParamWrapper.newInstance().put("aa", "张三"));
+        log.info("testParseStr方法的结果:" + result);
+        assertEquals("zhangsan", result);
     }
 
     /**
