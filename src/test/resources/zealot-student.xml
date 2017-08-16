@@ -23,4 +23,10 @@
         LIMIT 20 OFFSET 0
     </zealot>
 
+    <!-- 根据Id查询用户信息 -->
+    <zealot id="queryStudentById">
+        SELECT * FROM t_student AS s WHERE
+        <equal field="s.c_id" value="stuId"/>
+    </zealot>
+
 </zealots>

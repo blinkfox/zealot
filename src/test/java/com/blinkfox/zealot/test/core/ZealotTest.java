@@ -3,6 +3,7 @@ package com.blinkfox.zealot.test.core;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.core.Zealot;
@@ -162,7 +163,7 @@ public class ZealotTest {
     }
 
     /**
-     * 测试根据自定义标签来动态生成SqlInfo信息的方法.
+     * 测试`include`标签的使用方法.
      */
     @Test
     public void testQueryStudents() {
@@ -201,6 +202,17 @@ public class ZealotTest {
                 "123456", "%李%", 31, "1982-05-01 00:00:00", "1996-10-13 00:00:00", 0, 1};
         assertEquals(expectedSql, sql);
         assertArrayEquals(expectedParams, params);
+    }
+
+    /**
+     * 测试使用`ParamWrapper`来构建参数上下文的方法.
+     */
+    @Test
+    public void testQueryStudentById() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryStudentById",
+                ParamWrapper.newInstance().put("stuId", "123"));
+        assertEquals("SELECT * FROM t_student AS s WHERE s.c_id = ?", sqlInfo.getSql());
+        assertArrayEquals(new String[]{"123"}, sqlInfo.getParamsArr());
     }
 
 }
