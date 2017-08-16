@@ -210,7 +210,7 @@ public class ZealotTest {
     @Test
     public void testQueryStudentById() {
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryStudentById",
-                ParamWrapper.newInstance().put("stuId", "123"));
+                new ParamWrapper().put("stuId", "123"));
         assertEquals("SELECT * FROM t_student AS s WHERE s.c_id = ?", sqlInfo.getSql());
         assertArrayEquals(new String[]{"123"}, sqlInfo.getParamsArr());
     }

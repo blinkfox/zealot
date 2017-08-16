@@ -38,7 +38,7 @@ public class ParseHelperTest {
      */
     @Test
     public void testParseStr() {
-        String result = ParseHelper.parseTemplate("zhangsan", ParamWrapper.newInstance().put("aa", "张三"));
+        String result = ParseHelper.parseTemplate("zhangsan", new ParamWrapper("aa", "张三").toMap());
         log.info("testParseStr方法的结果:" + result);
         assertEquals("zhangsan", result);
     }

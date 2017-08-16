@@ -16,23 +16,25 @@ public final class ParamWrapper {
      * 获取paramMap的Map对象.
      * @return paramMap
      */
-    public Map<String, Object> getParamMap() {
+    public Map<String, Object> toMap() {
         return paramMap;
     }
 
     /**
-     * 私有构造方法.
+     * 默认构造方法.
      */
-    private ParamWrapper(Map<String, Object> paramMap) {
-        this.paramMap = paramMap;
+    public ParamWrapper() {
+        this.paramMap = new HashMap<String, Object>();
     }
 
     /**
-     * 获取新的ParamWrapper实例.
-     * @return ParamWrapper实例
+     * 构造第一个key和value来初始化map中数据的构造方法.
+     * @param key 键
+     * @param value 值
      */
-    public static ParamWrapper newInstance() {
-        return new ParamWrapper(new HashMap<String, Object>());
+    public ParamWrapper(String key, Object value) {
+        this.paramMap = new HashMap<String, Object>();
+        this.paramMap.put(key, value);
     }
 
     /**
@@ -42,7 +44,7 @@ public final class ParamWrapper {
      * @return map
      */
     public Map<String, Object> put(String key, Object value) {
-        paramMap.put(key, value);
+        this.paramMap.put(key, value);
         return paramMap;
     }
 

@@ -22,7 +22,7 @@ public class ParamWrapperTest {
      */
     @BeforeClass
     public static void init() {
-        paramWrapper = ParamWrapper.newInstance();
+        paramWrapper = new ParamWrapper();
     }
 
     /**
@@ -31,7 +31,7 @@ public class ParamWrapperTest {
     @Test
     public void testPut() {
         paramWrapper.put("aa", "张三").put("bb", "李四");
-        Map<String, Object> paramMap = paramWrapper.getParamMap();
+        Map<String, Object> paramMap = paramWrapper.toMap();
         Assert.assertEquals(paramMap.size(), 2);
         Assert.assertEquals("张三", paramMap.get("aa"));
     }
