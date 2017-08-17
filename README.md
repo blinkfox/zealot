@@ -444,7 +444,7 @@ import标签主要用于在zealot标签中导入其它公共的zealot节点，�
 ```xml
 <import zealotid="" />
 <import match="" zealotid="" />
-<import match="" namespace="" zealotid="" value="teacher" />
+<import match="" namespace="" zealotid="" value="" />
 ```
 
 #### (2). 属性介绍
