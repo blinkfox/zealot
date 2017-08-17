@@ -1,3 +1,5 @@
+![logo](media/logo.png)
+
 # Zealot
 
 > 一个简单、强大的Java动态SQL和参数生成工具库
