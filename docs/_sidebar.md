@@ -14,6 +14,7 @@
     - [动态SQL标签](xml/main-tags)
     - [自定义标签](xml/custom-tag)
     - [流程控制标签](xml/flow-tags)
+    - [更多功能](more-features)
 
 - 其他
 

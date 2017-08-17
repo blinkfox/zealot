@@ -78,7 +78,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         select * from user where
         <equal field="id" value="id"/>
     </zealot>
-    
+
     <!-- 根据动态条件查询用户信息 -->
     <zealot id="queryUserInfo">
         select * from user where
@@ -89,7 +89,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         <andIn match="?sexs != empty" field="sex" value="sexs"/>
         order by id desc 
     </zealot>
-    
+
 </zealots>
 ```
 

@@ -2,6 +2,7 @@ package com.blinkfox.zealot.test.bean;
 
 import com.blinkfox.zealot.bean.ParamWrapper;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.AfterClass;
@@ -15,6 +16,8 @@ import org.junit.Test;
  */
 public class ParamWrapperTest {
 
+    private static Map<String, Object> paramMap;
+
     private static ParamWrapper paramWrapper;
 
     /**
@@ -22,7 +25,22 @@ public class ParamWrapperTest {
      */
     @BeforeClass
     public static void init() {
+        paramMap = new HashMap<String, Object>();
+        paramMap.put("name", "韩梅梅");
+        paramMap.put("sex", "女");
+        paramMap.put("age", 27);
+
         paramWrapper = ParamWrapper.newInstance();
+    }
+
+    /**
+     * 测试构造新实例的方法.
+     */
+    @Test
+    public void testNewInstance() {
+        paramMap = ParamWrapper.newInstance(paramMap).put("birthday", "1990-05-18").toMap();
+        Assert.assertEquals(paramMap.size(), 4);
+        Assert.assertEquals(27, paramMap.get("age"));
     }
 
     /**

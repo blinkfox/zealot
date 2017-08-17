@@ -39,7 +39,7 @@ SQL中的关键字很多，`ZealotKhala`封装了大多数常用的关键字作�
 
 ```java
 SqlInfo sqlInfo = ZealotKhala.start()
-	    ...
+        ...
         .text("AND u.email = ? AND u.age >= ?", "san@163.com", 21)
 ```
 
@@ -72,7 +72,7 @@ equal系列是用来拼接SQL中等值查询的系列方法，生成如：` u.em
 - value，表示Java中的变量或常量值
 - match，表示是否生成该SQL片段，值为`true`时生成，否则不生成
 
-#### 使用示例如下：
+#### 使用示例
 
 ```java
 /**
@@ -100,10 +100,10 @@ public void testEqual() {
             .andEqual("u.email", context.get("myAge"), context.get("myEmail") == null)
             .orEqual("u.email", context.get("myEmail"))
             .end();
-	String sql = sqlInfo.getSql();
+    String sql = sqlInfo.getSql();
     Object[] arr = sqlInfo.getParamsArr();
 
-	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+    log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
 }
 ```
 
@@ -150,7 +150,7 @@ between系列是用来拼接SQL中区间查询的系列方法，生成如：` u.
 - endValue，表示区间查询的结束值
 - match，表示是否生成该SQL片段，值为`true`时生成，否则不生成
 
-#### 使用示例如下：
+#### 使用示例
 
 ```java
 /**
@@ -159,9 +159,9 @@ between系列是用来拼接SQL中区间查询的系列方法，生成如：` u.
 @BeforeClass
 public static void init() {
     context = new HashMap<String, Object>();
-	context.put("startAge", 18);
-	context.put("endAge", 26);
-	context.put("startBirthday", null);
+    context.put("startAge", 18);
+    context.put("endAge", 26);
+    context.put("startBirthday", null);
     context.put("endBirthday", "2010-05-28");
 }
 
@@ -175,10 +175,10 @@ public void testBetween() {
             .andBetween("u.age", startAge, endAge, startAge != null && endAge != null)
             .orBetween("u.age", startAge, endAge, startAge != null && endAge != null)
             .end();
-	String sql = sqlInfo.getSql();
+    String sql = sqlInfo.getSql();
     Object[] arr = sqlInfo.getParamsArr();
 
-	log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+    log.info("-- testEqual()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
 }
 ```
 
@@ -192,7 +192,6 @@ u.age BETWEEN ? AND ? AND u.age BETWEEN ? AND ? AND u.birthday <= ?
 ```
 
 !> **注意**：Zealot中会对start和end的值做null的空检测。区间查询中如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
-
 
 ### in
 
@@ -223,7 +222,7 @@ in系列是用来拼接SQL中范围查询的系列方法，生成如：` u.sex i
 @BeforeClass
 public static void init() {
     context = new HashMap<String, Object>();
-	context.put("sexs", new Integer[] {0, 1});
+    context.put("sexs", new Integer[] {0, 1});
 }
 
 /**
@@ -231,17 +230,17 @@ public static void init() {
  */
 @Test
 public void testBetween() {
-	Integer[] sexs = (Integer[]) context.get("sexs");
-    
+    Integer[] sexs = (Integer[]) context.get("sexs");
+
     SqlInfo sqlInfo = ZealotKhala.start()
             .in("u.sex", sexs)
             .andIn("u.sex", sexs, sexs != null)
-			.orIn("u.sex", sexs)
+            .orIn("u.sex", sexs)
             .end();
-	String sql = sqlInfo.getSql();
+    String sql = sqlInfo.getSql();
     Object[] arr = sqlInfo.getParamsArr();
-	
-	log.info("-- testIn()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+
+    log.info("-- testIn()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
 }
 ```
 
@@ -264,13 +263,13 @@ u.sex in (?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?)
 
 ```java
 SqlInfo sqlInfo = ZealotKhala.start()
-		.doAnything(true, new ICustomAction() {
-		    @Override
-		    public void execute(final StringBuilder join, final List<Object> params) {
-		        join.append("abc111");
-		        params.add(5);
-		        log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
-		    }
-		})
-		.end();
+        .doAnything(true, new ICustomAction() {
+            @Override
+            public void execute(final StringBuilder join, final List<Object> params) {
+                join.append("abc111");
+                params.add(5);
+                log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+            }
+        })
+        .end();
 ```

@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.6%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
 
-一个轻量级的SQL和参数动态生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
+一个轻量级而又强大的Java动态SQL和参数生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
 > My life for Auir!
 
@@ -18,10 +18,10 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅48k大小，集成和使用简单
-- 提供了纯Java代码或XML两种方式书写维护SQL
-- Java的方式采用流式API的方式书写动态SQL，易于书写阅读
-- XML的方式让SQL和Java代码解耦和，易于维护
+- 轻量级，jar包仅仅`52`k大小，集成和使用简单
+- 提供了纯`Java`代码或`XML`两种方式书写维护SQL
+- `Java`的方式采用流式API的方式书写动态SQL，易于书写阅读
+- `XML`的方式让SQL和Java代码解耦和，易于维护
 - 具有动态性、可复用逻辑和可半调试性的优点
 - 具有可扩展性，可自定义标签和处理器来完成自定义逻辑的SQL和参数生成
 
@@ -45,7 +45,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 四、Java链式式之ZealotKhala
 
-在Java中书写中等长度的SQL，用"+"连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在Zealot v1.0.4版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在v1.1.0版本中新增了ZealotKhala，ZealotKhala也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
+在Java中书写中等长度的SQL，用`+`连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在`Zealot v1.0.4`版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在`v1.1.0`版本中新增了`ZealotKhala`，`ZealotKhala`类也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
 
 ```java
 public class ZealotKhalaTest {
@@ -116,8 +116,9 @@ testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.ad
 ```java
 package com.blinkfox.config;
 
-import XmlContext;
-import AbstractZealotConfig;
+import com.blinkfox.zealot.config.AbstractZealotConfig;
+import com.blinkfox.zealot.config.entity.NormalConfig;
+import com.blinkfox.zealot.config.entity.XmlContext;
 
 /**
  * 我继承的zealotConfig配置类
@@ -313,9 +314,9 @@ public class UserController extends Controller {
 
 ## 六、Zealot SQL配置
 
-Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`等条件标签,以下重点介绍各条件标签。
+Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
 
-Zealot中默认自带了以下4类条件标签，分别是：`equal`、`like`、`between`、`in`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件以及范围匹配条件；四类条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形，这两者更为常用，目前还未加入`非`的情形。所以，zealot中总共带有12个条件标签，各标签的属性和生成SQL的示例如下：
+Zealot中默认自带了以下几类条件标签，分别是：`equal`、`like`、`between`、`in`、`text`、`import`、`choose`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件、范围匹配条件及其他逻辑操作条件；某些条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形。各标签的属性和生成SQL的示例如下：
 
 ### 1. equal、andEqual、orEqual 标签介绍
 
@@ -434,6 +435,78 @@ SQL片段的生成结果：and name in (?, ?) and email = ?
 解释：如果match为true、不填写或无match标签时，才生成此条SQL片段和自定义传递的参数，参数就是通过`name1`、`name2`和`email`组合成的数组或集合，或者直接传递集合或数组（此处组合而成的数组，如果是集合就把'{'换成'['即可）。
 ```
 
+### 6. import 介绍
+
+import标签主要用于在zealot标签中导入其它公共的zealot节点，便于程序代码逻辑的复用。
+
+#### (1). 标签
+
+```xml
+<import zealotid="" />
+<import match="" zealotid="" />
+<import match="" namespace="" zealotid="" value="teacher" />
+```
+
+#### (2). 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **namespace**，表示需要引用导入的节点所在的xml文件的命名空间，非必填属性。如果如果不写（填）此属性，则视为仅在本xml文件中查找对应的zealotId的节点。
+- **zealotid**，表示要引用导入的zealot节点的ID，必填属性。
+- **value**，表示需要传入到要引用的zealot节点中的上下文参数值，非必填属性。如果不写（填）此属性，则传递最顶层的上下文参数。
+
+#### (3). 使用生成示例
+
+```xml
+<zealot id="commonStuCondition">
+    <andMoreEqual match="?age > 0" field="s.n_age" value="age"/>
+    <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday"/>
+</zealot>
+
+<zealot id="queryStudents">
+    ...
+    <import zealotid="commonStuCondition" />
+    ...
+</zealot>
+```
+
+```markup
+SQL片段的生成结果：AND s.n_age >= ? AND s.d_birthday BETWEEN ? AND ?
+```
+
+### 7. choose 标签介绍
+
+choose标签主要用于解决"无数的"多分支条件选择逻辑，对应的即是Java中`if/else if/ ... /else if/else`这种逻辑。
+
+#### (1). 标签
+
+```xml
+<choose when="" then="" when2="" then2="" ... whenx="" thenx="" else="" />
+```
+
+#### (2). 属性介绍
+
+- **when**，表示匹配条件，可以写无数个，对应于Java中的`if/else if`条件。必要（填）属性，如果不写（填）此属性，表示false，直接进入`else`的逻辑块中。
+- **then**，表示需要执行的逻辑，和`when`向对应，可以写无数个，内容是字符串或者zealot的字符串模版，必要（填）属性。如果如果不写（填）此属性，即使满足了对应的`when`条件，也不会做SQL的拼接操作。
+- **else**，表示所有when条件都不满足时才执行的逻辑，内容是字符串或者zealot的字符串模版，非必填属性。如果不写（填）此属性，则表示什么都不做（这样就无任何意义了）。
+
+#### (3). 使用生成示例
+
+```xml
+<zealot id="queryByChoose">
+    UPDATE t_student SET s.c_sex =
+    <choose when="?sex == 0" then="'female'" when2="?sex == 1" then2="'male'" else="unknown" />
+    , s.c_status =
+    <choose when="?state" then="'yes'" else="'no'" />
+    , s.c_age =
+    <choose when="age > 60" then="'老年'" when2="age > 40" then2="'中年'" when3="age > 20" then3="'青年'" when4="age > 10" then4="'少年'" else="'幼年'" />
+    WHERE s.c_id = '@{stuId}'
+</zealot>
+```
+
+```markup
+SQL片段的生成结果：UPDATE t_student SET s.c_sex = 'male' , s.c_status = 'no' , s.c_age = '幼年' WHERE s.c_id = '123'
+```
+
 ## 五、自定义标签和处理器
 
 从前面所知,条件标签是生成动态SQL和参数的核心，但是项目开发的过程中往往有更多多复杂的逻辑来生成某些SQL，甚至那些逻辑还要被多处使用到，默认的一些标签不能够满足开发需求，那么自定义自己的动态条件标签来实现就显得很重要了。所谓自定义标签和处理器就是设置自定义的标签名称、匹配条件、参数和数据库字段等,再通过自定义的处理器来控制生成SQL的逻辑，这样就可以达到生成我们需要的SQL的功能，这样的标签重大的意义在于能够最大化简化sql的书写和功能的复用。
@@ -496,7 +569,7 @@ public class UserIdEmailHandler implements IConditHandler {
         if (StringHelper.isBlank(matchText)) {
             sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
         } else {
-			/* 如果match匹配成功，则生成数据库sql条件和参数 */
+            /* 如果match匹配成功，则生成数据库sql条件和参数 */
             Boolean isTrue = (Boolean) ParseHelper.parseWithMvel(matchText, source.getParamObj());
             if (isTrue) {
                 sqlInfo = buildIdEmailSqlInfo(source, idField, emailField, idValue, emailValue);
@@ -577,7 +650,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 测试代码和结果如下：
 
-```
+```java
 public void queryUserIdEmail() {
     Map<String, Object> user = new HashMap<String, Object>();
     user.put("userId", 3);
@@ -682,12 +755,55 @@ foreach标签允许您在模板中迭代集合或数组。 注意：foreach的�
 @end{}
 ```
 
-## 八、许可证
+## 八、更多功能
+
+Zealot中除了上面介绍的一些功能之外，还有其他额外的辅助、简化开发的功能，以下作简要介绍。
+
+### 1. 上下文参数包装器
+
+在`v1.2.0`版本中增加了上下文参数包装器`ParamWrapper`的功能，其本质上就是对`HashMap`的封装。在以前的版本中需要自己封装`JavaBean`对象或者Map对象来作为SQL拼接的上下文参数传入：
+
+#### (1). 前后对比的示例
+
+以前需要开发者自己封装Map：
+
+```java
+Map<String, Object> paramMap = new HashMap<String, Object>();
+paramMap.put("sex", "1")
+paramMap.put("stuId", "123")
+paramMap.put("state", false)
+
+SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryByChoose", paramMap);
+```
+
+现在的使用方式：
+
+```java
+SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryByChoose",
+        ParamWrapper.newInstance("sex", "1").put("stuId", "123").put("state", false).toMap());
+```
+
+前后对比来看，再仅仅只需要传入个别自定义参数时，能简化部分代码量。
+
+#### (2). ParamWrapper主要方法
+
+- `newInstance()`，创建新的`ParamWrapper`实例。
+- `newInstance(Map<String, Object> paramMap)`，传入已有的`Map`型对象，并创建新的`ParamWrapper`实例。
+- `newInstance(String key, Object value)`，创建新的`ParamWrapper`实例，并创建一对key和value的键值对。
+- `put(String key, Object value)`，向参数包装器中，`put`对应的key和value值。
+- `toMap()`，返回填充了key、value后的Map对象。
+
+## 九、许可证
 
 Zealot类库遵守[Apache License 2.0][6] 许可证
 
-## 九、版本更新记录
+## 十、版本更新记录
 
+- v1.2.0(2017-08-18，待发布)
+  - 新增`import`标签，用于引入公共的`zealot`标签节点，便于逻辑和代码复用
+  - 新增`choose`标签，可以无限制写无数的`if/else if/else`等条件选择分支逻辑，方便书写条件选择的动态SQL片段
+  - 新增`ParamWrapper`工具类，方便更快捷的创建参数的上下文对象
+  - 单元测试类的包结构重构
 - v1.1.6(2017-07-27)
   - 将`slf4j`的日志改为了`JDK`的日志
 - v1.1.5(2017-07-24)

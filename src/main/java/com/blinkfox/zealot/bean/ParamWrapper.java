@@ -28,7 +28,15 @@ public final class ParamWrapper {
     }
 
     /**
-     * 获取新的ParamWrapper实例.
+     * 获取新的ParamWrapper实例，并传入需要作为上下文参数的map.
+     * @return ParamWrapper实例
+     */
+    public static ParamWrapper newInstance(Map<String, Object> paramMap) {
+        return new ParamWrapper(paramMap);
+    }
+
+    /**
+     * 获取新的ParamWrapper实例，并注入一对key、value的值.
      * @return ParamWrapper实例
      */
     public static ParamWrapper newInstance(String key, Object value) {
