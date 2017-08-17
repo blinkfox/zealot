@@ -1,8 +1,8 @@
 # Zealot
 
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.1.6%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.2.0%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
 
-一个轻量级而又强大的Java动态SQL和参数生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
+一个简单、强大的Java动态SQL和参数生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
 > My life for Auir!
 
@@ -39,7 +39,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.6</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
@@ -855,7 +855,7 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 十、版本更新记录
 
-- v1.2.0(2017-08-18，待发布)
+- v1.2.0(2017-08-18)
   - 新增`import`标签，用于引入公共的`zealot`标签节点，便于逻辑和代码复用
   - 新增`choose`标签，可以无限制写无数的`if/else if/else`等条件选择分支逻辑，方便书写条件选择的动态SQL片段
   - 新增`ParamWrapper`工具类，方便更快捷的创建参数的上下文对象

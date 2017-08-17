@@ -12,12 +12,12 @@
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.1.6</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```bash
-compile 'com.blinkfox:zealot:1.1.6'
+compile 'com.blinkfox:zealot:1.2.0'
 ```
