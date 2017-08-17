@@ -31,10 +31,13 @@
 
     <!-- 测试case标签的使用查询示例. -->
     <zealot id="queryByChoose">
-        SELECT * FROM t_student AS s WHERE s.c_sex =
+        UPDATE t_student SET s.c_sex =
         <choose when="?sex == 0" then="'female'" when2="?sex == 1" then2="'male'" else="unknown" />
-        AND s.c_status =
+        , s.c_status =
         <choose when="?state" then="'yes'" else="'no'" />
+        , s.c_age =
+        <choose when="age > 60" then="'老年'" when2="age > 40" then2="'中年'" when3="age > 20" then3="'青年'" when4="age > 10" then4="'少年'" else="'幼年'" />
+        WHERE s.c_id = '@{stuId}'
     </zealot>
 
 </zealots>

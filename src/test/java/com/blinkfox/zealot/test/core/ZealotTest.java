@@ -221,8 +221,9 @@ public class ZealotTest {
     @Test
     public void testQueryByChoose() {
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryByChoose",
-                ParamWrapper.newInstance("sex", "1").put("state", false).toMap());
-        assertEquals("SELECT * FROM t_student AS s WHERE s.c_sex = 'male' AND s.c_status = 'no'", sqlInfo.getSql());
+                ParamWrapper.newInstance("sex", "1").put("stuId", "123").put("state", false).put("age", 3).toMap());
+        assertEquals("UPDATE t_student SET s.c_sex = 'male' , s.c_status = 'no' , s.c_age = '幼年' "
+                + "WHERE s.c_id = '123'", sqlInfo.getSql());
     }
 
 }

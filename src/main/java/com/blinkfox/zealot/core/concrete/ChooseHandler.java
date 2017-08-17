@@ -33,8 +33,10 @@ public class ChooseHandler implements IConditHandler {
 
         // 循环判断所有`when`的值，直到能找到第n个when的时候，如果都为false，则跳出循环走else的逻辑
         // 循环过程中，如果判断到第x个when解析后的值为true时，则解析拼接这第x个then的值到Sql中，并直接返回.
-        int i = 1;
+        int i = 0;
         while (true) {
+            // 每次循环加1，如果是第一个，则，when/then等添加的后缀为空字符串.
+            i++;
             String x = i == 1 ? "" : String.valueOf(i);
 
             // 获取第i个when属性的文本值，如果其文本内容为空则不再拼接，进入else的分支条件来拼接Sql片段信息.
@@ -52,9 +54,6 @@ public class ChooseHandler implements IConditHandler {
                 }
                 return sqlInfo;
             }
-
-            // 继续循环，将i+1，判断下一次的when和then的内容、值
-            i++;
         }
 
         // 如果没进入前面任何一个when-then的分支块，则进入else的分支，如果else为空，则直接返回原SqlInfo.
