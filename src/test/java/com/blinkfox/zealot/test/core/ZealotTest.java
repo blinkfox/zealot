@@ -210,9 +210,19 @@ public class ZealotTest {
     @Test
     public void testQueryStudentById() {
         SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryStudentById",
-                new ParamWrapper().put("stuId", "123"));
+                ParamWrapper.newInstance("stuId", "123").toMap());
         assertEquals("SELECT * FROM t_student AS s WHERE s.c_id = ?", sqlInfo.getSql());
         assertArrayEquals(new String[]{"123"}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 测试使用`choose`标签来构建sql片段.
+     */
+    @Test
+    public void testQueryByChoose() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryByChoose",
+                ParamWrapper.newInstance("sex", "1").put("state", false).toMap());
+        assertEquals("SELECT * FROM t_student AS s WHERE s.c_sex = 'male' AND s.c_status = 'no'", sqlInfo.getSql());
     }
 
 }

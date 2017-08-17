@@ -22,7 +22,7 @@ public class ParamWrapperTest {
      */
     @BeforeClass
     public static void init() {
-        paramWrapper = new ParamWrapper();
+        paramWrapper = ParamWrapper.newInstance();
     }
 
     /**

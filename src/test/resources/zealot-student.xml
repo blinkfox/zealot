@@ -30,8 +30,11 @@
     </zealot>
 
     <!-- 测试case标签的使用查询示例. -->
-    <zealot id="queryByCaseTag">
-        <choose when="" then="" when2="" then2="" else="" />
+    <zealot id="queryByChoose">
+        SELECT * FROM t_student AS s WHERE s.c_sex =
+        <choose when="?sex == 0" then="'female'" when2="?sex == 1" then2="'male'" else="unknown" />
+        AND s.c_status =
+        <choose when="?state" then="'yes'" else="'no'" />
     </zealot>
 
 </zealots>

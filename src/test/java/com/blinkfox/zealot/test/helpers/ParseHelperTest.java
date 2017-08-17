@@ -86,7 +86,7 @@ public class ParseHelperTest {
      */
     @Test
     public void testParseStr() {
-        String result = ParseHelper.parseTemplate("zhangsan", new ParamWrapper("aa", "张三").toMap());
+        String result = ParseHelper.parseTemplate("zhangsan", ParamWrapper.newInstance("aa", "张三").toMap());
         log.info("testParseStr方法的结果:" + result);
         assertEquals("zhangsan", result);
     }
@@ -96,7 +96,7 @@ public class ParseHelperTest {
      */
     @Test
     public void testParseStr2() {
-        Boolean result = (Boolean) ParseHelper.parseExpress("sex == 1", new ParamWrapper("sex", "1").toMap());
+        Boolean result = (Boolean) ParseHelper.parseExpress("sex == 1", ParamWrapper.newInstance("sex", "1").toMap());
         assertEquals(true, result);
     }
 
@@ -105,7 +105,7 @@ public class ParseHelperTest {
      */
     @Test
     public void testParseSpaceStr() {
-        Boolean result = (Boolean) ParseHelper.parseExpress("", new ParamWrapper("bb", "1").toMap());
+        Boolean result = (Boolean) ParseHelper.parseExpress("", ParamWrapper.newInstance("bb", "1").toMap());
         assertEquals(null, result);
     }
 
