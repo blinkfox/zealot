@@ -14,6 +14,7 @@ public final class ParamWrapper {
 
     /**
      * 仅有map的私有构造方法.
+     * @param paramMap Map型参数
      */
     private ParamWrapper(Map<String, Object> paramMap) {
         this.paramMap = paramMap;
@@ -29,6 +30,7 @@ public final class ParamWrapper {
 
     /**
      * 获取新的ParamWrapper实例，并传入需要作为上下文参数的map.
+     * @param paramMap Map型参数
      * @return ParamWrapper实例
      */
     public static ParamWrapper newInstance(Map<String, Object> paramMap) {
@@ -37,6 +39,8 @@ public final class ParamWrapper {
 
     /**
      * 获取新的ParamWrapper实例，并注入一对key、value的值.
+     * @param key 键
+     * @param value 值
      * @return ParamWrapper实例
      */
     public static ParamWrapper newInstance(String key, Object value) {
@@ -49,7 +53,7 @@ public final class ParamWrapper {
      * 存放参数的key和value值.
      * @param key 键
      * @param value 值
-     * @return map
+     * @return ParamWrapper实例
      */
     public ParamWrapper put(String key, Object value) {
         this.paramMap.put(key, value);

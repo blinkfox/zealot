@@ -57,6 +57,7 @@ public final class Zealot {
 
     /**
      * 构建完整的SqlInfo对象.
+     * @param nameSpace xml命名空间
      * @param sqlInfo SqlInfo对象
      * @param node dom4j对象节点
      * @param paramObj 参数对象
@@ -81,6 +82,7 @@ public final class Zealot {
 
     /**
      * 构建新的、完整的SqlInfo对象.
+     * @param nameSpace xml命名空间
      * @param node dom4j对象节点
      * @param paramObj 参数对象
      * @return 返回SqlInfo对象

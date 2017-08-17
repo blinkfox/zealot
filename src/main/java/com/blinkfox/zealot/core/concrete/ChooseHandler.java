@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * choose条件选择标签对应的动态条件选择标签，用来生成SqlInfo片段处理器的实现类.
- * <p>case标签的主要内容：'<case when="" then="" when2="" then2="" whenx="" thenx="" else="" />'</p>
+ * <p>choose标签的主要内容：'[choose when="" then="" when2="" then2="" whenx="" thenx="" else="" /]'</p>
  * Created by blinkfox on 2017/8/16.
  */
 public class ChooseHandler implements IConditHandler {

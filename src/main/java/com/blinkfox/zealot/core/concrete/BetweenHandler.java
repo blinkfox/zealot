@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * 区间查询动态sql生成的实现类.
- * <p>区间查询包括：`Between and`、`>=`、`<=`三种</p>
+ * <p>区间查询包括：`Between and`、`大于等于`、`小于等于`三种</p>
  * Created by blinkfox on 2016/10/30.
  */
 public class BetweenHandler implements IConditHandler {
