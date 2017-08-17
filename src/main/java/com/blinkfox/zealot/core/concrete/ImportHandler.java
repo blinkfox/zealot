@@ -12,13 +12,13 @@ import com.blinkfox.zealot.helpers.XmlNodeHelper;
 import org.dom4j.Node;
 
 /**
- * 引用标签对应的动态sql生成处理器的实现类.
- * <p>引用标签的主要内容：`<include match="" namespace="" zealotid="" value="" />`</p>
+ * 引用import标签对应的动态sql生成处理器的实现类.
+ * <p>引用标签的主要内容：`<import match="" namespace="" zealotid="" value="" />`</p>
  * Created by blinkfox on 2017/8/15.
  */
-public class IncludeHandler implements IConditHandler {
+public class ImportHandler implements IConditHandler {
     /**
-     * 构建include标签的sqlInfo信息.
+     * 构建import标签的sqlInfo信息.
      * @param source 构建所需的资源对象
      * @return 返回SqlInfo对象
      */

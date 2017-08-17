@@ -52,10 +52,10 @@ public final class ZealotConst {
     public static final String OR_IN = "orIn";
     // text文本
     public static final String TEXT = "text";
-    // include文本
-    public static final String INCLUDE = "include";
-    // case文本
-    public static final String CASE = "case";
+    // import导入文本
+    public static final String IMPORT = "import";
+    // choose文本
+    public static final String CHOOSE = "choose";
 
     /* 节点相关的类型 */
     public static final String ZEALOT_TAG = "zealots/zealot";

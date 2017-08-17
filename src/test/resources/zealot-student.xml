@@ -15,9 +15,9 @@
         INNER JOIN t_teacher AS t ON s.c_tid = t.c_id
         WHERE s.n_valid = 1
         <andLike match="?stuName != empty" field="s.c_name" value="stuName"/>
-        <include zealotid="commonStuCondition" />
-        <include match="?stuName == empty" zealotid="commonStuCondition" />
-        <include namespace="userZealot" zealotid="queryTeacherCondition" value="teacher" />
+        <import zealotid="commonStuCondition" />
+        <import match="?stuName == empty" zealotid="commonStuCondition" />
+        <import namespace="userZealot" zealotid="queryTeacherCondition" value="teacher" />
         <andIn match="?sexs != empty" field="s.n_sex" value="sexs"/>
         ORDER BY s.c_id
         LIMIT 20 OFFSET 0
@@ -31,7 +31,7 @@
 
     <!-- 测试case标签的使用查询示例. -->
     <zealot id="queryByCaseTag">
-        <case when="" then="" when2="" then2="" else="" />
+        <choose when="" then="" when2="" then2="" else="" />
     </zealot>
 
 </zealots>

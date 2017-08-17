@@ -7,9 +7,9 @@ import com.blinkfox.zealot.config.entity.TagHandler;
 import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.core.concrete.BetweenHandler;
-import com.blinkfox.zealot.core.concrete.CaseHandler;
+import com.blinkfox.zealot.core.concrete.ChooseHandler;
+import com.blinkfox.zealot.core.concrete.ImportHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
-import com.blinkfox.zealot.core.concrete.IncludeHandler;
 import com.blinkfox.zealot.core.concrete.LikeHandler;
 import com.blinkfox.zealot.core.concrete.NormalHandler;
 import com.blinkfox.zealot.core.concrete.TextHandler;
@@ -84,8 +84,8 @@ public abstract class AbstractZealotConfig {
 
         // 其他标签：text、include、case
         add(TEXT, TextHandler.class);
-        add(INCLUDE, IncludeHandler.class);
-        add(CASE, CaseHandler.class);
+        add(IMPORT, ImportHandler.class);
+        add(CHOOSE, ChooseHandler.class);
     }
 
     /**
