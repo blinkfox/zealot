@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.core.Zealot;
 import com.blinkfox.zealot.log.Log;
@@ -32,7 +33,7 @@ public class ZealotTest {
      */
     @BeforeClass
     public static void before() {
-        ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
+        ZealotConfigManager.getInstance().initLoad(new MyZealotConfig());
         log.info("加载Zealot缓存信息成功!");
     }
 
