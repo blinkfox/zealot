@@ -2,7 +2,7 @@
 
 ### 创建Java配置类
 
-在你的Java web项目项目中，创建一个继承自AbstractZealotConfig的核心配置类，如以下示例：
+在你的Java web项目项目中，创建一个继承自`AbstractZealotConfig`的核心配置类，如以下示例：
 
 ```java
 package com.blinkfox.config;
@@ -55,7 +55,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
-   <listener-class>ZealotConfigLoader</listener-class>
+   <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
 </listener>
 ```
 

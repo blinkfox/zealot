@@ -163,7 +163,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
-   <listener-class>ZealotConfigLoader</listener-class>
+   <listener-class>com.blinkfox.zealot.loader.ZealotConfigLoader</listener-class>
 </listener>
 ```
 
