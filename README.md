@@ -37,7 +37,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -853,6 +853,8 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 十、版本更新记录
 
+- v1.2.1(2018-02-04)
+  - 新增了通过ZealotConfig的已有实例来配置zealot，这样方便了从spring等已有实例中做配置
 - v1.2.0(2017-08-18)
   - 新增`import`标签，用于引入公共的`zealot`标签节点，便于逻辑和代码复用
   - 新增`choose`标签，可以无限制写无数的`if/else if/else`等条件选择分支逻辑，方便书写条件选择的动态SQL片段
