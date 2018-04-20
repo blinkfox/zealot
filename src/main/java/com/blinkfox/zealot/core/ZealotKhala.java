@@ -635,6 +635,27 @@ public final class ZealotKhala {
     }
 
     /**
+     * 生成带" OR "前缀大于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orMoreThan(String field, Object value) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.GT_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" OR "前缀大于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orMoreThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.GT_SUFFIX, match);
+    }
+
+    /**
      * 生成小于查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
@@ -674,6 +695,27 @@ public final class ZealotKhala {
      */
     public ZealotKhala andLessThan(String field, Object value, boolean match) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LT_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" OR "前缀小于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLessThan(String field, Object value) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.LT_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" OR "前缀小于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLessThan(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.LT_SUFFIX, match);
     }
 
     /**
@@ -719,6 +761,27 @@ public final class ZealotKhala {
     }
 
     /**
+     * 生成带" OR "前缀大于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orMoreEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.GTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" OR "前缀大于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orMoreEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.GTE_SUFFIX, match);
+    }
+
+    /**
      * 生成小于等于查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
@@ -758,6 +821,27 @@ public final class ZealotKhala {
      */
     public ZealotKhala andLessEqual(String field, Object value, boolean match) {
         return this.doNormal(ZealotConst.AND_PREFIX, field, value, ZealotConst.LTE_SUFFIX, match);
+    }
+
+    /**
+     * 生成带" OR "前缀小于等于查询的SQL片段.
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLessEqual(String field, Object value) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.LTE_SUFFIX, true);
+    }
+
+    /**
+     * 生成带" OR "前缀小于等于查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLessEqual(String field, Object value, boolean match) {
+        return this.doNormal(ZealotConst.OR_PREFIX, field, value, ZealotConst.LTE_SUFFIX, match);
     }
 
     /**

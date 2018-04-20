@@ -247,10 +247,14 @@ public class ZealotKhalaTest {
                 .moreThan("u.age", 18)
                 .and("").moreThan("u.age", 25, false)
                 .andMoreThan("u.birthday", "1990-02-17", false)
+                .orMoreThan("u.age", 30, true)
+                .orMoreThan("u.salary", 5000)
                 .or("")
                 .and("").lessThan("u.age", 19)
                 .and("").lessThan("u.age", 27, true)
                 .andLessThan("u.birthday", "1990-07-15", false)
+                .orLessThan("u.age", 56)
+                .orLessThan("u.salary", 8000, true)
                 .union()
                 .select("*")
                 .from("user_bak")
@@ -258,17 +262,22 @@ public class ZealotKhalaTest {
                 .moreEqual("u.age", 18)
                 .and("").moreEqual("u.age", 25, false)
                 .andMoreEqual("u.birthday", "1990-02-17", false)
+                .orMoreEqual("u.age", 29)
+                .orMoreEqual("u.salary", 4500, true)
                 .and("").lessEqual("u.age", 19)
                 .and("").lessEqual("u.age", 27, true)
                 .andLessEqual("u.birthday", "1990-07-15", false)
+                .orLessEqual("u.salary", 9700)
+                .orLessEqual("u.age", 85, false)
                 .end();
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
         // 断言并输出sql信息
-        assertEquals("SELECT * FROM user WHERE u.age > ? AND OR AND u.age < ? AND u.age < ? "
-                + "UNION SELECT * FROM user_bak WHERE 1 = 1 u.age >= ? AND AND u.age <= ? AND u.age <= ?", sql);
-        assertArrayEquals(new Object[]{18, 19, 27, 18, 19, 27}, arr);
+        assertEquals("SELECT * FROM user WHERE u.age > ? AND OR u.age > ? OR u.salary > ? OR AND u.age < ? "
+                + "AND u.age < ? OR u.age < ? OR u.salary < ? UNION SELECT * FROM user_bak WHERE 1 = 1 u.age >= ? AND "
+                + "OR u.age >= ? OR u.salary >= ? AND u.age <= ? AND u.age <= ? OR u.salary <= ?", sql);
+        assertArrayEquals(new Object[]{18, 30, 5000, 19, 27, 56, 8000, 18, 29, 4500, 19, 27, 9700}, arr);
     }
 
     /**
