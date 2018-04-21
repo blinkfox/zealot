@@ -551,7 +551,7 @@ public class ZealotKhalaTest {
     }
 
     /**
-     * is Null相关方法测试.
+     * IS NULL相关方法测试.
      */
     @Test
     public void testIsNull() {
@@ -579,6 +579,39 @@ public class ZealotKhalaTest {
         // 断言并输出sql信息
         assertEquals("a.name IS NULL b.email IS NULL a.name IS NULL AND a.name IS NULL AND b.email IS NULL "
                 + "AND b.email IS NULL OR a.name IS NULL OR b.email IS NULL OR b.email IS NULL", sql);
+        assertArrayEquals(new Object[]{} ,arr);
+    }
+
+    /**
+     * IS NOT NULL相关方法测试.
+     */
+    @Test
+    public void testIsNotNull() {
+        long start = System.currentTimeMillis();
+
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .isNotNull("a.name")
+                .isNotNull("b.email")
+                .isNotNull("a.name", true)
+                .isNotNull("b.email", false)
+                .andIsNotNull("a.name")
+                .andIsNotNull("b.email")
+                .andIsNotNull("a.name", false)
+                .andIsNotNull("b.email", true)
+                .orIsNotNull("a.name")
+                .orIsNotNull("b.email")
+                .orIsNotNull("a.name", false)
+                .orIsNotNull("b.email", true)
+                .end();
+
+        log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("a.name IS NOT NULL b.email IS NOT NULL a.name IS NOT NULL AND a.name IS NOT NULL "
+                + "AND b.email IS NOT NULL AND b.email IS NOT NULL OR a.name IS NOT NULL OR b.email IS NOT NULL "
+                + "OR b.email IS NOT NULL", sql);
         assertArrayEquals(new Object[]{} ,arr);
     }
 
