@@ -42,6 +42,10 @@ public final class ZealotConst {
     public static final String LIKE = "like";
     public static final String AND_LIKE = "andLike";
     public static final String OR_LIKE = "orLike";
+    // not like模糊
+    public static final String NOT_LIKE = "notLike";
+    public static final String AND_NOT_LIKE = "andNotLike";
+    public static final String OR_NOT_LIKE = "orNotLike";
     // between区间
     public static final String BETWEEN = "between";
     public static final String AND_BETWEEN = "andBetween";
@@ -73,6 +77,7 @@ public final class ZealotConst {
     public static final String ATTR_ELSE = "attribute::else";
 
     /* sql中前缀常量 */
+    public static final String EMPTY = "";
     public static final String ONE_SPACE = " ";
     public static final String AND_PREFIX = " AND ";
     public static final String OR_PREFIX = " OR ";

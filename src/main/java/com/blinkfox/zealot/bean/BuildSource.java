@@ -58,10 +58,11 @@ public final class BuildSource {
 
     /**
      * 重置前缀为默认值.
-     * 为了防止SQL拼接时连在一起，默认前缀为一个空格的字符串.
+     * 为了防止SQL拼接时连在一起，默认前缀为一个空格的字符串，后缀为空字符串.
      */
     public void resetPrefix() {
         this.prefix = ZealotConst.ONE_SPACE;
+        this.suffix = ZealotConst.EMPTY;
     }
 
     /**

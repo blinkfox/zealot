@@ -27,6 +27,9 @@ public class SqlInfoBuilder {
     /** 前缀. */
     private String prefix;
 
+    /** 后缀操作符. */
+    private String suffix;
+
     /**
      * 私有构造方法.
      */
@@ -55,6 +58,7 @@ public class SqlInfoBuilder {
         this.params = sqlInfo.getParams();
         this.context = source.getParamObj();
         this.prefix = source.getPrefix();
+        this.suffix = source.getSuffix();
     }
 
     /**
@@ -71,36 +75,15 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 根据字段、值和后缀操作符参数来构建like模糊查询需要的SqlInfo信息.
-     * @param fieldText 数据库字段的文本
-     * @param value 参数值
-     * @param suffix 后缀符
-     * @return sqlInfo
-     */
-    private SqlInfo buildLikeSqlBySuffix(String fieldText, Object value, String suffix) {
-        join.append(prefix).append(fieldText).append(suffix);
-        params.add("%" + value + "%");
-        return sqlInfo.setJoin(join).setParams(params);
-    }
-
-    /**
      * 构建like模糊查询需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
      * @param value 参数值
      * @return sqlInfo
      */
     public SqlInfo buildLikeSql(String fieldText, Object value) {
-        return this.buildLikeSqlBySuffix(fieldText, value, ZealotConst.LIEK_SUFFIX);
-    }
-
-    /**
-     * 构建not like模糊查询需要的SqlInfo信息.
-     * @param fieldText 数据库字段的文本
-     * @param value 参数值
-     * @return sqlInfo
-     */
-    public SqlInfo buildNotLikeSql(String fieldText, Object value) {
-        return this.buildLikeSqlBySuffix(fieldText, value, ZealotConst.NOT_LIEK_SUFFIX);
+        join.append(prefix).append(fieldText).append(suffix);
+        params.add("%" + value + "%");
+        return sqlInfo.setJoin(join).setParams(params);
     }
 
     /**

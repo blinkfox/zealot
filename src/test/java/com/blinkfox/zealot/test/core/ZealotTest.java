@@ -226,4 +226,17 @@ public class ZealotTest {
                 + "WHERE s.c_id = '123'", sqlInfo.getSql());
     }
 
+    /**
+     * 测试使用`not`情况时构建的sql片段.
+     */
+    @Test
+    public void testNotXmlSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryNotStudents",
+                ParamWrapper.newInstance("sex", "1").put("stuId", "123").put("state", false).put("age", 3).toMap());
+        String expectedSql = "SELECT * FROM t_student AS s WHERE s.c_id NOT LIKE ? AND s.c_sex NOT LIKE ? "
+                + "OR s.n_age NOT LIKE ?";
+        assertEquals(expectedSql, sqlInfo.getSql());
+        assertArrayEquals(new Object[]{"%123%", "%1%", "%3%"}, sqlInfo.getParamsArr());
+    }
+
 }

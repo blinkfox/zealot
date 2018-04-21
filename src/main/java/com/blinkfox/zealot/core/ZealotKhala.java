@@ -391,12 +391,8 @@ public final class ZealotKhala {
      */
     private ZealotKhala doLike(String prefix, String field, Object value, boolean match, boolean positive) {
         if (match) {
-            SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
-            if (positive) {
-                builder.buildLikeSql(field, value);
-            } else {
-                builder.buildNotLikeSql(field, value);
-            }
+            String suffix = positive ? ZealotConst.LIEK_SUFFIX : ZealotConst.NOT_LIEK_SUFFIX;
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix).setSuffix(suffix)).buildLikeSql(field, value);
             this.source.resetPrefix();
         }
         return this;

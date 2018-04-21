@@ -40,4 +40,12 @@
         WHERE s.c_id = '@{stuId}'
     </zealot>
 
+    <!-- 测试not的情况. -->
+    <zealot id="queryNotStudents">
+        SELECT * FROM t_student AS s WHERE
+        <notLike field="s.c_id" value="stuId"/>
+        <andNotLike field="s.c_sex" value="sex"/>
+        <orNotLike field="s.n_age" value="age"/>
+    </zealot>
+
 </zealots>
