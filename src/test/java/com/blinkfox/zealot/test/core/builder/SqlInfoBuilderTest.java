@@ -4,7 +4,9 @@ import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -13,12 +15,42 @@ import org.junit.Test;
  */
 public class SqlInfoBuilderTest {
 
+    /** BuildSource实例. */
+    private BuildSource source;
+
+    /**
+     * 每个方法执行之前都初始化BuildSource实例.
+     */
+    @Before
+    public void initSource() {
+        source = new BuildSource(SqlInfo.newInstance()).setPrefix("");
+    }
+
+    /**
+     * 每个方法执行之后都销毁BuildSource实例.
+     */
+    @After
+    public void destroySource() {
+        source = null;
+    }
+
+    /**
+     * 构建按like自定义模式来生成sql片段的测试方法.
+     */
+    @Test
+    public void testBuildLikePatternSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
+                .buildLikePatternSql("b.title", "Java%");
+
+        Assert.assertEquals("b.title LIKE 'Java%' ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+    }
+
     /**
      * 构建区间查询的测试方法.
      */
     @Test
     public void testBuildBetweenSql() {
-        BuildSource source = new BuildSource(SqlInfo.newInstance()).setPrefix("");
         SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
                 .buildBetweenSql("u.age", null, 20);
 
@@ -31,7 +63,6 @@ public class SqlInfoBuilderTest {
      */
     @Test
     public void testBuildBetweenSql2() {
-        BuildSource source = new BuildSource(SqlInfo.newInstance()).setPrefix("");
         SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
                 .buildBetweenSql("u.age", 15, null);
 
@@ -44,7 +75,6 @@ public class SqlInfoBuilderTest {
      */
     @Test
     public void testBuildInSql() {
-        BuildSource source = new BuildSource(SqlInfo.newInstance()).setPrefix("");
         SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
                 .buildInSql("u.sex", null);
 

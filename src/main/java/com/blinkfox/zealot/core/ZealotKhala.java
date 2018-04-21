@@ -397,6 +397,22 @@ public final class ZealotKhala {
     }
 
     /**
+     * 执行根据传入模式来生成like匹配SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param pattern 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例的当前实例
+     */
+    private ZealotKhala doLikePattern(String prefix, String field, String pattern, boolean match) {
+        if (match) {
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildLikePatternSql(field, pattern);
+            this.source.resetPrefix();
+        }
+        return this;
+    }
+
+    /**
      * 执行生成like模糊查询SQL片段的方法.
      * @param prefix 前缀
      * @param field 数据库字段
@@ -905,6 +921,84 @@ public final class ZealotKhala {
      */
     public ZealotKhala orLike(String field, Object value, boolean match) {
         return this.doLike(ZealotConst.OR_PREFIX, field, value, match);
+    }
+
+    /**
+     * 根据指定的模式字符串生成like模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Java%"} 两个参数，生成的SQL片段为：" b.title LIKE 'Java%' "</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala likePattern(String field, String pattern) {
+        return this.doLikePattern(ZealotConst.ONE_SPACE, field, pattern, true);
+    }
+
+    /**
+     * 根据指定的模式字符串生成like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Java%", true} 三个参数，生成的SQL片段为：" b.title LIKE 'Java%' "</p>
+     * <p>示例：传入 {"b.title", "Java%", false} 三个参数，生成的SQL片段为空字符串.</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala likePattern(String field, String pattern, boolean match) {
+        return this.doLikePattern(ZealotConst.ONE_SPACE, field, pattern, match);
+    }
+
+    /**
+     * 根据指定的模式字符串生成带" AND "前缀的like模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Java%"} 两个参数，生成的SQL片段为：" AND b.title LIKE 'Java%' "</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLikePattern(String field, String pattern) {
+        return this.doLikePattern(ZealotConst.AND_PREFIX, field, pattern, true);
+    }
+
+    /**
+     * 根据指定的模式字符串生成带" AND "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Java%", true} 三个参数，生成的SQL片段为：" AND b.title LIKE 'Java%' "</p>
+     * <p>示例：传入 {"b.title", "Java%", false} 三个参数，生成的SQL片段为空字符串.</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andLikePattern(String field, String pattern, boolean match) {
+        return this.doLikePattern(ZealotConst.AND_PREFIX, field, pattern, match);
+    }
+
+    /**
+     * 根据指定的模式字符串生成带" OR "前缀的like模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Java%"} 两个参数，生成的SQL片段为：" OR b.title LIKE 'Java%' "</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLikePattern(String field, String pattern) {
+        return this.doLikePattern(ZealotConst.OR_PREFIX, field, pattern, true);
+    }
+
+    /**
+     * 根据指定的模式字符串生成带" OR "前缀的like模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Java%", true} 三个参数，生成的SQL片段为：" OR b.title LIKE 'Java%' "</p>
+     * <p>示例：传入 {"b.title", "Java%", false} 三个参数，生成的SQL片段为空字符串.</p>
+     *
+     * @param field 数据库字段
+     * @param pattern 模式字符串
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orLikePattern(String field, String pattern, boolean match) {
+        return this.doLikePattern(ZealotConst.OR_PREFIX, field, pattern, match);
     }
 
     /**

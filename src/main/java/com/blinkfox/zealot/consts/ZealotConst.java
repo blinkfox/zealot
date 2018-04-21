@@ -84,6 +84,7 @@ public final class ZealotConst {
     public static final String GTE_SUFFIX = " >= ? ";
     public static final String LTE_SUFFIX = " <= ? ";
     public static final String NOT_EQUAL_SUFFIX = " <> ? ";
+    public static final String LIEK_KEY = " LIKE ";
     public static final String LIEK_SUFFIX = " LIKE ? ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " IN ";

@@ -83,6 +83,18 @@ public class SqlInfoBuilder {
     }
 
     /**
+     * 根据指定的模式`pattern`来构建like模糊查询需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @param pattern like匹配的模式
+     * @return sqlInfo
+     */
+    public SqlInfo buildLikePatternSql(String fieldText, String pattern) {
+        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_KEY)
+                .append("'").append(pattern).append("' ");
+        return sqlInfo.setJoin(join).setParams(params);
+    }
+
+    /**
      * 构建区间查询的SqlInfo信息.
      * @param fieldText 数据库字段文本
      * @param startValue 参数开始值
