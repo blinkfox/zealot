@@ -452,7 +452,8 @@ public final class ZealotKhala {
      * @return ZealotKhala实例的当前实例
      */
     @SuppressWarnings("unchecked")
-    private ZealotKhala doInByType(String prefix, String field, Object value, boolean match, int objType, boolean positive) {
+    private ZealotKhala doInByType(String prefix, String field, Object value,
+            boolean match, int objType, boolean positive) {
         if (match) {
             // 根据对象类型调用对应的生成in查询的sql片段方法,否则抛出类型不符合的异常
             switch (objType) {

@@ -494,8 +494,8 @@ public class ZealotKhalaTest {
 
         // 断言并输出sql信息
         assertEquals("u.sex NOT IN (?, ?) u.city NOT IN (?, ?, ?) u.sex NOT IN (?, ?) AND u.sex NOT IN (?, ?) "
-                + "AND u.city NOT IN (?, ?, ?) AND u.sex NOT IN (?, ?) OR u.sex NOT IN (?, ?) OR u.city NOT IN (?, ?, ?) "
-                + "OR u.sex NOT IN (?, ?)", sql);
+                + "AND u.city NOT IN (?, ?, ?) AND u.sex NOT IN (?, ?) OR u.sex NOT IN (?, ?) OR u.city NOT "
+                + "IN (?, ?, ?) OR u.sex NOT IN (?, ?)", sql);
         assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
                 0, 1, "四川", "北京", "上海", 0, 1} ,arr);
     }
