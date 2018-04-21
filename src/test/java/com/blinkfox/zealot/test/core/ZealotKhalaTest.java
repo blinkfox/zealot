@@ -330,7 +330,7 @@ public class ZealotKhalaTest {
                 .orNotLike("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
                 .orNotLike("u.nick_name", context.get("myBirthday"), context.get("name") == null)
                 .end();
-        log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        log.info("testNotLike方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
@@ -488,7 +488,7 @@ public class ZealotKhalaTest {
                 .orNotIn("u.city", citys, citys == null)
                 .end();
 
-        log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        log.info("testNotIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
         String sql = sqlInfo.getSql();
         Object[] arr = sqlInfo.getParamsArr();
 
@@ -548,6 +548,38 @@ public class ZealotKhalaTest {
                 + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
+    }
+
+    /**
+     * is Null相关方法测试.
+     */
+    @Test
+    public void testIsNull() {
+        long start = System.currentTimeMillis();
+
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .isNull("a.name")
+                .isNull("b.email")
+                .isNull("a.name", true)
+                .isNull("b.email", false)
+                .andIsNull("a.name")
+                .andIsNull("b.email")
+                .andIsNull("a.name", false)
+                .andIsNull("b.email", true)
+                .orIsNull("a.name")
+                .orIsNull("b.email")
+                .orIsNull("a.name", false)
+                .orIsNull("b.email", true)
+                .end();
+
+        log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("a.name IS NULL b.email IS NULL a.name IS NULL AND a.name IS NULL AND b.email IS NULL "
+                + "AND b.email IS NULL OR a.name IS NULL OR b.email IS NULL OR b.email IS NULL", sql);
+        assertArrayEquals(new Object[]{} ,arr);
     }
 
 }

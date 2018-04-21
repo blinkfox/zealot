@@ -112,7 +112,7 @@ public class SqlInfoBuilder {
     public SqlInfo buildLikePatternSql(String fieldText, String pattern) {
         join.append(prefix).append(fieldText).append(ZealotConst.LIEK_KEY)
                 .append("'").append(pattern).append("' ");
-        return sqlInfo.setJoin(join).setParams(params);
+        return sqlInfo.setJoin(join);
     }
 
     /**
@@ -124,7 +124,7 @@ public class SqlInfoBuilder {
     public SqlInfo buildNotLikePatternSql(String fieldText, String pattern) {
         join.append(prefix).append(fieldText).append(ZealotConst.NOT_LIEK_KEY)
                 .append("'").append(pattern).append("' ");
-        return sqlInfo.setJoin(join).setParams(params);
+        return sqlInfo.setJoin(join);
     }
 
     /**
@@ -196,6 +196,26 @@ public class SqlInfoBuilder {
      */
     public SqlInfo buildNotInSql(String fieldText, Object[] values) {
         return this.buildInSql(fieldText, values, ZealotConst.NOT_IN_SUFFIX);
+    }
+
+    /**
+     * 构建" IS NULL "需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @return sqlInfo
+     */
+    public SqlInfo buildIsNullSql(String fieldText) {
+        join.append(prefix).append(fieldText).append(ZealotConst.IS_NULL_SUFFIX);
+        return sqlInfo.setJoin(join);
+    }
+
+    /**
+     * 构建" IS NOT NULL "需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @return sqlInfo
+     */
+    public SqlInfo buildIsNotNullSql(String fieldText) {
+        join.append(prefix).append(fieldText).append(ZealotConst.IS_NOT_NULL_SUFFIX);
+        return sqlInfo.setJoin(join);
     }
 
 }

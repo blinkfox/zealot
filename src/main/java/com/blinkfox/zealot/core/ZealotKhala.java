@@ -509,6 +509,27 @@ public final class ZealotKhala {
     }
 
     /**
+     * 执行生成" IS NULL "SQL片段的方法.
+     * @param prefix 前缀
+     * @param field 数据库字段
+     * @param match 是否匹配
+     * @param positive true则表示是 IS NULL，否则是IS NOT NULL
+     * @return ZealotKhala实例的当前实例
+     */
+    private ZealotKhala doIsNull(String prefix, String field, boolean match, boolean positive) {
+        if (match) {
+            SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
+            if (positive) {
+                builder.buildIsNullSql(field);
+            } else {
+                builder.buildIsNullSql(field);
+            }
+            this.source.resetPrefix();
+        }
+        return this;
+    }
+
+    /**
      * 生成等值查询的SQL片段.
      * @param field 数据库字段
      * @param value 值
@@ -1499,6 +1520,75 @@ public final class ZealotKhala {
      */
     public ZealotKhala orNotIn(String field, Collection<?> values, boolean match) {
         return this.doIn(ZealotConst.OR_PREFIX, field, values, match, false);
+    }
+
+    /**
+     * 生成" IS NULL "的SQL片段.
+     * <p>示例：传入 {"a.name"} 参数，生成的SQL片段为：" a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala isNull(String field) {
+        return this.doIsNull(ZealotConst.ONE_SPACE, field, true,true);
+    }
+
+    /**
+     * 生成" IS NULL "的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"a.name", true} 两个参数，生成的SQL片段为：" a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala isNull(String field, boolean match) {
+        return this.doIsNull(ZealotConst.ONE_SPACE, field, match,true);
+    }
+
+    /**
+     * 生成带" AND "前缀" IS NULL "的SQL片段.
+     * <p>示例：传入 {"a.name"} 参数，生成的SQL片段为：" AND a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andIsNull(String field) {
+        return this.doIsNull(ZealotConst.AND_PREFIX, field, true,true);
+    }
+
+    /**
+     * 生成带" AND "前缀" IS NULL "的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"a.name", true} 两个参数，生成的SQL片段为：" AND a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andIsNull(String field, boolean match) {
+        return this.doIsNull(ZealotConst.AND_PREFIX, field, match,true);
+    }
+
+    /**
+     * 生成带" OR "前缀" IS NULL "的SQL片段.
+     * <p>示例：传入 {"a.name"} 参数，生成的SQL片段为：" OR a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orIsNull(String field) {
+        return this.doIsNull(ZealotConst.OR_PREFIX, field, true,true);
+    }
+
+    /**
+     * 生成带" OR "前缀" IS NULL "的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"a.name", true} 两个参数，生成的SQL片段为：" OR a.name IS NULL "</p>
+     *
+     * @param field 数据库字段
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orIsNull(String field, boolean match) {
+        return this.doIsNull(ZealotConst.OR_PREFIX, field, match,true);
     }
 
 }

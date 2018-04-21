@@ -115,4 +115,24 @@ public class SqlInfoBuilderTest {
         Assert.assertArrayEquals(new Object[]{25, 30}, sqlInfo.getParamsArr());
     }
 
+    /**
+     * 构建" NOT IN "范围查询的测试方法.
+     */
+    @Test
+    public void testBuildIsNullSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildIsNullSql("a.name");
+        Assert.assertEquals("a.name IS NULL ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 构建" NOT IN "范围查询的测试方法.
+     */
+    @Test
+    public void testBuildIsNotNullSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildIsNotNullSql("b.email");
+        Assert.assertEquals("b.email IS NOT NULL ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+    }
+
 }
