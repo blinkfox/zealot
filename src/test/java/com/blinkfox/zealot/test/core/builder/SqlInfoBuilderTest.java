@@ -83,7 +83,7 @@ public class SqlInfoBuilderTest {
     }
 
     /**
-     * 构建区间查询的测试方法2.
+     * 构建区间查询的测试方法.
      */
     @Test
     public void testBuildBetweenSql2() {
@@ -95,15 +95,24 @@ public class SqlInfoBuilderTest {
     }
 
     /**
-     * 构建区间查询的测试方法2.
+     * 构建" IN "范围查询的测试方法.
      */
     @Test
     public void testBuildInSql() {
-        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
-                .buildInSql("u.sex", null);
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildInSql("u.sex", new Object[]{18, 19});
 
-        Assert.assertEquals("", sqlInfo.getJoin().toString());
-        Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+        Assert.assertEquals("u.sex IN (?, ?) ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{18, 19}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 构建" NOT IN "范围查询的测试方法.
+     */
+    @Test
+    public void testBuildNotInSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildNotInSql("u.sex", new Object[]{25, 30});
+        Assert.assertEquals("u.sex NOT IN (?, ?) ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{25, 30}, sqlInfo.getParamsArr());
     }
 
 }

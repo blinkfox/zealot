@@ -464,6 +464,43 @@ public class ZealotKhalaTest {
     }
 
     /**
+     * not in相关方法测试.
+     */
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNotIn() {
+        Integer[] sexs = (Integer[]) context.get("sexs");
+        List<String> citys = (List<String>) context.get("citys");
+        long start = System.currentTimeMillis();
+
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .notIn("u.sex", sexs)
+                .notIn("u.city", citys)
+                .notIn("u.sex", sexs, sexs != null)
+                .notIn("u.city", citys, citys == null)
+                .andNotIn("u.sex", sexs)
+                .andNotIn("u.city", citys)
+                .andNotIn("u.sex", sexs, sexs != null)
+                .andNotIn("u.city", citys, citys == null)
+                .orNotIn("u.sex", sexs)
+                .orNotIn("u.city", citys)
+                .orNotIn("u.sex", sexs, sexs != null)
+                .orNotIn("u.city", citys, citys == null)
+                .end();
+
+        log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("u.sex NOT IN (?, ?) u.city NOT IN (?, ?, ?) u.sex NOT IN (?, ?) AND u.sex NOT IN (?, ?) "
+                + "AND u.city NOT IN (?, ?, ?) AND u.sex NOT IN (?, ?) OR u.sex NOT IN (?, ?) OR u.city NOT IN (?, ?, ?) "
+                + "OR u.sex NOT IN (?, ?)", sql);
+        assertArrayEquals(new Object[]{0, 1, "四川", "北京", "上海", 0, 1, 0, 1, "四川", "北京", "上海", 0, 1,
+                0, 1, "四川", "北京", "上海", 0, 1} ,arr);
+    }
+
+    /**
      * 测试使用ZealotKhala书写的sql.
      */
     @Test

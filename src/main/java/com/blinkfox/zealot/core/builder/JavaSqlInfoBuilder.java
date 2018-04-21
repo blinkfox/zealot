@@ -29,12 +29,21 @@ public class JavaSqlInfoBuilder extends SqlInfoBuilder {
     }
 
     /**
-     * 构建区间查询的sql信息.
+     * 构建" IN "范围查询的sql信息.
      * @param fieldText 数据库字段文本
      * @param values 对象集合
      */
     public void buildInSqlByCollection(String fieldText, Collection<Object> values) {
         super.buildInSql(fieldText, values == null ? null : values.toArray());
+    }
+
+    /**
+     * 构建" NOT IN "范围区间查询的sql信息.
+     * @param fieldText 数据库字段文本
+     * @param values 对象集合
+     */
+    public void buildNotInSqlByCollection(String fieldText, Collection<Object> values) {
+        super.buildNotInSql(fieldText, values == null ? null : values.toArray());
     }
 
 }

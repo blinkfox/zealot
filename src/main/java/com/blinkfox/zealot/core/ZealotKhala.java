@@ -386,7 +386,7 @@ public final class ZealotKhala {
      * @param field 数据库字段
      * @param value 值
      * @param match 是否匹配
-     * @param positive 是否是like匹配，否则是not like
+     * @param positive true则表示是like，否则是not like
      * @return ZealotKhala实例的当前实例
      */
     private ZealotKhala doLike(String prefix, String field, Object value, boolean match, boolean positive) {
@@ -408,7 +408,7 @@ public final class ZealotKhala {
      * @param field 数据库字段
      * @param pattern 值
      * @param match 是否匹配
-     * @param positive 是否是like匹配，否则是not like
+     * @param positive true则表示是like，否则是not like
      * @return ZealotKhala实例的当前实例
      */
     private ZealotKhala doLikePattern(String prefix, String field, String pattern, boolean match, boolean positive) {
@@ -448,19 +448,31 @@ public final class ZealotKhala {
      * @param value 数组的值
      * @param match 是否匹配
      * @param objType 对象类型，取自ZealotConst.java中以OBJTYPE开头的类型
+     * @param positive true则表示是in，否则是not in
      * @return ZealotKhala实例的当前实例
      */
     @SuppressWarnings("unchecked")
-    private ZealotKhala doInByType(String prefix, String field, Object value, boolean match, int objType) {
+    private ZealotKhala doInByType(String prefix, String field, Object value, boolean match, int objType, boolean positive) {
         if (match) {
             // 根据对象类型调用对应的生成in查询的sql片段方法,否则抛出类型不符合的异常
             switch (objType) {
+                // 如果类型是数组.
                 case ZealotConst.OBJTYPE_ARRAY:
-                    SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildInSql(field, (Object[]) value);
+                    SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
+                    if (positive) {
+                        builder.buildInSql(field, (Object[]) value);
+                    } else {
+                        builder.buildNotInSql(field, (Object[]) value);
+                    }
                     break;
+                // 如果类型是Java集合.
                 case ZealotConst.OBJTYPE_COLLECTION:
-                    JavaSqlInfoBuilder.newInstace(this.source.setPrefix(prefix))
-                            .buildInSqlByCollection(field, (Collection<Object>) value);
+                    JavaSqlInfoBuilder javaBuilder = JavaSqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
+                    if (positive) {
+                        javaBuilder.buildInSqlByCollection(field, (Collection<Object>) value);
+                    } else {
+                        javaBuilder.buildNotInSqlByCollection(field, (Collection<Object>) value);
+                    }
                     break;
                 default:
                     throw new NotCollectionOrArrayException("in查询的值不是有效的集合或数组!");
@@ -476,10 +488,11 @@ public final class ZealotKhala {
      * @param field 数据库字段
      * @param values 数组的值
      * @param match 是否匹配
+     * @param positive true则表示是in，否则是not in
      * @return ZealotKhala实例的当前实例
      */
-    private ZealotKhala doIn(String prefix, String field, Object[] values, boolean match) {
-        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_ARRAY);
+    private ZealotKhala doIn(String prefix, String field, Object[] values, boolean match, boolean positive) {
+        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_ARRAY, positive);
     }
 
     /**
@@ -488,10 +501,11 @@ public final class ZealotKhala {
      * @param field 数据库字段
      * @param values 集合的值
      * @param match 是否匹配
+     * @param positive true则表示是in，否则是not in
      * @return ZealotKhala实例的当前实例
      */
-    private ZealotKhala doIn(String prefix, String field, Collection<?> values, boolean match) {
-        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_COLLECTION);
+    private ZealotKhala doIn(String prefix, String field, Collection<?> values, boolean match, boolean positive) {
+        return this.doInByType(prefix, field, values, match, ZealotConst.OBJTYPE_COLLECTION, positive);
     }
 
     /**
@@ -1242,7 +1256,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Object[] values) {
-        return this.doIn(ZealotConst.ONE_SPACE, field, values, true);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true, true);
     }
 
     /**
@@ -1253,7 +1267,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Object[] values, boolean match) {
-        return this.doIn(ZealotConst.ONE_SPACE, field, values, match);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match, true);
     }
 
     /**
@@ -1263,7 +1277,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Collection<?> values) {
-        return this.doIn(ZealotConst.ONE_SPACE, field, values, true);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true, true);
     }
 
     /**
@@ -1274,7 +1288,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala in(String field, Collection<?> values, boolean match) {
-        return this.doIn(ZealotConst.ONE_SPACE, field, values, match);
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match, true);
     }
 
     /**
@@ -1284,7 +1298,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andIn(String field, Object[] values) {
-        return this.doIn(ZealotConst.AND_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true, true);
     }
 
     /**
@@ -1295,7 +1309,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andIn(String field, Object[] values, boolean match) {
-        return this.doIn(ZealotConst.AND_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match, true);
     }
 
     /**
@@ -1305,7 +1319,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andIn(String field, Collection<?> values) {
-        return this.doIn(ZealotConst.AND_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true, true);
     }
 
     /**
@@ -1316,7 +1330,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andIn(String field, Collection<?> values, boolean match) {
-        return this.doIn(ZealotConst.AND_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match, true);
     }
 
     /**
@@ -1326,7 +1340,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orIn(String field, Object[] values) {
-        return this.doIn(ZealotConst.OR_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true, true);
     }
 
     /**
@@ -1337,7 +1351,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orIn(String field, Object[] values, boolean match) {
-        return this.doIn(ZealotConst.OR_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match, true);
     }
 
     /**
@@ -1347,7 +1361,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orIn(String field, Collection<?> values) {
-        return this.doIn(ZealotConst.OR_PREFIX, field, values, true);
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true, true);
     }
 
     /**
@@ -1358,7 +1372,133 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orIn(String field, Collection<?> values, boolean match) {
-        return this.doIn(ZealotConst.OR_PREFIX, field, values, match);
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match, true);
+    }
+
+    /**
+     * 生成" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notIn(String field, Object[] values) {
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true, false);
+    }
+
+    /**
+     * 生成" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notIn(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match, false);
+    }
+
+    /**
+     * 生成" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notIn(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, true, false);
+    }
+
+    /**
+     * 生成" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notIn(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.ONE_SPACE, field, values, match, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotIn(String field, Object[] values) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotIn(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotIn(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, true, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotIn(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.AND_PREFIX, field, values, match, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotIn(String field, Object[] values) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 数组的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotIn(String field, Object[] values, boolean match) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT IN "范围查询的SQL片段.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotIn(String field, Collection<?> values) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, true, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT IN "范围查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * @param field 数据库字段
+     * @param values 集合的值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotIn(String field, Collection<?> values, boolean match) {
+        return this.doIn(ZealotConst.OR_PREFIX, field, values, match, false);
     }
 
 }
