@@ -366,6 +366,31 @@ public class ZealotKhalaTest {
     }
 
     /**
+     * 测试根据指定模式生成" NOT LIKE "片段相关方法测试.
+     */
+    @Test
+    public void testNotLikePattern() {
+        long start = System.currentTimeMillis();
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .notLikePattern("u.id", "4%", "4".equals(context.get("id")))
+                .notLikePattern("u.nick_name", context.get("name") + "%")
+                .notLikePattern("u.email", "%" + context.get("myEmail"), context.get("myEmail") != null)
+                .andNotLikePattern("u.age", context.get("myAge") + "%")
+                .andNotLikePattern("u.true_age", context.get("myAge") + "%", context.get("myAge") != null)
+                .andNotLikePattern("u.email", context.get("myAge") + "%", context.get("myEmail") == null)
+                .orNotLikePattern("u.email", context.get("myEmail") + "%")
+                .orNotLikePattern("u.birthday", context.get("myBirthday") + "%", context.get("myBirthday") != null)
+                .end();
+        log.info("testNotLikePattern()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getSql();
+
+        // 断言并输出sql信息
+        assertEquals("u.nick_name NOT LIKE 'zhagnsan%' u.email NOT LIKE '%zhagnsan@163.com' AND u.age NOT LIKE '25%'"
+                + " AND u.true_age NOT LIKE '25%' OR u.email NOT LIKE 'zhagnsan@163.com%' OR u.birthday "
+                + "NOT LIKE '1990-03-31%'", sql);
+    }
+
+    /**
      * equal相关方法测试.
      */
     @Test
