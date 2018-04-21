@@ -39,7 +39,7 @@ public class ParamWrapperTest {
     @Test
     public void testNewInstance() {
         paramMap = ParamWrapper.newInstance(paramMap).put("birthday", "1990-05-18").toMap();
-        Assert.assertEquals(paramMap.size(), 4);
+        Assert.assertEquals(4, paramMap.size());
         Assert.assertEquals(27, paramMap.get("age"));
     }
 
@@ -50,7 +50,7 @@ public class ParamWrapperTest {
     public void testPut() {
         paramWrapper.put("aa", "张三").put("bb", "李四");
         Map<String, Object> paramMap = paramWrapper.toMap();
-        Assert.assertEquals(paramMap.size(), 2);
+        Assert.assertEquals(2, paramMap.size());
         Assert.assertEquals("张三", paramMap.get("aa"));
     }
 

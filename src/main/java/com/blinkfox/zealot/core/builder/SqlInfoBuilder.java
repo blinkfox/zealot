@@ -71,15 +71,36 @@ public class SqlInfoBuilder {
     }
 
     /**
+     * 根据字段、值和后缀操作符参数来构建like模糊查询需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @param value 参数值
+     * @param suffix 后缀符
+     * @return sqlInfo
+     */
+    private SqlInfo buildLikeSqlBySuffix(String fieldText, Object value, String suffix) {
+        join.append(prefix).append(fieldText).append(suffix);
+        params.add("%" + value + "%");
+        return sqlInfo.setJoin(join).setParams(params);
+    }
+
+    /**
      * 构建like模糊查询需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
      * @param value 参数值
      * @return sqlInfo
      */
     public SqlInfo buildLikeSql(String fieldText, Object value) {
-        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_SUFFIX);
-        params.add("%" + value + "%");
-        return sqlInfo.setJoin(join).setParams(params);
+        return this.buildLikeSqlBySuffix(fieldText, value, ZealotConst.LIEK_SUFFIX);
+    }
+
+    /**
+     * 构建not like模糊查询需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @param value 参数值
+     * @return sqlInfo
+     */
+    public SqlInfo buildNotLikeSql(String fieldText, Object value) {
+        return this.buildLikeSqlBySuffix(fieldText, value, ZealotConst.NOT_LIEK_SUFFIX);
     }
 
     /**
@@ -90,6 +111,18 @@ public class SqlInfoBuilder {
      */
     public SqlInfo buildLikePatternSql(String fieldText, String pattern) {
         join.append(prefix).append(fieldText).append(ZealotConst.LIEK_KEY)
+                .append("'").append(pattern).append("' ");
+        return sqlInfo.setJoin(join).setParams(params);
+    }
+
+    /**
+     * 根据指定的模式`pattern`来构建not like模糊查询需要的SqlInfo信息.
+     * @param fieldText 数据库字段的文本
+     * @param pattern like匹配的模式
+     * @return sqlInfo
+     */
+    public SqlInfo buildNotLikePatternSql(String fieldText, String pattern) {
+        join.append(prefix).append(fieldText).append(ZealotConst.NOT_LIEK_KEY)
                 .append("'").append(pattern).append("' ");
         return sqlInfo.setJoin(join).setParams(params);
     }

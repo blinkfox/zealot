@@ -281,7 +281,7 @@ public class ZealotKhalaTest {
     }
 
     /**
-     * equal相关方法测试.
+     * 测试生成Like片段相关方法测试.
      */
     @Test
     public void testLike() {
@@ -311,6 +311,34 @@ public class ZealotKhalaTest {
                 + "OR u.birthday LIKE ? u.id LIKE ?", sql);
         assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%", "%25%", "%zhagnsan%",
                 "%zhagnsan@163.com%", "%1990-03-31%", "%1990-03-31%", "%3%"}, arr);
+    }
+
+    /**
+     * 测试生成Like片段相关方法测试.
+     */
+    @Test
+    public void testNotLike() {
+        long start = System.currentTimeMillis();
+        SqlInfo sqlInfo = ZealotKhala.start()
+                .notLike("u.id", context.get("id"), "4".equals(context.get("id")))
+                .notLike("u.nick_name", context.get("name"))
+                .notLike("u.email", context.get("myEmail"), context.get("myEmail") != null)
+                .andNotLike("u.age", context.get("myAge"))
+                .andNotLike("u.true_age", context.get("myAge"), context.get("myAge") != null)
+                .andNotLike("u.email", context.get("myAge"), context.get("myEmail") == null)
+                .orNotLike("u.email", context.get("myEmail"))
+                .orNotLike("u.birthday", context.get("myBirthday"), context.get("myBirthday") != null)
+                .orNotLike("u.nick_name", context.get("myBirthday"), context.get("name") == null)
+                .end();
+        log.info("testLike()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+        String sql = sqlInfo.getSql();
+        Object[] arr = sqlInfo.getParamsArr();
+
+        // 断言并输出sql信息
+        assertEquals("u.nick_name NOT LIKE ? u.email NOT LIKE ? AND u.age NOT LIKE ? "
+                + "AND u.true_age NOT LIKE ? OR u.email NOT LIKE ? OR u.birthday NOT LIKE ?", sql);
+        assertArrayEquals(new Object[]{"%zhagnsan%", "%zhagnsan@163.com%", "%25%", "%25%",
+                "%zhagnsan@163.com%", "%1990-03-31%"}, arr);
     }
 
     /**

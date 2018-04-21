@@ -386,11 +386,17 @@ public final class ZealotKhala {
      * @param field 数据库字段
      * @param value 值
      * @param match 是否匹配
+     * @param isLike 是否是like匹配，否则是not like
      * @return ZealotKhala实例的当前实例
      */
-    private ZealotKhala doLike(String prefix, String field, Object value, boolean match) {
+    private ZealotKhala doLike(String prefix, String field, Object value, boolean match, boolean isLike) {
         if (match) {
-            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix)).buildLikeSql(field, value);
+            SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
+            if (isLike) {
+                builder.buildLikeSql(field, value);
+            } else {
+                builder.buildNotLikeSql(field, value);
+            }
             this.source.resetPrefix();
         }
         return this;
@@ -867,7 +873,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala like(String field, Object value) {
-        return this.doLike(ZealotConst.ONE_SPACE, field, value, true);
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, true, true);
     }
 
     /**
@@ -878,7 +884,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala like(String field, Object value, boolean match) {
-        return this.doLike(ZealotConst.ONE_SPACE, field, value, match);
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, match, true);
     }
 
     /**
@@ -888,7 +894,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andLike(String field, Object value) {
-        return this.doLike(ZealotConst.AND_PREFIX, field, value, true);
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, true, true);
     }
 
     /**
@@ -899,7 +905,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala andLike(String field, Object value, boolean match) {
-        return this.doLike(ZealotConst.AND_PREFIX, field, value, match);
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, match, true);
     }
 
     /**
@@ -909,7 +915,7 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orLike(String field, Object value) {
-        return this.doLike(ZealotConst.OR_PREFIX, field, value, true);
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, true, true);
     }
 
     /**
@@ -920,7 +926,82 @@ public final class ZealotKhala {
      * @return ZealotKhala实例
      */
     public ZealotKhala orLike(String field, Object value, boolean match) {
-        return this.doLike(ZealotConst.OR_PREFIX, field, value, match);
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, match, true);
+    }
+
+    /**
+     * 生成" NOT LIKE "模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Spring"} 两个参数，生成的SQL片段为：" b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notLike(String field, Object value) {
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, true, false);
+    }
+
+    /**
+     * 生成" NOT LIKE "模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Spring", true} 三个参数，生成的SQL片段为：" b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala notLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.ONE_SPACE, field, value, match, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT LIKE "模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Spring"} 两个参数，生成的SQL片段为：" AND b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotLike(String field, Object value) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, true, false);
+    }
+
+    /**
+     * 生成带" AND "前缀的" NOT LIKE "模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Spring", true} 三个参数，生成的SQL片段为：" AND b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala andNotLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.AND_PREFIX, field, value, match, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT LIKE "模糊查询的SQL片段.
+     * <p>示例：传入 {"b.title", "Spring"} 两个参数，生成的SQL片段为：" OR b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotLike(String field, Object value) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, true, false);
+    }
+
+    /**
+     * 生成带" OR "前缀的" NOT LIKE "模糊查询的SQL片段,如果match为true时则生成该条SQL片段，否则不生成.
+     * <p>示例：传入 {"b.title", "Spring", true} 三个参数，生成的SQL片段为：" OR b.title NOT LIKE ? ", SQL参数为:{"%Spring%"}</p>
+     *
+     * @param field 数据库字段
+     * @param value 值
+     * @param match 是否匹配
+     * @return ZealotKhala实例
+     */
+    public ZealotKhala orNotLike(String field, Object value, boolean match) {
+        return this.doLike(ZealotConst.OR_PREFIX, field, value, match, false);
     }
 
     /**

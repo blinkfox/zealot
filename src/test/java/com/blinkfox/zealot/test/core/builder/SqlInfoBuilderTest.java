@@ -35,6 +35,18 @@ public class SqlInfoBuilderTest {
     }
 
     /**
+     * 构建not like sql片段的测试方法.
+     */
+    @Test
+    public void testBuildNotLikeSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
+                .buildNotLikeSql("b.title", "Spring");
+
+        Assert.assertEquals("b.title NOT LIKE ? ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{"%Spring%"}, sqlInfo.getParamsArr());
+    }
+
+    /**
      * 构建按like自定义模式来生成sql片段的测试方法.
      */
     @Test
@@ -43,6 +55,18 @@ public class SqlInfoBuilderTest {
                 .buildLikePatternSql("b.title", "Java%");
 
         Assert.assertEquals("b.title LIKE 'Java%' ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 构建按not like自定义模式来生成sql片段的测试方法.
+     */
+    @Test
+    public void testBuildNotLikePatternSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
+                .buildNotLikePatternSql("b.title", "Java%");
+
+        Assert.assertEquals("b.title NOT LIKE 'Java%' ", sqlInfo.getJoin().toString());
         Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
     }
 
