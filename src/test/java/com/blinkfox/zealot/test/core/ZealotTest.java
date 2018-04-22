@@ -7,6 +7,7 @@ import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.core.Zealot;
+import com.blinkfox.zealot.exception.ValidFailException;
 import com.blinkfox.zealot.log.Log;
 import com.blinkfox.zealot.test.bean.Teacher;
 import com.blinkfox.zealot.test.config.MyZealotConfig;
@@ -227,16 +228,26 @@ public class ZealotTest {
     }
 
     /**
-     * 测试使用`not`情况时构建的sql片段.
+     * 系统全面的测试使用`like`标签构建的sql片段.
      */
     @Test
-    public void testNotXmlSql() {
-        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryNotStudents",
+    public void testLikePatternSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryLikePattern",
                 ParamWrapper.newInstance("sex", "1").put("stuId", "123").put("state", false).put("age", 3).toMap());
-        String expectedSql = "SELECT * FROM t_student AS s WHERE s.c_id NOT LIKE ? AND s.c_sex NOT LIKE ? "
-                + "OR s.n_age NOT LIKE ?";
+        String expectedSql = "SELECT * FROM t_student AS s WHERE s.c_id LIKE ? AND s.c_sex LIKE ? OR s.n_age LIKE ? "
+                + "AND s.c_id NOT LIKE ? AND s.c_sex NOT LIKE ? OR s.n_age NOT LIKE ? AND s.c_id LIKE '345%' "
+                + "AND s.c_sex LIKE '%2' OR s.n_age LIKE '_3' AND s.c_id NOT LIKE '345%' AND s.c_sex NOT LIKE '%2' "
+                + "OR s.n_age NOT LIKE '3%'";
         assertEquals(expectedSql, sqlInfo.getSql());
-        assertArrayEquals(new Object[]{"%123%", "%1%", "%3%"}, sqlInfo.getParamsArr());
+        assertArrayEquals(new Object[]{"%123%", "%1%", "%3%", "%123%", "%1%", "%3%"}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 测试使用`like`标签异常时构建的sql片段.
+     */
+    @Test(expected = ValidFailException.class)
+    public void testLikePatternExceptionSql() {
+        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryLikePatternException", null);
     }
 
 }

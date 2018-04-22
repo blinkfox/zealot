@@ -2,6 +2,7 @@ package com.blinkfox.zealot.test.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.builder.SqlInfoBuilder;
 
 import org.junit.After;
@@ -35,6 +36,18 @@ public class SqlInfoBuilderTest {
     }
 
     /**
+     * 构建not like sql片段的测试方法.
+     */
+    @Test
+    public void testBuildNotLikeSql() {
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source.setSuffix(ZealotConst.NOT_LIKE_KEY))
+                .buildLikeSql("b.title", "Spring");
+
+        Assert.assertEquals("b.title NOT LIKE ? ", sqlInfo.getJoin().toString());
+        Assert.assertArrayEquals(new Object[]{"%Spring%"}, sqlInfo.getParamsArr());
+    }
+
+    /**
      * 构建按like自定义模式来生成sql片段的测试方法.
      */
     @Test
@@ -51,8 +64,8 @@ public class SqlInfoBuilderTest {
      */
     @Test
     public void testBuildNotLikePatternSql() {
-        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source)
-                .buildNotLikePatternSql("b.title", "Java%");
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(this.source.setSuffix(ZealotConst.NOT_LIKE_KEY))
+                .buildLikePatternSql("b.title", "Java%");
 
         Assert.assertEquals("b.title NOT LIKE 'Java%' ", sqlInfo.getJoin().toString());
         Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());

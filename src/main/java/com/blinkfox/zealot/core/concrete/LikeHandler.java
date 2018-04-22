@@ -30,18 +30,18 @@ public class LikeHandler implements IConditHandler {
 
         /* 判断必填的参数是否为空 */
         String fieldText = XmlNodeHelper.getAndCheckNodeText(node, ZealotConst.ATTR_FIELD);
-        String valueText = XmlNodeHelper.getAndCheckNodeText(node, ZealotConst.ATTR_VALUE);
+        String valueText = XmlNodeHelper.getNodeAttrText(node, ZealotConst.ATTR_VALUE);
+        String patternText = XmlNodeHelper.getNodeAttrText(node, ZealotConst.ATTR_PATTERN);
 
-        /* 如果匹配中字符没有，则认为是必然生成项 */
-        Node matchNode = node.selectSingleNode(ZealotConst.ATTR_MATCH);
-        String matchText = XmlNodeHelper.getNodeText(matchNode);
+        /* 如果匹配中'match'属性没有值，则认为是必然生成项 */
+        String matchText = XmlNodeHelper.getNodeAttrText(node, ZealotConst.ATTR_MATCH);
         if (StringHelper.isBlank(matchText)) {
-            sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText);
+            sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText, patternText);
         } else {
             /* 如果match匹配成功，则生成数据库sql条件和参数 */
             Boolean isTrue = (Boolean) ParseHelper.parseExpressWithException(matchText, source.getParamObj());
             if (isTrue) {
-                sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText);
+                sqlInfo = XmlSqlInfoBuilder.newInstace(source).buildLikeSql(fieldText, valueText, patternText);
             }
         }
 

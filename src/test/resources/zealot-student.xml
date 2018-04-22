@@ -40,12 +40,31 @@
         WHERE s.c_id = '@{stuId}'
     </zealot>
 
-    <!-- 测试not的情况. -->
-    <zealot id="queryNotStudents">
+    <!-- 系统全面的测试Like的情况. -->
+    <zealot id="queryLikePattern">
         SELECT * FROM t_student AS s WHERE
+        <like field="s.c_id" value="stuId"/>
+        <andLike field="s.c_sex" value="sex"/>
+        <orLike field="s.n_age" value="age"/>
+        AND
         <notLike field="s.c_id" value="stuId"/>
         <andNotLike field="s.c_sex" value="sex"/>
         <orNotLike field="s.n_age" value="age"/>
+        AND
+        <like field="s.c_id" pattern="345%"/>
+        <andLike field="s.c_sex" pattern="%2"/>
+        <orLike field="s.n_age" pattern="_@{age}"/>
+        AND
+        <notLike field="s.c_id" pattern="345%"/>
+        <andNotLike field="s.c_sex" pattern="%2"/>
+        <orNotLike field="s.n_age" pattern="@{age}%"/>
+    </zealot>
+
+    <!-- 测试Like异常时的情况. -->
+    <zealot id="queryLikePatternException">
+        SELECT * FROM t_student AS s WHERE
+        <like field="s.c_id" value="" pattern=""/>
+        <like field="s.c_id" value="1" pattern="2%"/>
     </zealot>
 
 </zealots>

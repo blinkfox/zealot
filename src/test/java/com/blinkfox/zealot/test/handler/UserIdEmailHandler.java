@@ -78,7 +78,7 @@ public class UserIdEmailHandler implements IConditHandler {
         String emailText = (String) ParseHelper.parseExpressWithException(emailValue, source.getParamObj());
         if (StringHelper.isNotBlank(emailText)) {
             // prefix是前缀，如"and","or"之类，没有则默认为空字符串""
-            join.append(source.getPrefix()).append(emailField).append(ZealotConst.LIEK_SUFFIX);
+            join.append(source.getPrefix()).append(emailField).append(" LIKE ? ");
             params.add("%" + emailText + "%");
             return sqlInfo.setJoin(join).setParams(params);
         }

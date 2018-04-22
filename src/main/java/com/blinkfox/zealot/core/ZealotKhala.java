@@ -391,7 +391,7 @@ public final class ZealotKhala {
      */
     private ZealotKhala doLike(String prefix, String field, Object value, boolean match, boolean positive) {
         if (match) {
-            String suffix = positive ? ZealotConst.LIEK_SUFFIX : ZealotConst.NOT_LIEK_SUFFIX;
+            String suffix = positive ? ZealotConst.LIKE_KEY : ZealotConst.NOT_LIKE_KEY;
             SqlInfoBuilder.newInstace(this.source.setPrefix(prefix).setSuffix(suffix)).buildLikeSql(field, value);
             this.source.resetPrefix();
         }
@@ -409,12 +409,8 @@ public final class ZealotKhala {
      */
     private ZealotKhala doLikePattern(String prefix, String field, String pattern, boolean match, boolean positive) {
         if (match) {
-            SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
-            if (positive) {
-                builder.buildLikePatternSql(field, pattern);
-            } else {
-                builder.buildNotLikePatternSql(field, pattern);
-            }
+            String suffix = positive ? ZealotConst.LIKE_KEY : ZealotConst.NOT_LIKE_KEY;
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix).setSuffix(suffix)).buildLikePatternSql(field, pattern);
             this.source.resetPrefix();
         }
         return this;

@@ -3,6 +3,7 @@ package com.blinkfox.zealot.core.builder;
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.consts.ZealotConst;
+import com.blinkfox.zealot.helpers.StringHelper;
 
 import java.util.List;
 
@@ -81,7 +82,9 @@ public class SqlInfoBuilder {
      * @return sqlInfo
      */
     public SqlInfo buildLikeSql(String fieldText, Object value) {
-        join.append(prefix).append(fieldText).append(suffix);
+        // 由于默认配置的suffix的值只是" LIKE "和" NOT LIKE "两个关键字，生成的LIKE SQL片段需要加上" ? "占位符.
+        this.suffix = StringHelper.isBlank(this.suffix) ? ZealotConst.LIKE_KEY : this.suffix;
+        join.append(prefix).append(fieldText).append(suffix).append("? ");
         params.add("%" + value + "%");
         return sqlInfo.setJoin(join).setParams(params);
     }
@@ -93,20 +96,8 @@ public class SqlInfoBuilder {
      * @return sqlInfo
      */
     public SqlInfo buildLikePatternSql(String fieldText, String pattern) {
-        join.append(prefix).append(fieldText).append(ZealotConst.LIEK_KEY)
-                .append("'").append(pattern).append("' ");
-        return sqlInfo.setJoin(join);
-    }
-
-    /**
-     * 根据指定的模式`pattern`来构建not like模糊查询需要的SqlInfo信息.
-     * @param fieldText 数据库字段的文本
-     * @param pattern like匹配的模式
-     * @return sqlInfo
-     */
-    public SqlInfo buildNotLikePatternSql(String fieldText, String pattern) {
-        join.append(prefix).append(fieldText).append(ZealotConst.NOT_LIEK_KEY)
-                .append("'").append(pattern).append("' ");
+        this.suffix = StringHelper.isBlank(this.suffix) ? ZealotConst.LIKE_KEY : this.suffix;
+        join.append(prefix).append(fieldText).append(this.suffix).append("'").append(pattern).append("' ");
         return sqlInfo.setJoin(join);
     }
 

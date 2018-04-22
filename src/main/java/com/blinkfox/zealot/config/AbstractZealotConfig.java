@@ -68,14 +68,14 @@ public abstract class AbstractZealotConfig {
         add(OR_LESS_EQUAL, OR_PREFIX, NormalHandler.class, LTE_SUFFIX);
 
         // like相关标签：like、andLike、orLike
-        add(LIKE, LikeHandler.class, LIEK_SUFFIX);
-        add(AND_LIKE, AND_PREFIX, LikeHandler.class, LIEK_SUFFIX);
-        add(OR_LIKE, OR_PREFIX, LikeHandler.class, LIEK_SUFFIX);
+        add(LIKE, LikeHandler.class, LIKE_KEY);
+        add(AND_LIKE, AND_PREFIX, LikeHandler.class, LIKE_KEY);
+        add(OR_LIKE, OR_PREFIX, LikeHandler.class, LIKE_KEY);
 
         // not like相关标签：notLike、andNotLike、orNotLike
-        add(NOT_LIKE, LikeHandler.class, NOT_LIEK_SUFFIX);
-        add(AND_NOT_LIKE, AND_PREFIX, LikeHandler.class, NOT_LIEK_SUFFIX);
-        add(OR_NOT_LIKE, OR_PREFIX, LikeHandler.class, NOT_LIEK_SUFFIX);
+        add(NOT_LIKE, LikeHandler.class, NOT_LIKE_KEY);
+        add(AND_NOT_LIKE, AND_PREFIX, LikeHandler.class, NOT_LIKE_KEY);
+        add(OR_NOT_LIKE, OR_PREFIX, LikeHandler.class, NOT_LIKE_KEY);
 
         // between相关标签：between、andBetween、orBetween
         add(BETWEEN, BetweenHandler.class);

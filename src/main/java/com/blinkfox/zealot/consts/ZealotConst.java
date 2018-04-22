@@ -68,6 +68,7 @@ public final class ZealotConst {
     public static final String ATTR_MATCH = "attribute::match";
     public static final String ATTR_FIELD = "attribute::field";
     public static final String ATTR_VALUE = "attribute::value";
+    public static final String ATTR_PATTERN = "attribute::pattern";
     public static final String ATTR_START = "attribute::start";
     public static final String ATTR_ENT = "attribute::end";
     public static final String ATTR_NAME_SPACE = "attribute::namespace";
@@ -89,10 +90,8 @@ public final class ZealotConst {
     public static final String GTE_SUFFIX = " >= ? ";
     public static final String LTE_SUFFIX = " <= ? ";
     public static final String NOT_EQUAL_SUFFIX = " <> ? ";
-    public static final String LIEK_KEY = " LIKE ";
-    public static final String NOT_LIEK_KEY = " NOT LIKE ";
-    public static final String LIEK_SUFFIX = " LIKE ? ";
-    public static final String NOT_LIEK_SUFFIX = " NOT LIKE ? ";
+    public static final String LIKE_KEY = " LIKE ";
+    public static final String NOT_LIKE_KEY = " NOT LIKE ";
     public static final String BT_AND_SUFFIX = " BETWEEN ? AND ? ";
     public static final String IN_SUFFIX = " IN ";
     public static final String NOT_IN_SUFFIX = " NOT IN ";

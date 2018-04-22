@@ -2,7 +2,9 @@ package com.blinkfox.zealot.core.builder;
 
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.exception.ValidFailException;
 import com.blinkfox.zealot.helpers.ParseHelper;
+import com.blinkfox.zealot.helpers.StringHelper;
 
 import java.util.Collection;
 
@@ -48,8 +50,14 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * @param valueText 参数值
      * @return 返回SqlInfo信息
      */
-    public SqlInfo buildLikeSql(String fieldText, String valueText) {
-        return super.buildLikeSql(fieldText, ParseHelper.parseExpressWithException(valueText, context));
+    public SqlInfo buildLikeSql(String fieldText, String valueText, String patternText) {
+        if (StringHelper.isNotBlank(valueText) && StringHelper.isBlank(patternText)) {
+            return super.buildLikeSql(fieldText, ParseHelper.parseExpressWithException(valueText, context));
+        } else if (StringHelper.isBlank(valueText) && StringHelper.isNotBlank(patternText)) {
+            return super.buildLikePatternSql(fieldText, patternText);
+        } else {
+            throw new ValidFailException("<like /> 标签中的'value'属性和'pattern'属性不能同时为空或者同时不为空！");
+        }
     }
 
     /**
