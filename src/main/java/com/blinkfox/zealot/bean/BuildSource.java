@@ -163,4 +163,13 @@ public final class BuildSource {
         return this;
     }
 
+    /**
+     * 设置SQL片段需要解析的参数对象.
+     * @param paramObj 参数对象
+     * @return 当前BuildSource的实例
+     */
+    public BuildSource setParamObj(Object paramObj) {
+        this.paramObj = paramObj;
+        return this;
+    }
 }

@@ -108,7 +108,7 @@ public class ZealotConfigManager {
         }
 
         // 判断获取到的类是否是AbstractZealotConfig的子类，如果是，则加载xml和自定义标签
-        if (temp != null && temp instanceof AbstractZealotConfig) {
+        if (temp instanceof AbstractZealotConfig) {
             this.loadZealotConfig((AbstractZealotConfig) temp);
         }
     }
@@ -121,7 +121,7 @@ public class ZealotConfigManager {
         zealotConfig.configNormal(NormalConfig.getInstance());
         zealotConfig.configXml(XmlContext.INSTANCE);
         zealotConfig.configTagHandler();
-        log.warn("zealot的配置信息加载完成!");
+        log.warn("Zealot的配置信息加载完成!");
     }
 
     /**

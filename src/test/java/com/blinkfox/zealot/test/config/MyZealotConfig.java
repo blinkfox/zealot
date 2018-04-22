@@ -1,7 +1,6 @@
 package com.blinkfox.zealot.test.config;
 
 import com.blinkfox.zealot.config.AbstractZealotConfig;
-import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.test.handler.UserIdEmailHandler;
 
@@ -14,17 +13,6 @@ public class MyZealotConfig extends AbstractZealotConfig {
     /** xml命名空间标识. */
     public static final String USER_ZEALOT = "userZealot";
     public static final String STUDENT_ZEALOT = "studentZealot";
-
-    /**
-     * 配置Zealot的普通配置信息.
-     * @param normalConfig 普通配置实例
-     */
-    @Override
-    public void configNormal(NormalConfig normalConfig) {
-        normalConfig.setDebug(false)
-                .setPrintBanner(true)
-                .setPrintSqlInfo(true);
-    }
 
     /**
      * zealot的xml SQL文件和命名空间配置.

@@ -155,10 +155,10 @@ public abstract class AbstractZealotConfig {
     }
 
     /**
-     * 配置Zealot的普通配置信息.
+     * 配置Zealot的普通配置信息(默认配置方法，不需要再实现).
      * @param normalConfig 普通配置实例
      */
-    public abstract void configNormal(NormalConfig normalConfig);
+    public void configNormal(NormalConfig normalConfig){}
 
     /**
      * 配置xml文件的标识和资源路径.

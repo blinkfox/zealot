@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.test.helpers;
 
 import com.blinkfox.zealot.config.entity.XmlContext;
+import com.blinkfox.zealot.exception.XmlParseException;
 import com.blinkfox.zealot.helpers.XmlNodeHelper;
 
 import org.dom4j.Document;
@@ -31,11 +32,19 @@ public class XmlNodeHelperTest {
     }
 
     /**
-     * 测试获取的Document文档是否为空的方法.
+     * 测试获取的Document文档是否不为空的方法.
      */
     @Test
     public void testGetDocument() {
         Assert.assertNotNull(doc);
+    }
+
+    /**
+     * 测试获取的Document文档读取不到发生异常时的方法.
+     */
+    @Test(expected = XmlParseException.class)
+    public void testGetDocumentException() {
+        XmlNodeHelper.getDocument("test error path/" + XML_PATH);
     }
 
     /**

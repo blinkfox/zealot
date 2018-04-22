@@ -3,12 +3,11 @@ package com.blinkfox.zealot.helpers;
 import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
-import com.blinkfox.zealot.log.Log;
+import com.blinkfox.zealot.exception.XmlParseException;
 
 import java.io.InputStream;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
@@ -17,8 +16,6 @@ import org.dom4j.io.SAXReader;
  * Created by blinkfox on 2016/10/30.
  */
 public final class XmlNodeHelper {
-
-    private static final Log log = Log.get(XmlNodeHelper.class);
 
     /**
      * 私有构造方法.
@@ -33,15 +30,12 @@ public final class XmlNodeHelper {
      * @return 返回dom4j文档
      */
     public static Document getDocument(String xmlPath) {
-        SAXReader reader = new SAXReader();
-        Document document = null;
         try {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlPath);
-            document = reader.read(is);
-        } catch (DocumentException e) {
-            log.error("读取或解析xml文件失败，xmlPath是:" + xmlPath, e);
+            return new SAXReader().read(is);
+        } catch (Exception e) {
+            throw new XmlParseException("读取或解析xml文件失败，xmlPath是:" + xmlPath, e);
         }
-        return document;
     }
 
     /**

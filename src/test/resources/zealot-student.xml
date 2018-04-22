@@ -67,6 +67,12 @@
         <like field="s.c_id" value="1" pattern="2%"/>
     </zealot>
 
+    <!-- 测试 between 异常时的情况. -->
+    <zealot id="queryBetweenException">
+        SELECT * FROM t_student AS s WHERE
+        <between field="s.d_birthday" start="" end=""/>
+    </zealot>
+
     <!-- 系统全面的测试In的情况. -->
     <zealot id="queryWithIn">
         SELECT * FROM t_student AS s WHERE
@@ -79,6 +85,12 @@
         <andNotIn match="?sexs != empty" field="s.n_sex" value="sexs" />
         <andNotIn match="?sexs == empty" field="s.n_sex" value="sexs" />
         <orNotIn match="?sexs != empty" field="s.n_sex" value="sexs" />
+    </zealot>
+
+    <!-- 测试In 异常时的情况. -->
+    <zealot id="queryWithInException">
+        SELECT * FROM t_student AS s WHERE
+        <in field="" value="sexs" />
     </zealot>
 
 </zealots>

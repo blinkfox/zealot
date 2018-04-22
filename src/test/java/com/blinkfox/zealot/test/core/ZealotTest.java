@@ -7,6 +7,7 @@ import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.bean.SqlInfo;
 import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.core.Zealot;
+import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.exception.ValidFailException;
 import com.blinkfox.zealot.log.Log;
 import com.blinkfox.zealot.test.bean.Teacher;
@@ -251,6 +252,14 @@ public class ZealotTest {
     }
 
     /**
+     * 测试使用`in`标签异常时构建的sql片段.
+     */
+    @Test(expected = FieldEmptyException.class)
+    public void testBetweenExceptionSql() {
+        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryBetweenException", null);
+    }
+
+    /**
      * 系统全面的测试使用`like`标签构建的sql片段.
      */
     @Test
@@ -261,6 +270,14 @@ public class ZealotTest {
                 + "OR s.n_sex IN (?, ?) AND s.n_sex NOT IN (?, ?) AND s.n_sex NOT IN (?, ?) OR s.n_sex NOT IN (?, ?)";
         assertEquals(expectedSql, sqlInfo.getSql());
         assertArrayEquals(new Object[]{0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 测试使用`in`标签异常时构建的sql片段.
+     */
+    @Test(expected = FieldEmptyException.class)
+    public void testInExceptionSql() {
+        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithInException", null);
     }
 
 }
