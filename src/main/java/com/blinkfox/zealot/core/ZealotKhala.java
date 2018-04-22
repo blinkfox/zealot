@@ -410,7 +410,8 @@ public final class ZealotKhala {
     private ZealotKhala doLikePattern(String prefix, String field, String pattern, boolean match, boolean positive) {
         if (match) {
             String suffix = positive ? ZealotConst.LIKE_KEY : ZealotConst.NOT_LIKE_KEY;
-            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix).setSuffix(suffix)).buildLikePatternSql(field, pattern);
+            SqlInfoBuilder.newInstace(this.source.setPrefix(prefix).setSuffix(suffix))
+                    .buildLikePatternSql(field, pattern);
             this.source.resetPrefix();
         }
         return this;

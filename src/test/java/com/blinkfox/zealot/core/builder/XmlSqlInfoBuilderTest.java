@@ -1,16 +1,17 @@
 package com.blinkfox.zealot.core.builder;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import com.blinkfox.zealot.bean.BuildSource;
 import com.blinkfox.zealot.bean.ParamWrapper;
 import com.blinkfox.zealot.bean.SqlInfo;
-import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * XmlSqlInfoBuilder的单元测试类.
