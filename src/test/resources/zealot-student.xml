@@ -67,4 +67,18 @@
         <like field="s.c_id" value="1" pattern="2%"/>
     </zealot>
 
+    <!-- 系统全面的测试In的情况. -->
+    <zealot id="queryWithIn">
+        SELECT * FROM t_student AS s WHERE
+        <in field="s.n_sex" value="sexs" />
+        <andIn match="?sexs != empty" field="s.n_sex" value="sexs" />
+        <andIn match="?sexs == empty" field="s.n_sex" value="sexs" />
+        <orIn match="?sexs != empty" field="s.n_sex" value="sexs" />
+        AND
+        <notIn field="s.n_sex" value="sexs" />
+        <andNotIn match="?sexs != empty" field="s.n_sex" value="sexs" />
+        <andNotIn match="?sexs == empty" field="s.n_sex" value="sexs" />
+        <orNotIn match="?sexs != empty" field="s.n_sex" value="sexs" />
+    </zealot>
+
 </zealots>

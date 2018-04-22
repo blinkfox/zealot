@@ -250,4 +250,17 @@ public class ZealotTest {
         Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryLikePatternException", null);
     }
 
+    /**
+     * 系统全面的测试使用`like`标签构建的sql片段.
+     */
+    @Test
+    public void testInSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithIn",
+                ParamWrapper.newInstance("sexs", new Integer[]{0, 1}).toMap());
+        String expectedSql = "SELECT * FROM t_student AS s WHERE s.n_sex IN (?, ?) AND s.n_sex IN (?, ?) "
+                + "OR s.n_sex IN (?, ?) AND s.n_sex NOT IN (?, ?) AND s.n_sex NOT IN (?, ?) OR s.n_sex NOT IN (?, ?)";
+        assertEquals(expectedSql, sqlInfo.getSql());
+        assertArrayEquals(new Object[]{0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, sqlInfo.getParamsArr());
+    }
+
 }
