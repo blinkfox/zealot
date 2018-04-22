@@ -447,25 +447,17 @@ public final class ZealotKhala {
     private ZealotKhala doInByType(String prefix, String field, Object value,
             boolean match, int objType, boolean positive) {
         if (match) {
+            // 赋予source对象in SQL片段的前缀和后缀操作符.
+            this.source.setPrefix(prefix).setSuffix(positive ? ZealotConst.IN_SUFFIX : ZealotConst.NOT_IN_SUFFIX);
             // 根据对象类型调用对应的生成in查询的sql片段方法,否则抛出类型不符合的异常
             switch (objType) {
                 // 如果类型是数组.
                 case ZealotConst.OBJTYPE_ARRAY:
-                    SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
-                    if (positive) {
-                        builder.buildInSql(field, (Object[]) value);
-                    } else {
-                        builder.buildNotInSql(field, (Object[]) value);
-                    }
+                    SqlInfoBuilder.newInstace(source).buildInSql(field, (Object[]) value);
                     break;
                 // 如果类型是Java集合.
                 case ZealotConst.OBJTYPE_COLLECTION:
-                    JavaSqlInfoBuilder javaBuilder = JavaSqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
-                    if (positive) {
-                        javaBuilder.buildInSqlByCollection(field, (Collection<Object>) value);
-                    } else {
-                        javaBuilder.buildNotInSqlByCollection(field, (Collection<Object>) value);
-                    }
+                    JavaSqlInfoBuilder.newInstace(source).buildInSqlByCollection(field, (Collection<Object>) value);
                     break;
                 default:
                     throw new NotCollectionOrArrayException("in查询的值不是有效的集合或数组!");

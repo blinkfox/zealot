@@ -126,19 +126,19 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建区间查询的SqlInfo信息.
+     * 构建" IN "范围查询的SqlInfo信息.
      * @param fieldText 数据库字段文本
      * @param values 对象数组的值
-     * @param suffix 后缀操作符
      * @return 返回SqlInfo信息
      */
-    private SqlInfo buildInSql(String fieldText, Object[] values, String suffix) {
+    public SqlInfo buildInSql(String fieldText, Object[] values) {
         if (values == null || values.length == 0) {
             return sqlInfo;
         }
 
         // 遍历数组，并遍历添加in查询的替换符和参数
-        join.append(prefix).append(fieldText).append(suffix).append("(");
+        this.suffix = StringHelper.isBlank(this.suffix) ? ZealotConst.IN_SUFFIX : this.suffix;
+        join.append(prefix).append(fieldText).append(this.suffix).append("(");
         int len = values.length;
         for (int i = 0; i < len; i++) {
             if (i == len - 1) {
@@ -150,26 +150,6 @@ public class SqlInfoBuilder {
         }
 
         return sqlInfo.setJoin(join).setParams(params);
-    }
-
-    /**
-     * 构建" IN "范围查询的SqlInfo信息.
-     * @param fieldText 数据库字段文本
-     * @param values 对象数组的值
-     * @return 返回SqlInfo信息
-     */
-    public SqlInfo buildInSql(String fieldText, Object[] values) {
-        return this.buildInSql(fieldText, values, ZealotConst.IN_SUFFIX);
-    }
-
-    /**
-     * 构建" NOT IN "范围查询的SqlInfo信息.
-     * @param fieldText 数据库字段文本
-     * @param values 对象数组的值
-     * @return 返回SqlInfo信息
-     */
-    public SqlInfo buildNotInSql(String fieldText, Object[] values) {
-        return this.buildInSql(fieldText, values, ZealotConst.NOT_IN_SUFFIX);
     }
 
     /**

@@ -82,10 +82,14 @@ public abstract class AbstractZealotConfig {
         add(AND_BETWEEN, AND_PREFIX, BetweenHandler.class);
         add(OR_BETWEEN, OR_PREFIX, BetweenHandler.class);
 
-        // in相关标签：in、andIn、orIn
-        add(IN, InHandler.class);
-        add(AND_IN, AND_PREFIX, InHandler.class);
-        add(OR_IN, OR_PREFIX, InHandler.class);
+        // "IN"相关标签：in、andIn、orIn
+        add(IN, InHandler.class, IN_SUFFIX);
+        add(AND_IN, AND_PREFIX, InHandler.class, IN_SUFFIX);
+        add(OR_IN, OR_PREFIX, InHandler.class, IN_SUFFIX);
+        // "NOT IN"相关标签：notIn、andNotIn、orNotIn
+        add(NOT_IN, InHandler.class, NOT_IN_SUFFIX);
+        add(AND_NOT_IN, AND_PREFIX, InHandler.class, NOT_IN_SUFFIX);
+        add(OR_NOT_IN, OR_PREFIX, InHandler.class, NOT_IN_SUFFIX);
 
         // 其他标签：text、include、case
         add(TEXT, TextHandler.class);

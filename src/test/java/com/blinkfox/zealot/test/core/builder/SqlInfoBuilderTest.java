@@ -111,7 +111,8 @@ public class SqlInfoBuilderTest {
      */
     @Test
     public void testBuildNotInSql() {
-        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildNotInSql("u.sex", new Object[]{25, 30});
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source.setSuffix(ZealotConst.NOT_IN_SUFFIX))
+                .buildInSql("u.sex", new Object[]{25, 30});
         Assert.assertEquals("u.sex NOT IN (?, ?) ", sqlInfo.getJoin().toString());
         Assert.assertArrayEquals(new Object[]{25, 30}, sqlInfo.getParamsArr());
     }

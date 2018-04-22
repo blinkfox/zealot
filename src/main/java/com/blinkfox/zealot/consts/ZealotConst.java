@@ -38,27 +38,31 @@ public final class ZealotConst {
     public static final String LESS_EQUAL = "lessEqual";
     public static final String AND_LESS_EQUAL = "andLessEqual";
     public static final String OR_LESS_EQUAL = "orLessEqual";
-    // like模糊
+    // "like"模糊
     public static final String LIKE = "like";
     public static final String AND_LIKE = "andLike";
     public static final String OR_LIKE = "orLike";
-    // not like模糊
+    // "not like"模糊
     public static final String NOT_LIKE = "notLike";
     public static final String AND_NOT_LIKE = "andNotLike";
     public static final String OR_NOT_LIKE = "orNotLike";
-    // between区间
+    // "between"区间
     public static final String BETWEEN = "between";
     public static final String AND_BETWEEN = "andBetween";
     public static final String OR_BETWEEN = "orBetween";
-    // in范围
+    // "in"范围
     public static final String IN = "in";
     public static final String AND_IN = "andIn";
     public static final String OR_IN = "orIn";
-    // text文本
+    // "not in"范围
+    public static final String NOT_IN = "notIn";
+    public static final String AND_NOT_IN = "andNotIn";
+    public static final String OR_NOT_IN = "orNotIn";
+    // "text"文本
     public static final String TEXT = "text";
-    // import导入文本
+    // "import"导入文本
     public static final String IMPORT = "import";
-    // choose文本
+    // "choose"多条件选择
     public static final String CHOOSE = "choose";
 
     /* 节点相关的类型 */
