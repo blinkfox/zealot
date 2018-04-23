@@ -6,6 +6,7 @@ import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.config.entity.NormalConfig;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.NodeNotFoundException;
+import com.blinkfox.zealot.exception.ValidFailException;
 import com.blinkfox.zealot.helpers.ParseHelper;
 import com.blinkfox.zealot.helpers.SqlInfoPrinter;
 import com.blinkfox.zealot.helpers.StringHelper;
@@ -29,22 +30,58 @@ public final class Zealot {
     }
 
     /**
-     * 获取sqlInfo信息.
+     * 通过传入zealot xml文件对应的命名空间及zealot节点的ID的结合体，来简单快速的生成和获取sqlInfo信息(无参的SQL).
+     *
+     * @param nsAtZealotId xml命名空间nameSpace+@@+zealotId的值.如:"student@@queryStudentById"
+     * @return 返回SqlInfo对象
+     */
+    public static SqlInfo getSqlInfoSimply(String nsAtZealotId) {
+        return getSqlInfoSimply(nsAtZealotId, null);
+    }
+
+    /**
+     * 通过传入zealot xml文件对应的命名空间、zealot节点的ID以及参数对象(一般是JavaBean或者Map)的结合体，来简单快速的生成和获取sqlInfo信息(有参的SQL).
+     *
+     * @param nsAtZealotId xml命名空间nameSpace+@@+zealotId的值.如:"student@@queryStudentById"
+     * @param paramObj 参数对象(一般是JavaBean对象或者Map)
+     * @return 返回SqlInfo对象
+     */
+    public static SqlInfo getSqlInfoSimply(String nsAtZealotId, Object paramObj) {
+        String[] arr = nsAtZealotId.split(ZealotConst.SP_AT);
+        if (arr.length != 2) {
+            throw new  ValidFailException("nsAtZealotId参数的值必须是xml文件中的 nameSpace + '@@' + zealotId 节点的值，"
+                    + "如:'student@@queryStudentById'.其中student为nameSpace, queryStudentById为XML文件中SQL的zealotId.");
+        }
+        return getSqlInfo(arr[0], arr[1], paramObj);
+    }
+
+    /**
+     * 通过传入zealot xml文件对应的命名空间和zealot节点的ID来生成和获取sqlInfo信息(无参的SQL).
+     *
      * @param nameSpace xml命名空间
      * @param zealotId xml中的zealotId
-     * @param paramObj 参数对象
+     * @return 返回SqlInfo对象
+     */
+    public static SqlInfo getSqlInfo(String nameSpace, String zealotId) {
+        return getSqlInfo(nameSpace, zealotId, null);
+    }
+
+    /**
+     * 通过传入zealot xml文件对应的命名空间、zealot节点的ID以及参数对象(一般是JavaBean或者Map)来生成和获取sqlInfo信息(有参的SQL).
+     *
+     * @param nameSpace xml命名空间
+     * @param zealotId xml中的zealotId
+     * @param paramObj 参数对象(一般是JavaBean对象或者Map)
      * @return 返回SqlInfo对象
      */
     public static SqlInfo getSqlInfo(String nameSpace, String zealotId, Object paramObj) {
-        // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点，如果是debug模式，则实时获取；否则从缓存中获取.
-        Node zealotNode;
-        if (NormalConfig.getInstance().isDebug()) {
-            zealotNode = XmlNodeHelper.getNodeBySpaceAndId(nameSpace, zealotId);
-        } else {
-            zealotNode = AbstractZealotConfig.getZealots()
-                    .get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
+        if (StringHelper.isBlank(nameSpace) || StringHelper.isBlank(zealotId)) {
+            throw new ValidFailException("请输入有效的nameSpace或者zealotId的值!");
         }
 
+        // 获取nameSpace文档中的指定sql的zealotId的节点对应的Node节点，如果是debug模式，则实时获取；否则从缓存中获取.
+        Node zealotNode = NormalConfig.getInstance().isDebug() ? XmlNodeHelper.getNodeBySpaceAndId(nameSpace, zealotId)
+                : AbstractZealotConfig.getZealots().get(StringHelper.concat(nameSpace, ZealotConst.SP_AT, zealotId));
         if (zealotNode == null) {
             throw new NodeNotFoundException("未找到nameSpace为:" + nameSpace + ",zealotId为:" + zealotId + "的节点!");
         }
@@ -57,6 +94,7 @@ public final class Zealot {
 
     /**
      * 构建完整的SqlInfo对象.
+     *
      * @param nameSpace xml命名空间
      * @param sqlInfo SqlInfo对象
      * @param node dom4j对象节点
@@ -82,6 +120,7 @@ public final class Zealot {
 
     /**
      * 构建新的、完整的SqlInfo对象.
+     *
      * @param nameSpace xml命名空间
      * @param node dom4j对象节点
      * @param paramObj 参数对象
@@ -93,6 +132,7 @@ public final class Zealot {
 
     /**
      * 根据标签拼接的SQL信息来生成最终的SQL.
+     *
      * @param sqlInfo sql及参数信息
      * @param paramObj 参数对象信息
      * @return 返回SqlInfo对象

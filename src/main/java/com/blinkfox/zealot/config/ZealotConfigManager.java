@@ -99,7 +99,7 @@ public class ZealotConfigManager {
             throw new ConfigNotFoundException("未获取到ZealotConfig配置信息");
         }
 
-        log.info("zealot加载器开始加载，Zealot配置类为:" + configClass);
+        log.info("Zealot加载器开始加载，Zealot配置类为:" + configClass);
         Object temp;
         try {
             temp = Class.forName(configClass).newInstance();
@@ -145,10 +145,9 @@ public class ZealotConfigManager {
             // 获取该文档下所有的zealot元素,
             List<Node> zealotNodes = doc.selectNodes(ZealotConst.ZEALOT_TAG);
             for (Node zealotNode: zealotNodes) {
-                Node idNode = zealotNode.selectSingleNode(ZealotConst.ATTR_ID);
-                String zealotId = XmlNodeHelper.getNodeText(idNode);
+                String zealotId = XmlNodeHelper.getNodeText(zealotNode.selectSingleNode(ZealotConst.ATTR_ID));
                 if (StringHelper.isBlank(zealotId)) {
-                    throw new NodeNotFoundException("未获取到zealot节点,zealotId为空!");
+                    throw new NodeNotFoundException("该xml文件中有zealot节点的zealotId属性为空，请检查！文件为:" + filePath);
                 }
 
                 // zealot节点缓存到Map中，key是由nameSpace和zealot id组成,用"@@"符号分隔,value是zealotNode

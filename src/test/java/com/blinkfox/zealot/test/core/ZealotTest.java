@@ -277,7 +277,7 @@ public class ZealotTest {
      */
     @Test(expected = FieldEmptyException.class)
     public void testInExceptionSql() {
-        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithInException", null);
+        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithInException");
     }
 
     /**
@@ -285,7 +285,7 @@ public class ZealotTest {
      */
     @Test
     public void testIsNullSql() {
-        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithIsNull",
+        SqlInfo sqlInfo = Zealot.getSqlInfoSimply("studentZealot@@queryWithIsNull",
                 ParamWrapper.newInstance("id", 123).toMap());
         String expectedSql = "SELECT * FROM t_student AS s WHERE s.n_age IS NULL AND s.n_age IS NULL "
                 + "OR s.n_age IS NULL AND s.n_age IS NOT NULL AND s.n_age IS NOT NULL OR s.n_age IS NOT NULL";
@@ -298,7 +298,15 @@ public class ZealotTest {
      */
     @Test(expected = FieldEmptyException.class)
     public void testIsNullExceptionSql() {
-        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithIsNullException", null);
+        Zealot.getSqlInfoSimply("studentZealot@@queryWithIsNullException");
+    }
+
+    /**
+     * 测试zealot异常传值时构建的sql片段.
+     */
+    @Test(expected = ValidFailException.class)
+    public void testZealotExceptionSql() {
+        Zealot.getSqlInfoSimply("studentZealot@queryWithIsNullException");
     }
 
 }
