@@ -165,7 +165,7 @@ public abstract class AbstractZealotConfig {
     }
 
     /**
-     * 配置Zealot的普通配置信息(默认配置方法，不需要再实现).
+     * 配置Zealot的普通配置信息(默认配置方法，开发者可覆盖此方法来做一些自定义配置).
      * @param normalConfig 普通配置实例
      */
     public void configNormal(NormalConfig normalConfig){}
@@ -177,8 +177,8 @@ public abstract class AbstractZealotConfig {
     public abstract void configXml(XmlContext ctx);
 
     /**
-     * 配置标签和其对应的处理类.
+     * 配置标签和其对应的处理类(默认了许多常用的标签，开发者可覆盖此方法来配置更多的自定义标签).
      */
-    public abstract void configTagHandler();
+    public void configTagHandler(){}
 
 }
