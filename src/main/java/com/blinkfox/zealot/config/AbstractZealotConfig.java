@@ -10,6 +10,7 @@ import com.blinkfox.zealot.core.concrete.BetweenHandler;
 import com.blinkfox.zealot.core.concrete.ChooseHandler;
 import com.blinkfox.zealot.core.concrete.ImportHandler;
 import com.blinkfox.zealot.core.concrete.InHandler;
+import com.blinkfox.zealot.core.concrete.IsNullHandler;
 import com.blinkfox.zealot.core.concrete.LikeHandler;
 import com.blinkfox.zealot.core.concrete.NormalHandler;
 import com.blinkfox.zealot.core.concrete.TextHandler;
@@ -90,6 +91,15 @@ public abstract class AbstractZealotConfig {
         add(NOT_IN, InHandler.class, NOT_IN_SUFFIX);
         add(AND_NOT_IN, AND_PREFIX, InHandler.class, NOT_IN_SUFFIX);
         add(OR_NOT_IN, OR_PREFIX, InHandler.class, NOT_IN_SUFFIX);
+
+        // "IS NULL"相关标签：isNull、andIsNull、orIsNull
+        add(IS_NULL, IsNullHandler.class, IS_NULL_SUFFIX);
+        add(AND_IS_NULL, AND_PREFIX, IsNullHandler.class, IS_NULL_SUFFIX);
+        add(OR_IS_NULL, OR_PREFIX, IsNullHandler.class, IS_NULL_SUFFIX);
+        // "IS NOT NULL"相关标签：isNotNull、andIsNotNull、orIsNotNull
+        add(IS_NOT_NULL, IsNullHandler.class, IS_NOT_NULL_SUFFIX);
+        add(AND_IS_NOT_NULL, AND_PREFIX, IsNullHandler.class, IS_NOT_NULL_SUFFIX);
+        add(OR_IS_NOT_NULL, OR_PREFIX, IsNullHandler.class, IS_NOT_NULL_SUFFIX);
 
         // 其他标签：text、include、case
         add(TEXT, TextHandler.class);

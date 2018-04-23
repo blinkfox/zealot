@@ -58,6 +58,14 @@ public final class ZealotConst {
     public static final String NOT_IN = "notIn";
     public static final String AND_NOT_IN = "andNotIn";
     public static final String OR_NOT_IN = "orNotIn";
+    // "is null"判空
+    public static final String IS_NULL = "isNull";
+    public static final String AND_IS_NULL = "andIsNull";
+    public static final String OR_IS_NULL = "orIsNull";
+    // "is not null"判不为空
+    public static final String IS_NOT_NULL = "isNotNull";
+    public static final String AND_IS_NOT_NULL = "andIsNotNull";
+    public static final String OR_IS_NOT_NULL = "orIsNotNull";
     // "text"文本
     public static final String TEXT = "text";
     // "import"导入文本

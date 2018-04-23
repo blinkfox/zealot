@@ -504,12 +504,10 @@ public final class ZealotKhala {
      */
     private ZealotKhala doIsNull(String prefix, String field, boolean match, boolean positive) {
         if (match) {
-            SqlInfoBuilder builder = SqlInfoBuilder.newInstace(this.source.setPrefix(prefix));
-            if (positive) {
-                builder.buildIsNullSql(field);
-            } else {
-                builder.buildIsNotNullSql(field);
-            }
+            // 判断是"IS NULL"还是"IS NOT NULL"来设置source实例.
+            this.source = this.source.setPrefix(prefix)
+                    .setSuffix(positive ? ZealotConst.IS_NULL_SUFFIX : ZealotConst.IS_NOT_NULL_SUFFIX);
+            SqlInfoBuilder.newInstace(this.source).buildIsNullSql(field);
             this.source.resetPrefix();
         }
         return this;

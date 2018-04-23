@@ -153,22 +153,13 @@ public class SqlInfoBuilder {
     }
 
     /**
-     * 构建" IS NULL "需要的SqlInfo信息.
+     * 构建" IS NULL "和" IS NOT NULL "需要的SqlInfo信息.
      * @param fieldText 数据库字段的文本
-     * @return sqlInfo
+     * @return SqlInfo信息
      */
     public SqlInfo buildIsNullSql(String fieldText) {
-        join.append(prefix).append(fieldText).append(ZealotConst.IS_NULL_SUFFIX);
-        return sqlInfo.setJoin(join);
-    }
-
-    /**
-     * 构建" IS NOT NULL "需要的SqlInfo信息.
-     * @param fieldText 数据库字段的文本
-     * @return sqlInfo
-     */
-    public SqlInfo buildIsNotNullSql(String fieldText) {
-        join.append(prefix).append(fieldText).append(ZealotConst.IS_NOT_NULL_SUFFIX);
+        this.suffix = StringHelper.isBlank(this.suffix) ? ZealotConst.IS_NULL_SUFFIX : this.suffix;
+        join.append(prefix).append(fieldText).append(this.suffix);
         return sqlInfo.setJoin(join);
     }
 

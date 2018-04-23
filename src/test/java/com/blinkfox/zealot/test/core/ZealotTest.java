@@ -252,7 +252,7 @@ public class ZealotTest {
     }
 
     /**
-     * 测试使用`in`标签异常时构建的sql片段.
+     * 测试使用`between`标签异常时构建的sql片段.
      */
     @Test(expected = FieldEmptyException.class)
     public void testBetweenExceptionSql() {
@@ -260,7 +260,7 @@ public class ZealotTest {
     }
 
     /**
-     * 系统全面的测试使用`like`标签构建的sql片段.
+     * 系统全面的测试使用`in`标签构建的sql片段.
      */
     @Test
     public void testInSql() {
@@ -278,6 +278,27 @@ public class ZealotTest {
     @Test(expected = FieldEmptyException.class)
     public void testInExceptionSql() {
         Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithInException", null);
+    }
+
+    /**
+     * 系统全面的测试使用`isNull`标签构建的sql片段.
+     */
+    @Test
+    public void testIsNullSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithIsNull",
+                ParamWrapper.newInstance("id", 123).toMap());
+        String expectedSql = "SELECT * FROM t_student AS s WHERE s.n_age IS NULL AND s.n_age IS NULL "
+                + "OR s.n_age IS NULL AND s.n_age IS NOT NULL AND s.n_age IS NOT NULL OR s.n_age IS NOT NULL";
+        assertEquals(expectedSql, sqlInfo.getSql());
+        assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 测试使用`isNull`标签异常时构建的sql片段.
+     */
+    @Test(expected = FieldEmptyException.class)
+    public void testIsNullExceptionSql() {
+        Zealot.getSqlInfo(MyZealotConfig.STUDENT_ZEALOT, "queryWithIsNullException", null);
     }
 
 }

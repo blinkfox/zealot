@@ -93,4 +93,24 @@
         <in field="" value="sexs" />
     </zealot>
 
+    <!-- 系统全面的测试"IS NULL"的情况. -->
+    <zealot id="queryWithIsNull">
+        SELECT * FROM t_student AS s WHERE
+        <isNull field="s.n_age" />
+        <andIsNull match="?id != empty" field="s.n_age" />
+        <andIsNull match="?id == empty" field="s.n_age" />
+        <orIsNull match="?id != empty" field="s.n_age" />
+        AND
+        <isNotNull field="s.n_age" />
+        <andIsNotNull match="?id != empty" field="s.n_age" />
+        <andIsNotNull match="?id == empty" field="s.n_age" />
+        <orIsNotNull match="?id != empty" field="s.n_age" />
+    </zealot>
+
+    <!-- 测试"IS NULL"异常时的情况. -->
+    <zealot id="queryWithIsNullException">
+        SELECT * FROM t_student AS s WHERE
+        <isNull field="" />
+    </zealot>
+
 </zealots>

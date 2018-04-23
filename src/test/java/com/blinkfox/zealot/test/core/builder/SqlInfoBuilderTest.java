@@ -132,7 +132,8 @@ public class SqlInfoBuilderTest {
      */
     @Test
     public void testBuildIsNotNullSql() {
-        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source).buildIsNotNullSql("b.email");
+        SqlInfo sqlInfo = SqlInfoBuilder.newInstace(source.setSuffix(ZealotConst.IS_NOT_NULL_SUFFIX))
+                .buildIsNullSql("b.email");
         Assert.assertEquals("b.email IS NOT NULL ", sqlInfo.getJoin().toString());
         Assert.assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
     }
