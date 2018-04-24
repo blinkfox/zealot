@@ -28,6 +28,18 @@ public class CollectionHelperTest {
     }
 
     /**
+     * 测试是否不为空的方法.
+     */
+    @Test
+    public void testCollectionIsEmpty() {
+        List<String> names = new ArrayList<String>();
+        assertEquals(true, CollectionHelper.isEmpty(null));
+        assertEquals(true, CollectionHelper.isEmpty(names));
+        names.add("Tom");
+        assertEquals(false, CollectionHelper.isEmpty(names));
+    }
+
+    /**
      * 测试转换为数组的方法.
      */
     @Test

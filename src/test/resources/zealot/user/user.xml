@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zealots>
+
+    <!-- 根据Id查询用户信息 -->
+    <zealot id="queryUserById">
+        select * from user as u where
+        <equal field="u.id" value="id"/>
+        <andNotEqual field="u.age" value="age"/>
+        <text match="" value="{name1, name2, email}">
+            and u.name IN (?, ?)
+            and u.email = ?
+        </text>
+        <andLike match="?email != empty" field="u.email" value="email"/>
+    </zealot>
+
+    <!-- 根据流程控制标签查询用户信息 -->
+    <zealot id="queryUsersByFlowTag">
+        select * from user where
+        <like field="nickname" value="nickName"/>
+        @if{?email != empty}
+            AND email like '%@{email}%'
+        @end{}
+        order by id desc
+    </zealot>
+    
+    <!-- 根据自定义 userIdEmail 标签来查询用户信息 -->
+    <zealot id="queryUserWithIdEmail">
+        select * from user where
+        <userIdEmail match="?userId != empty || ?userEmail != empty" idField="id" emailField="email" idValue="userId" emailValue="userEmail"/>
+    </zealot>
+
+</zealots>

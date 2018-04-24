@@ -2,6 +2,7 @@ package com.blinkfox.zealot.helpers;
 
 import com.blinkfox.zealot.log.Log;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -21,15 +22,16 @@ public final class IoHelper {
     }
 
     /**
-     * “安静的”关闭Reader.
-     * @param input reader实例
+     * “安静的”关闭资源.
+     * @param closeable reader实例
      */
-    public static void closeQuietly(Reader input) {
-        if (input != null) {
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
             try {
-                input.close();
+                closeable.close();
             } catch (IOException e) {
-                log.error("关闭Reader实例出错！", e);
+                // 忽略，不打印异常堆栈信息.
+                log.error("关闭Reader实例出错！");
             }
         }
     }

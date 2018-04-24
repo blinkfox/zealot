@@ -45,12 +45,16 @@ public class ZealotConfigManager {
     }
 
     /**
-     * 缓存xml、打印bannner并做初次计算.
+     * 初始化加载Zealot的配置信息到缓存中.
+     *
+     * @param configClass 系统中Zealot的class路径
+     * @param xmlLocations zealot的XML文件所在的位置，多个用逗号隔开
+     * @param handlerLocations zealot的自定义handler处理器所在的位置，多个用逗号隔开
      */
-    private void cachingXmlAndEval() {
-        this.cachingXmlZealots();
-        BannerLoader.newInstance().print(NormalConfig.getInstance().isPrintBanner());
-        this.testFirstEvaluate();
+    public void initLoad(String configClass, String xmlLocations, String handlerLocations) {
+        // 加载ZealotConfig配置信息
+        this.loadZealotConfig(configClass);
+        cachingXmlAndEval();
     }
 
     /**
@@ -122,6 +126,15 @@ public class ZealotConfigManager {
         zealotConfig.configXml(XmlContext.INSTANCE);
         zealotConfig.configTagHandler();
         log.warn("Zealot的配置信息加载完成!");
+    }
+
+    /**
+     * 缓存xml、打印bannner并做初次计算.
+     */
+    private void cachingXmlAndEval() {
+        this.cachingXmlZealots();
+        BannerLoader.newInstance().print(NormalConfig.getInstance().isPrintBanner());
+        this.testFirstEvaluate();
     }
 
     /**
