@@ -40,7 +40,7 @@ public class ZealotConfigLoader implements ServletContextListener {
         String configClass = event.getServletContext().getInitParameter(CONFIG_CLASS);
         String xmlLocations = event.getServletContext().getInitParameter(XML_LOCATIONS);
         String handlerLocations = event.getServletContext().getInitParameter(HANDLER_LOCATIONS);
-        ZealotConfigManager.getInstance().initLoad(configClass);
+        ZealotConfigManager.getInstance().initLoad(configClass, xmlLocations, handlerLocations);
     }
 
 }

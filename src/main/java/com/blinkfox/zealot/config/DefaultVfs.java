@@ -4,7 +4,13 @@ import com.blinkfox.zealot.exception.ZealotException;
 import com.blinkfox.zealot.helpers.IoHelper;
 import com.blinkfox.zealot.log.Log;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -66,7 +72,7 @@ public class DefaultVfs {
             }
 
             List<String> children = new ArrayList<String>();
-            this.getResourceUrls(url, path, is, children);
+            children = this.getResourceUrls(url, path, is, children);
 
             // The URL prefix to use when recursively listing child resources
             String prefix = url.toExternalForm();

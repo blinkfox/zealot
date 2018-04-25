@@ -53,8 +53,8 @@ public class ZealotConfigManager {
      */
     public void initLoad(String configClass, String xmlLocations, String handlerLocations) {
         // 加载ZealotConfig配置信息
-        this.loadZealotConfig(configClass);
-        cachingXmlAndEval();
+        XmlScanConfigure.newInstance().scan(xmlLocations);
+        this.initLoad(configClass);
     }
 
     /**
