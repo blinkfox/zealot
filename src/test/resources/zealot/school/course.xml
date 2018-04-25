@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zealots nameSpace="myCourse">
+
+    <!-- 根据Id查询用户信息 -->
+    <zealot id="queryCourseById">
+        select * from t_course as c where
+        <equal field="c.id" value="id"/>
+    </zealot>
+
+</zealots>

@@ -75,6 +75,7 @@ public final class ZealotConst {
 
     /* 节点相关的类型 */
     public static final String ZEALOT_TAG = "zealots/zealot";
+    public static final String ATTR_NAMESPACE = "attribute::nameSpace";
     public static final String ATTR_CHILD = "child::node()";
     public static final String ATTR_ID = "attribute::id";
     public static final String ATTR_MATCH = "attribute::match";

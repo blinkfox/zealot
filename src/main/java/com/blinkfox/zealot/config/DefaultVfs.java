@@ -28,6 +28,9 @@ public class DefaultVfs {
     /** 路径分割符. */
     private static final String PATH_SP = "/";
 
+    /** for循环最大执行时限. */
+    private static final long MAX_LIMIT = 3000;
+
     /** The magic header that indicates a JAR (ZIP) file. */
     private static final byte[] JAR_MAGIC = { 'P', 'K', 3, 4 };
 
@@ -62,62 +65,8 @@ public class DefaultVfs {
                 return listResources(new JarInputStream(is), path);
             }
 
-            JarInputStream jarInput = null;
-            BufferedReader reader = null;
             List<String> children = new ArrayList<String>();
-            try {
-                if (isJar(url)) {
-                    // Some versions of JBoss VFS might give a JAR stream even if the resource
-                    // referenced by the URL isn't actually a JAR
-                    is = url.openStream();
-                    jarInput = new JarInputStream(is);
-                    for (JarEntry entry; (entry = jarInput.getNextJarEntry()) != null;) {
-                        children.add(entry.getName());
-                    }
-                    jarInput.close();
-                } else {
-                    /*
-                     * Some servlet containers allow reading from directory resources like a
-                     * text file, listing the child resources one per line. However, there is no
-                     * way to differentiate between directory and file resources just by reading
-                     * them. To work around that, as each line is read, try to look it up via
-                     * the class loader as a child of the current resource. If any line fails
-                     * then we assume the current resource is not a directory.
-                     */
-                    is = url.openStream();
-                    reader = new BufferedReader(new InputStreamReader(is));
-                    List<String> lines = new ArrayList<String>();
-                    for (String line; (line = reader.readLine()) != null;) {
-                        lines.add(line);
-                        if (this.getResources(path + PATH_SP + line).isEmpty()) {
-                            lines.clear();
-                            break;
-                        }
-                    }
-
-                    if (!lines.isEmpty()) {
-                        children.addAll(lines);
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                /*
-                 * For file URLs the openStream() call might fail, depending on the servlet
-                 * container, because directories can't be opened for reading. If that happens,
-                 * then list the directory directly instead.
-                 */
-                if ("file".equals(url.getProtocol())) {
-                    File file = new File(url.getFile());
-                    if (file.isDirectory()) {
-                        children = Arrays.asList(file.list());
-                    }
-                } else {
-                    // No idea where the exception came from so rethrow it
-                    throw e;
-                }
-            } finally {
-                IoHelper.closeQuietly(jarInput);
-                IoHelper.closeQuietly(reader);
-            }
+            this.getResourceUrls(url, path, is, children);
 
             // The URL prefix to use when recursively listing child resources
             String prefix = url.toExternalForm();
@@ -139,7 +88,61 @@ public class DefaultVfs {
         }
     }
 
-    private static List<URL> getResources(String path) throws IOException {
+    private List<String> getResourceUrls(URL url, String path, InputStream is,
+            List<String> children) throws IOException {
+        JarInputStream jarInput = null;
+        BufferedReader reader = null;
+
+        try {
+            if (isJar(url)) {
+                // Some versions of JBoss VFS might give a JAR stream even if the resource
+                // referenced by the URL isn't actually a JAR
+                is = url.openStream();
+                jarInput = new JarInputStream(is);
+                for (JarEntry entry; (entry = jarInput.getNextJarEntry()) != null;) {
+                    children.add(entry.getName());
+                }
+                jarInput.close();
+            } else {
+                is = url.openStream();
+                reader = new BufferedReader(new InputStreamReader(is));
+                List<String> lines = new ArrayList<String>();
+                for (String line; (line = reader.readLine()) != null;) {
+                    lines.add(line);
+                    if (this.getResources(path + PATH_SP + line).isEmpty()) {
+                        lines.clear();
+                        break;
+                    }
+                }
+
+                if (!lines.isEmpty()) {
+                    children.addAll(lines);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            children = this.getUrls(url, children, e);
+        } finally {
+            IoHelper.closeQuietly(jarInput);
+            IoHelper.closeQuietly(reader);
+            IoHelper.closeQuietly(is);
+        }
+        return children;
+    }
+
+    private List<String> getUrls(URL url, List<String> children, FileNotFoundException e) throws IOException {
+        if ("file".equals(url.getProtocol())) {
+            File file = new File(url.getFile());
+            if (file.isDirectory()) {
+                children = Arrays.asList(file.list());
+            }
+        } else {
+            // No idea where the exception came from so rethrow it
+            throw e;
+        }
+        return children;
+    }
+
+    private List<URL> getResources(String path) throws IOException {
         return Collections.list(Thread.currentThread().getContextClassLoader().getResources(path));
     }
 
@@ -154,11 +157,11 @@ public class DefaultVfs {
      */
     private List<String> listResources(JarInputStream jar, String path) throws IOException {
         // Include the leading and trailing slash when matching names
-        if (!path.startsWith("/")) {
-            path = "/" + path;
+        if (!path.startsWith(PATH_SP)) {
+            path = PATH_SP + path;
         }
-        if (!path.endsWith("/")) {
-            path = path + "/";
+        if (!path.endsWith(PATH_SP)) {
+            path = path + PATH_SP;
         }
 
         // Iterate over the entries and collect those that begin with the requested path
@@ -167,8 +170,9 @@ public class DefaultVfs {
             if (!entry.isDirectory()) {
                 // Add leading slash if it's missing
                 String name = entry.getName();
-                if (!name.startsWith("/")) {
-                    name = "/" + name;
+                StringBuilder sb = new StringBuilder("");
+                if (!name.startsWith(PATH_SP)) {
+                    name = sb.append(PATH_SP).append(name).toString();
                 }
 
                 // Check file name
@@ -189,12 +193,15 @@ public class DefaultVfs {
     private URL findJarForResource(URL url) {
         // 如果URL的文件部分本身是一个URL，那么该URL可能指向JAR
         try {
+            long startTime = System.currentTimeMillis();
             while (true) {
                 url = new URL(url.getFile());
+                if (System.currentTimeMillis() - startTime > MAX_LIMIT) {
+                    break;
+                }
             }
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException expected) {
             // This will happen at some point and serves as a break in the loop
-            log.error("解析处url出错，MalformedURLException.", e);
         }
 
         // Look for the .jar extension and chop off everything after that
@@ -219,11 +226,7 @@ public class DefaultVfs {
 
             // File name might be URL-encoded
             if (!file.exists()) {
-                try {
-                    file = new File(URLEncoder.encode(jarUrl.toString(), "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    throw new ZealotException("Unsupported encoding?  UTF-8?  That's unpossible.");
-                }
+                file = new File(URLEncoder.encode(jarUrl.toString(), "UTF-8"));
             }
 
             if (file.exists()) {
@@ -234,6 +237,8 @@ public class DefaultVfs {
             }
         } catch (MalformedURLException e) {
             log.warn("Invalid JAR URL: " + jarUrl);
+        } catch (UnsupportedEncodingException e) {
+            throw new ZealotException("Unsupported encoding?  UTF-8?  That's unpossible.");
         }
 
         return null;

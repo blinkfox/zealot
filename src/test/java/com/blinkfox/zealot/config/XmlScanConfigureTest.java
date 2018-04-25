@@ -1,10 +1,13 @@
 package com.blinkfox.zealot.config;
 
+import com.blinkfox.zealot.config.entity.XmlContext;
+
+import java.util.Map;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * XmlScanConfigureTest.
@@ -36,8 +39,11 @@ public class XmlScanConfigureTest {
      */
     @Test
     public void scan() {
-        String xmlLocations = "zealot/user, zealot/teacher   ,  zealot/student, zealot/student.xml";
+        String xmlLocations = "zealot, zealot/user   ,  zealot/student, zealot/student.xml";
         this.xmlScanConfigure.scan(xmlLocations);
+
+        Map<String, String> xmlMap = XmlContext.INSTANCE.getXmlPathMap();
+        Assert.assertNotNull(xmlMap);
     }
 
 }

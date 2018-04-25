@@ -1,9 +1,11 @@
 package com.blinkfox.zealot.helpers;
 
+import com.blinkfox.zealot.config.ZealotConfigManager;
 import com.blinkfox.zealot.config.entity.XmlContext;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.exception.FieldEmptyException;
 import com.blinkfox.zealot.exception.XmlParseException;
+import com.blinkfox.zealot.log.Log;
 
 import java.io.InputStream;
 
@@ -16,6 +18,8 @@ import org.dom4j.io.SAXReader;
  * Created by blinkfox on 2016/10/30.
  */
 public final class XmlNodeHelper {
+
+    private static final Log log = Log.get(ZealotConfigManager.class);
 
     /**
      * 私有构造方法.
@@ -48,6 +52,36 @@ public final class XmlNodeHelper {
         String filePath = XmlContext.INSTANCE.getXmlPathMap().get(nameSpace);
         Document doc = XmlNodeHelper.getDocument(filePath);
         return doc == null ? null : XmlNodeHelper.getZealotNodeById(doc, zealotId);
+    }
+
+    /**
+     * 根据xml文件的路径判断该xml文件是否是zealot xml文件(简单判断是否有'zealots'根节点即可)，如果是则返回nameSpace.
+     * @param xmlPath xml路径
+     * @return 该xml文件的zealot命名空间nameSpace
+     */
+    public static String getZealotXmlNameSpace(String xmlPath) {
+        Document doc;
+        try {
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlPath);
+            doc = new SAXReader().read(is);
+        } catch (Exception expected) {
+            // 由于只是判断该文件是否能被正确解析，并不进行正式的解析，所有这里就不抛出和记录异常了.
+            log.warn("解析路径为:'" + xmlPath + "'的xml文件出错，请检查其正确性");
+            return null;
+        }
+
+        // 获取XML文件的根节点，判断其根节点是否为'zealots'，如果是则获取其属性nameSpace的值.
+        Node root = doc.getRootElement();
+        if (root != null && "zealots".equals(root.getName())) {
+            String nameSpace = getNodeText(root.selectSingleNode(ZealotConst.ATTR_NAMESPACE));
+            if (StringHelper.isBlank(nameSpace)) {
+                log.warn("zealot xml文件:'" + xmlPath + "'的根节点nameSpace命名空间属性为配置，请配置，否则将被忽略!");
+                return null;
+            }
+            return nameSpace;
+        }
+
+        return null;
     }
 
     /**

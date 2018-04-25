@@ -48,6 +48,15 @@ public class XmlNodeHelperTest {
     }
 
     /**
+     * 测试根据xml文件的路径判断该xml文件是否是zealot xml文件(简单判断是否有'zealots'根节点即可)，如果是则返回nameSpace.
+     */
+    @Test
+    public void testGetZealotXmlNameSpace() {
+        String nameSpace = XmlNodeHelper.getZealotXmlNameSpace("zealot/teacher.xml");
+        Assert.assertNotNull(nameSpace);
+    }
+
+    /**
      * 测试根据xml文件的命名空间和zealot节点id值获取对应的第一个节点的方法.
      */
     @Test
