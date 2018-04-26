@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.blinkfox.zealot.helpers.StringHelper;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -32,6 +33,36 @@ public class StringHelperTest {
         assertEquals(false, StringHelper.isNotBlank(""));
         assertEquals(false, StringHelper.isNotBlank(" "));
         assertEquals(true, StringHelper.isNotBlank(" a "));
+    }
+
+    /**
+     * 测试是否是XML文件.
+     */
+    @Test
+    public void testIsXmlFile() {
+        Assert.assertFalse(StringHelper.isXmlFile(null));
+        Assert.assertFalse(StringHelper.isXmlFile("ab/.xmls"));
+        Assert.assertTrue(StringHelper.isXmlFile("zealot/ab.xml"));
+    }
+
+    /**
+     * 测试是否是XML文件.
+     */
+    @Test
+    public void testIsJavaFile() {
+        Assert.assertFalse(StringHelper.isJavaFile(null));
+        Assert.assertFalse(StringHelper.isJavaFile("ab/.jav"));
+        Assert.assertTrue(StringHelper.isJavaFile("com.blinkfox.zealot.Hello.java"));
+    }
+
+    /**
+     * 测试是否是XML文件.
+     */
+    @Test
+    public void testIsClassFile() {
+        Assert.assertFalse(StringHelper.isClassFile(null));
+        Assert.assertFalse(StringHelper.isClassFile("com.blinkfox.Test.classes"));
+        Assert.assertTrue(StringHelper.isClassFile("com.blinkfox.zealot.Hello.class"));
     }
 
 }

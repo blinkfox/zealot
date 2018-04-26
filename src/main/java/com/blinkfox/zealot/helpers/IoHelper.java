@@ -13,23 +13,11 @@ public final class IoHelper {
 
     private static final Log log = Log.get(IoHelper.class);
 
-    /** 逗号. */
-    private static final String XML_EXT = ".xml";
-
     /**
      * 私有构造方法.
      */
     private IoHelper() {
         super();
-    }
-
-    /**
-     * 根据给定的文件路径判断文件是否是XML文件.
-     * @param filePath 文件路径
-     * @return 布尔值
-     */
-    public static boolean isXmlFile(String filePath) {
-        return filePath != null && filePath.endsWith(XML_EXT);
     }
 
     /**

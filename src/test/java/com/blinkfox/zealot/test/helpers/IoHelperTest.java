@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -14,16 +13,6 @@ import org.junit.Test;
  * Created by blinkfox on 2017/4/29.
  */
 public class IoHelperTest {
-
-    /**
-     * 测试是否是XML文件.
-     */
-    @Test
-    public void testIsXmlFile() {
-        Assert.assertFalse(IoHelper.isXmlFile(null));
-        Assert.assertFalse(IoHelper.isXmlFile("ab/.xmls"));
-        Assert.assertTrue(IoHelper.isXmlFile("zealot/ab.xml"));
-    }
 
     /**
      * 测试关闭流的方法.

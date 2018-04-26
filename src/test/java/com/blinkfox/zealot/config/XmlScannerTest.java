@@ -14,16 +14,16 @@ import org.junit.Test;
  *
  * @author blinkfox on 2018/4/24.
  */
-public class XmlScanConfigureTest {
+public class XmlScannerTest {
 
-    private XmlScanConfigure xmlScanConfigure;
+    private XmlScanner xmlScanner;
 
     /**
      * 构造实例.
      */
     @Before
     public void init() {
-        this.xmlScanConfigure = XmlScanConfigure.newInstance();
+        this.xmlScanner = XmlScanner.newInstance();
     }
 
     /**
@@ -31,7 +31,7 @@ public class XmlScanConfigureTest {
      */
     @After
     public void destroy() {
-        this.xmlScanConfigure = null;
+        this.xmlScanner = null;
     }
 
     /**
@@ -40,7 +40,7 @@ public class XmlScanConfigureTest {
     @Test
     public void scan() {
         String xmlLocations = "zealot, zealot/user   ,  zealot/student, zealot/student.xml";
-        this.xmlScanConfigure.scan(xmlLocations);
+        this.xmlScanner.scan(xmlLocations);
 
         Map<String, String> xmlMap = XmlContext.INSTANCE.getXmlPathMap();
         Assert.assertNotNull(xmlMap);

@@ -34,7 +34,7 @@ public class ZealotTest {
      */
     @BeforeClass
     public static void before() {
-        ZealotConfigManager.getInstance().initLoad(new MyZealotConfig());
+        ZealotConfigManager.getInstance().initLoad(new MyZealotConfig(), "zealot/", "");
         log.info("加载Zealot缓存信息成功!");
     }
 
@@ -307,6 +307,18 @@ public class ZealotTest {
     @Test(expected = ValidFailException.class)
     public void testZealotExceptionSql() {
         Zealot.getSqlInfoSimply("studentZealot@queryWithIsNullException");
+    }
+
+    /**
+     * 测试从扫描的zealot xml文件中生成sql.
+     */
+    @Test
+    public void testQueryTeacherSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo("myTeacher", "queryTeacherById",
+                ParamWrapper.newInstance("id", "123").toMap());
+        String expectedSql = "SELECT * FROM t_teacher AS t WHERE t.c_id = ?";
+        assertEquals(expectedSql, sqlInfo.getSql());
+        assertArrayEquals(new Object[]{"123"}, sqlInfo.getParamsArr());
     }
 
 }

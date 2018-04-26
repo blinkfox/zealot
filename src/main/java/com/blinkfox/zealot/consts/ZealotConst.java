@@ -9,6 +9,9 @@ public final class ZealotConst {
     /** 分隔符常量,SP是Separate的简称. */
     public static final String SP_AT = "@@"; // @@分隔符
 
+    /** 逗号常量. */
+    public static final String COMMA = ",";
+
     /* 节点类型 */
     public static final String NODETYPE_TEXT = "Text"; // 文本节点
     public static final String NODETYPE_ELEMENT = "Element"; // 元素节点

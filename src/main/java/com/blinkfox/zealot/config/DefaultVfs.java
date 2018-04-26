@@ -29,7 +29,7 @@ import java.util.jar.JarInputStream;
  */
 public class DefaultVfs {
 
-    private static final Log log = Log.get(XmlScanConfigure.class);
+    private static final Log log = Log.get(XmlScanner.class);
 
     /** 路径分割符. */
     private static final String PATH_SP = "/";

@@ -53,7 +53,7 @@ public class ZealotConfigManager {
      */
     public void initLoad(String configClass, String xmlLocations, String handlerLocations) {
         // 加载ZealotConfig配置信息
-        XmlScanConfigure.newInstance().scan(xmlLocations);
+        XmlScanner.newInstance().scan(xmlLocations);
         this.initLoad(configClass);
     }
 
@@ -73,6 +73,16 @@ public class ZealotConfigManager {
      */
     public void initLoad(Class<? extends AbstractZealotConfig> clazz) {
         this.initLoad(clazz.getName());
+    }
+
+    /**
+     * 初始化加载Zealot的配置信息到缓存中.
+     *
+     * @param zealotConfig 配置类实例
+     */
+    public void initLoad(AbstractZealotConfig zealotConfig, String xmlLocations, String handlerLocations) {
+        XmlScanner.newInstance().scan(xmlLocations);
+        this.initLoad(zealotConfig);
     }
 
     /**

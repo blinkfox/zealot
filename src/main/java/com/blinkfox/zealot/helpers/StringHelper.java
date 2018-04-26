@@ -9,6 +9,15 @@ import java.util.regex.Pattern;
  */
 public final class StringHelper {
 
+    /** XML文件扩展名. */
+    private static final String XML_EXT = ".xml";
+
+    /** Java文件扩展名. */
+    private static final String JAVA_EXT = ".java";
+
+    /** Java编译后的class文件扩展名. */
+    private static final String CLASS_EXT = ".class";
+
     /**
      * 私有的构造方法.
      */
@@ -67,6 +76,44 @@ public final class StringHelper {
             sb.append(str);
         }
         return sb.toString();
+    }
+
+    /**
+     * 判断文件全路径是否是已某扩展名结尾的文件.
+     *
+     * @param filePath 文件全路径名
+     * @param ext 文件扩展名
+     * @return 布尔值
+     */
+    private static boolean isExtFile(String filePath, String ext) {
+        return filePath != null && filePath.endsWith(ext);
+    }
+
+    /**
+     * 根据给定的文件路径判断文件是否是XML文件.
+     * @param filePath 文件路径
+     * @return 布尔值
+     */
+    public static boolean isXmlFile(String filePath) {
+        return isExtFile(filePath, XML_EXT);
+    }
+
+    /**
+     * 根据给定的文件路径判断文件是否是.java文件.
+     * @param filePath 文件路径
+     * @return 布尔值
+     */
+    public static boolean isJavaFile(String filePath) {
+        return isExtFile(filePath, JAVA_EXT);
+    }
+
+    /**
+     * 根据给定的文件路径判断文件是否是.class文件.
+     * @param filePath 文件路径
+     * @return 布尔值
+     */
+    public static boolean isClassFile(String filePath) {
+        return isExtFile(filePath, CLASS_EXT);
     }
 
 }
