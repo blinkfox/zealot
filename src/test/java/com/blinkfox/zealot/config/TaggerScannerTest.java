@@ -1,6 +1,14 @@
 package com.blinkfox.zealot.config;
 
+import com.blinkfox.zealot.config.entity.TagHandler;
+import com.blinkfox.zealot.core.IConditHandler;
+import com.blinkfox.zealot.log.Log;
+import com.blinkfox.zealot.test.handler.TaggerTestHandler;
+
+import java.util.Map;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +18,8 @@ import org.junit.Test;
  * @author blinkfox on 2018-04-26.
  */
 public class TaggerScannerTest {
+
+    private static Log log = Log.get(TaggerScanner.class);
 
     private TaggerScanner taggerScanner;
 
@@ -30,6 +40,21 @@ public class TaggerScannerTest {
     }
 
     /**
+     * 测试class中的'isAssignableFrom()'方法.
+     */
+    @Test
+    public void isAssignableFrom() {
+        Assert.assertTrue(IConditHandler.class.isAssignableFrom(IConditHandler.class));
+        Assert.assertFalse(TaggerTestHandler.class.isAssignableFrom(IConditHandler.class));
+        Class<?>[] classes = TaggerTestHandler.class.getInterfaces();
+        for (Class<?> cls: classes) {
+            if (IConditHandler.class.isAssignableFrom(cls)) {
+                log.info("该类是IConditHandler的子类:" + cls.getName());
+            }
+        }
+    }
+
+    /**
      * 测试扫描配置的包下的所有xml文件.
      */
     @Test
@@ -37,5 +62,10 @@ public class TaggerScannerTest {
         String locations = "com.blinkfox.zealot, com.blinkfox.zealot.bean.SqlInfo.java, "
                 + "com.blinkfox.bean.BuildSource.class";
         this.taggerScanner.scan(locations);
+
+        Map<String, TagHandler> tagHandlerMap = AbstractZealotConfig.getTagHandlerMap();
+        Assert.assertNotNull(tagHandlerMap);
+        log.info("扫描到的tagHandlerMap集合:" + tagHandlerMap.toString());
+        log.info("是否含有 helloTagger 标签:" + tagHandlerMap.containsKey("helloTagger"));
     }
 }

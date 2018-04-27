@@ -25,16 +25,16 @@ import org.dom4j.Node;
  * Zealot主配置类.
  * Created by blinkfox on 2016/10/30.
  */
-public abstract class AbstractZealotConfig {
+public class AbstractZealotConfig {
 
     /**
      * 所有zealots XML文档的缓存map.
      * <p>key是资源的路径（将xml命名空间和zealotId用"@"符号分割），value是dom4j文档节点Node.</p>
      */
-    private static Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
+    private static final Map<String, Node> zealots = new ConcurrentHashMap<String, Node>();
 
     /** 初始化默认的一些标签和tagHandlers到HashMap集合中,key是标签字符串,value是TagHandler对象. */
-    private static Map<String, TagHandler> tagHandlerMap = new HashMap<String, TagHandler>();
+    private static final Map<String, TagHandler> tagHandlerMap = new HashMap<String, TagHandler>();
     
     /* 添加默认的标签和对应的handler处理器，主要是普通条件,like,between,in等 */
     static {
@@ -168,17 +168,23 @@ public abstract class AbstractZealotConfig {
      * 配置Zealot的普通配置信息(默认配置方法，开发者可覆盖此方法来做一些自定义配置).
      * @param normalConfig 普通配置实例
      */
-    public void configNormal(NormalConfig normalConfig){}
+    public void configNormal(NormalConfig normalConfig) {
+        normalConfig.setDebug(false).setPrintBanner(true).setPrintSqlInfo(true);
+    }
 
     /**
      * 配置xml文件的标识和资源路径.
      * @param ctx xmlContext对象
      */
-    public abstract void configXml(XmlContext ctx);
+    public void configXml(XmlContext ctx) {
+        // 子类可覆盖此方法，来增加新的xml及命名空间的配置.
+    }
 
     /**
      * 配置标签和其对应的处理类(默认了许多常用的标签，开发者可覆盖此方法来配置更多的自定义标签).
      */
-    public void configTagHandler(){}
+    public void configTagHandler() {
+        // 子类可覆盖此方法，来增加新的标签和处理器的配置.
+    }
 
 }
