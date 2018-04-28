@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.config;
 
 import com.blinkfox.zealot.config.entity.TagHandler;
+import com.blinkfox.zealot.config.scanner.TaggerScanner;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.log.Log;
 import com.blinkfox.zealot.test.handler.TaggerTestHandler;
@@ -65,7 +66,8 @@ public class TaggerScannerTest {
 
         Map<String, TagHandler> tagHandlerMap = AbstractZealotConfig.getTagHandlerMap();
         Assert.assertNotNull(tagHandlerMap);
+        Assert.assertTrue(tagHandlerMap.containsKey("helloTagger"));
+        Assert.assertTrue(tagHandlerMap.containsKey("hw"));
         log.info("扫描到的tagHandlerMap集合:" + tagHandlerMap.toString());
-        log.info("是否含有 helloTagger 标签:" + tagHandlerMap.containsKey("helloTagger"));
     }
 }

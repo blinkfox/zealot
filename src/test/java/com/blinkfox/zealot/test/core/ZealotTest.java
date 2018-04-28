@@ -34,7 +34,8 @@ public class ZealotTest {
      */
     @BeforeClass
     public static void before() {
-        ZealotConfigManager.getInstance().initLoad(new MyZealotConfig(), "zealot/", "");
+        ZealotConfigManager.getInstance().initLoad(new MyZealotConfig(), "zealot/",
+                "com.blinkfox.zealot.test.handler");
         log.info("加载Zealot缓存信息成功!");
     }
 
@@ -319,6 +320,17 @@ public class ZealotTest {
         String expectedSql = "SELECT * FROM t_teacher AS t WHERE t.c_id = ?";
         assertEquals(expectedSql, sqlInfo.getSql());
         assertArrayEquals(new Object[]{"123"}, sqlInfo.getParamsArr());
+    }
+
+    /**
+     * 测试从扫描的handler注解中生成的标签sql.
+     */
+    @Test
+    public void testScanHandlerSql() {
+        SqlInfo sqlInfo = Zealot.getSqlInfo("myCourse", "testTaggerHanderSql");
+        String expectedSql = "Hello Tagger hello blinkfox hi blinkfox hello world";
+        assertEquals(expectedSql, sqlInfo.getSql());
+        assertArrayEquals(new Object[]{}, sqlInfo.getParamsArr());
     }
 
 }

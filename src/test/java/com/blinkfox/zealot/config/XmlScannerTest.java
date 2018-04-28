@@ -1,6 +1,7 @@
 package com.blinkfox.zealot.config;
 
 import com.blinkfox.zealot.config.entity.XmlContext;
+import com.blinkfox.zealot.config.scanner.XmlScanner;
 
 import java.util.Map;
 

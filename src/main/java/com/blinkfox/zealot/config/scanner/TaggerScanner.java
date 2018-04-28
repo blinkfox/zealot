@@ -1,9 +1,9 @@
-package com.blinkfox.zealot.config;
+package com.blinkfox.zealot.config.scanner;
 
+import com.blinkfox.zealot.config.AbstractZealotConfig;
 import com.blinkfox.zealot.config.annotation.Tagger;
 import com.blinkfox.zealot.config.annotation.Taggers;
 import com.blinkfox.zealot.config.entity.TagHandler;
-import com.blinkfox.zealot.config.scanner.Scanner;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.core.IConditHandler;
 import com.blinkfox.zealot.helpers.StringHelper;
@@ -262,7 +262,7 @@ public final class TaggerScanner implements Scanner {
             return false;
         }
 
-        // 循环判断是否
+        // 循环判断其接口是否含有'IConditHandler'接口.
         for (Class cls: classes) {
             if (IConditHandler.class.isAssignableFrom(cls)) {
                 return true;

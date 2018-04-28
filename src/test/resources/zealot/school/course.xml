@@ -2,9 +2,14 @@
 <zealots nameSpace="myCourse">
 
     <!-- 根据Id查询用户信息 -->
-    <zealot id="queryCourseById">
-        select * from t_course as c where
-        <equal field="c.id" value="id"/>
+    <zealot id="testTaggerHanderSql">
+        <!-- helloTagger 的自定义标签在 com.blinkfox.zealot.test.handler.TaggerTestHandler 类中通过自定义注解来定义和实现的 -->
+        <helloTagger />
+
+        <!-- sayHello 的自定义标签在 com.blinkfox.zealot.test.handler.TaggersTestHandler 类中通过自定义注解来定义和实现的 -->
+        <hello />
+        <hi />
+        <hw />
     </zealot>
 
 </zealots>

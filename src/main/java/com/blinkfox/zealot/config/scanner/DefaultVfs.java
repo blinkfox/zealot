@@ -1,4 +1,4 @@
-package com.blinkfox.zealot.config;
+package com.blinkfox.zealot.config.scanner;
 
 import com.blinkfox.zealot.exception.ZealotException;
 import com.blinkfox.zealot.helpers.IoHelper;

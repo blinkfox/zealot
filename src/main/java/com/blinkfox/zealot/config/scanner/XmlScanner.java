@@ -1,7 +1,6 @@
-package com.blinkfox.zealot.config;
+package com.blinkfox.zealot.config.scanner;
 
 import com.blinkfox.zealot.config.entity.XmlContext;
-import com.blinkfox.zealot.config.scanner.Scanner;
 import com.blinkfox.zealot.consts.ZealotConst;
 import com.blinkfox.zealot.helpers.CollectionHelper;
 import com.blinkfox.zealot.helpers.StringHelper;
