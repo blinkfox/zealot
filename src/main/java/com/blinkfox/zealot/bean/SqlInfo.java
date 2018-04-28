@@ -45,6 +45,18 @@ public class SqlInfo {
         return params == null ? new Object[]{} : this.params.toArray();
     }
 
+    /**
+     * 如果存在某子SQL字符串，则移除该子SQL字符串，常用于来消除'WHERE 1=1'或其他不需要的SQL字符串的场景.
+     * 注意该方法不会移除其对应的参数，所以，这里只应该移除静态SQL字符串，不应该移除包含占位符的SQL.
+     *
+     * @param subSql 静态子SQL片段
+     * @return SqlInfo实例
+     */
+    public SqlInfo removeIfExist(String subSql) {
+        this.sql = subSql != null && sql.contains(subSql) ? sql.replaceAll(subSql, "") : sql;
+        return this;
+    }
+
     /* -------------- 以下是 getter 和 setter 方法 ------------- */
 
     public StringBuilder getJoin() {
