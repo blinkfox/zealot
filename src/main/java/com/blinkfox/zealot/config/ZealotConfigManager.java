@@ -31,6 +31,12 @@ public class ZealotConfigManager {
     /** 初始化的单实例. */
     private static final ZealotConfigManager confManager = new ZealotConfigManager();
 
+    /** zealot的XML文件所在的位置，多个用逗号隔开,可以是目录也可以是具体的xml文件. */
+    private String xmlLocations;
+
+    /** zealot的自定义handler处理器所在的位置，多个用逗号隔开,可以是目录也可以是具体的java或class文件路径. */
+    private String handlerLocations;
+
     /**
      * 私有化构造方法.
      */
@@ -48,34 +54,16 @@ public class ZealotConfigManager {
 
     /**
      * 初始化加载Zealot的配置信息到缓存中.
-     * @param configClass 系统中Zealot的class路径
-     * @return ZealotConfigManager实例
-     */
-    public ZealotConfigManager initLoad(String configClass) {
-        // 加载ZealotConfig配置信息
-        this.loadZealotConfig(configClass);
-        cachingXmlAndEval();
-        return this;
-    }
-
-    /**
-     * 初始化加载Zealot的配置信息到缓存中.
      *
      * @param configClass 系统中Zealot的class路径
      * @param xmlLocations zealot的XML文件所在的位置，多个用逗号隔开
      * @param handlerLocations zealot的自定义handler处理器所在的位置，多个用逗号隔开
      */
     public void initLoad(String configClass, String xmlLocations, String handlerLocations) {
-        // 加载ZealotConfig配置信息
-        this.initLoad(xmlLocations, handlerLocations).initLoad(configClass);
-    }
-
-    /**
-     * 初始化加载Zealot的配置信息到缓存中.
-     * @param clazz 配置类
-     */
-    public void initLoad(Class<? extends AbstractZealotConfig> clazz) {
-        this.initLoad(clazz.getName());
+        // 设置配置的文件路径的值，并开始加载ZealotConfig配置信息
+        this.xmlLocations = xmlLocations;
+        this.handlerLocations = handlerLocations;
+        this.initLoad(configClass);
     }
 
     /**
@@ -97,18 +85,28 @@ public class ZealotConfigManager {
      * @param handlerLocations zealot的自定义handler处理器所在的位置，多个用逗号隔开
      */
     public void initLoad(AbstractZealotConfig zealotConfig, String xmlLocations, String handlerLocations) {
-        this.initLoad(xmlLocations, handlerLocations).initLoad(zealotConfig);
+        this.xmlLocations = xmlLocations;
+        this.handlerLocations = handlerLocations;
+        this.initLoad(zealotConfig);
     }
 
     /**
-     * 只根据 XML扫描的位置 和 Handler扫描位置 两个参数来初始化加载数据.
-     * @param xmlLocations zealot的XML文件所在的位置，多个用逗号隔开
-     * @param handlerLocations zealot的自定义handler处理器所在的位置，多个用逗号隔开
-     * @return ZealotConfigManager实例
+     * 初始化加载Zealot的配置信息到缓存中.
+     * @param clazz 配置类
      */
-    public ZealotConfigManager initLoad(String xmlLocations, String handlerLocations) {
-        this.initLoadXmlLocations(xmlLocations).initLoadHandlerLocations(handlerLocations);
-        return this;
+    public void initLoad(Class<? extends AbstractZealotConfig> clazz) {
+        this.initLoad(clazz.getName());
+    }
+
+    /**
+     * 初始化加载Zealot的配置信息到缓存中.
+     * @param configClass 系统中Zealot的class路径
+     */
+    public void initLoad(String configClass) {
+        // 加载ZealotConfig配置信息
+        this.scanLocations(this.xmlLocations, this.handlerLocations);
+        this.loadZealotConfig(configClass);
+        cachingXmlAndEval();
     }
 
     /**
@@ -116,30 +114,21 @@ public class ZealotConfigManager {
      *
      * @param zealotConfig 配置类实例
      */
-    public ZealotConfigManager initLoad(AbstractZealotConfig zealotConfig) {
+    public void initLoad(AbstractZealotConfig zealotConfig) {
+        this.scanLocations(this.xmlLocations, this.handlerLocations);
         this.loadZealotConfig(zealotConfig);
         this.cachingXmlAndEval();
-        return this;
     }
 
     /**
-     * 只根据 XML扫描的位置 参数来初始化加载 XML命名空间和其文件位置的映射.
-     * @param xmlLocations zealot的XML文件所在的位置，多个用逗号隔开
-     * @return ZealotConfigManager实例
+     * 扫描 xml和handler所在的文件位置.
+     * @param xmlLocations zealot的XML文件所在的位置
+     * @param handlerLocations zealot的自定义handler处理器所在的位置
      */
-    public ZealotConfigManager initLoadXmlLocations(String xmlLocations) {
+    private void scanLocations(String xmlLocations, String handlerLocations) {
+        this.xmlLocations = StringHelper.isBlank(this.xmlLocations) ? "zealot" : this.xmlLocations;
         XmlScanner.newInstance().scan(xmlLocations);
-        return this;
-    }
-
-    /**
-     * 只根据 Handler扫描位置 参数来初始化加载注解处理器的数据.
-     * @param handlerLocations zealot的自定义handler处理器所在的位置，多个用逗号隔开
-     * @return ZealotConfigManager实例
-     */
-    public ZealotConfigManager initLoadHandlerLocations(String handlerLocations) {
         TaggerScanner.newInstance().scan(handlerLocations);
-        return this;
     }
 
     /**
