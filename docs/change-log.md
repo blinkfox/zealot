@@ -1,3 +1,10 @@
+- v1.3.0(2018-05-02)
+  - 新增完善各种动态SQL操作符和XML标签的`与`、`或`、`非`的逻辑
+  - 新增了根据自定义模式构建模糊匹配的likePattern标签，新增了isNull、isNotNull等情况
+  - 新增了消除`where 1 = 1`等场景的SQL
+  - 新增了Zealot调用的重载方法
+  - 新增了扫描XML路径来检测识别zealot xml（不配置扫描XML位置的话，默认扫描资源目录下`zealot/`目录中的xml文件）
+  - 新增了扫描Handler注解(`@Tagger`、`@Taggers`)的功能和快速配置
 - v1.2.1(2018-02-04)
   - 新增了通过ZealotConfig的已有实例来配置zealot，这样方便了从spring等已有实例中做配置
 - v1.2.0(2017-08-18)
