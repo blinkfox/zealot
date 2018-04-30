@@ -64,10 +64,16 @@ equal系列是用来拼接SQL中等值查询的系列方法，生成如：` u.em
 - andEqual(String field, Object value, boolean match)
 - orEqual(String field, Object value)
 - orEqual(String field, Object value, boolean match)
+- notEqual(String field, Object value)
+- notEqual(String field, Object value, boolean match)
+- andNotEqual(String field, Object value)
+- andNotEqual(String field, Object value, boolean match)
+- orNotEqual(String field, Object value)
+- orNotEqual(String field, Object value, boolean match)
 
 **方法解释**：
 
-- equal、andEqual、orEqual，分别表示拼接等值查询SQL的前缀为`空字符串`,` AND `，` OR `
+- equal、andEqual、orEqual，分别表示拼接等值查询SQL的前缀为`空字符串`,` AND `，` OR `。
 - field，表示数据库字段
 - value，表示Java中的变量或常量值
 - match，表示是否生成该SQL片段，值为`true`时生成，否则不生成
@@ -126,6 +132,7 @@ u.nick_name = ? AND u.true_age = ? AND u.true_age = ? OR u.email = ?
 - `moreEqual` 大于等于
 - `lessEqual` 小于等于
 - `like` 模糊查询
+- `likePattern` 根据自定义模式来匹配
 
 !> 以上各系列的方法也同equal，这里就不再赘述了。
 
@@ -205,10 +212,16 @@ in系列是用来拼接SQL中范围查询的系列方法，生成如：` u.sex i
 - andIn(String field, Object[] values, boolean match)
 - orIn(String field, Object[] values)
 - orIn(String field, Object[] values, boolean match)
+- notIn(String field, Object[] values)
+- notIn(String field, Object[] values, boolean match)
+- andNotIn(String field, Object[] values)
+- andNotIn(String field, Object[] values, boolean match)
+- orNotIn(String field, Object[] values)
+- orNotIn(String field, Object[] values, boolean match)
 
 **方法解释**：
 
-- in、andIn、orIn，分别表示拼接范围查询SQL的前缀为`空字符串`,` AND `，` OR `
+- in、andIn、orIn，分别表示拼接范围查询SQL的前缀为`空字符串`,` AND `，` OR `。
 - field，表示数据库字段
 - values，表示范围查询需要的参数的数组
 - match，表示是否生成该SQL片段，值为`true`时生成，否则不生成
@@ -226,7 +239,7 @@ public static void init() {
 }
 
 /**
- * between相关方法测试.
+ * in相关方法测试.
  */
 @Test
 public void testBetween() {
@@ -253,13 +266,84 @@ u.sex in (?, ?) AND u.sex in (?, ?) OR u.sex in (?, ?)
 [0, 1, 0, 1, 0, 1]
 ```
 
+### isNull
+
+#### 方法介绍
+
+`isNull`系列是用来拼接SQL中判断字段为null值或不为null值情况的系列方法，生成如：` u.state IS NULL `这样SQL片段的功能，主要包含如下方法：
+
+- isNull(String field)
+- isNull(String field, boolean match)
+- andIsNull(String field)
+- andIsNull(String field, boolean match)
+- orIsNull(String field)
+- orIsNull(String field, boolean match)
+- isNotNull(String field)
+- isNotNull(String field, boolean match)
+- andIsNotNull(String field)
+- andIsNotNull(String field, boolean match)
+- orIsNotNull(String field)
+- orIsNotNull(String field, boolean match
+
+**方法解释**：
+
+- isNull、andIsNull、orIsNull，分别表示拼接null值判断SQL的前缀为`空字符串`,` AND `，` OR `。
+- field，表示数据库字段
+- match，表示是否生成该SQL片段，值为`true`时生成，否则不生成
+
+#### 使用示例如下：
+
+```java
+/**
+ * IS NULL相关方法测试.
+ */
+@Test
+public void testIsNull() {
+    long start = System.currentTimeMillis();
+
+    SqlInfo sqlInfo = ZealotKhala.start()
+            .isNull("a.name")
+            .isNull("b.email")
+            .isNull("a.name", true)
+            .isNull("b.email", false)
+            .andIsNull("a.name")
+            .andIsNull("b.email")
+            .andIsNull("a.name", false)
+            .andIsNull("b.email", true)
+            .orIsNull("a.name")
+            .orIsNull("b.email")
+            .orIsNull("a.name", false)
+            .orIsNull("b.email", true)
+            .end();
+
+    log.info("testIn()方法执行耗时:" + (System.currentTimeMillis() - start) + " ms");
+    String sql = sqlInfo.getSql();
+    Object[] arr = sqlInfo.getParamsArr();
+
+    // 断言并输出sql信息
+    assertEquals("a.name IS NULL b.email IS NULL a.name IS NULL AND a.name IS NULL AND b.email IS NULL "
+            + "AND b.email IS NULL OR a.name IS NULL OR b.email IS NULL OR b.email IS NULL", sql);
+    assertArrayEquals(new Object[]{} ,arr);
+    log.info("-- testIsNull()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
+}
+```
+
+打印的SQL如下：
+
+```sql
+-- testIsNull()方法生成的sql信息:
+a.name IS NULL b.email IS NULL a.name IS NULL AND a.name IS NULL AND b.email IS NULL AND b.email IS NULL OR a.name IS NULL OR b.email IS NULL OR b.email IS NULL
+-- 参数为:
+[]
+```
+
 ### doAnything
 
 > doAnything(ICustomAction action)
 
 > doAnything(boolean match, ICustomAction action)
 
-这两个方法主要用来方便你在链式拼接的过程中，来完成更多自定义、灵活的操作。`match`意义和上面类似，值为true时才执行，`ICustomAction`是你自定义操作的接口，执行时调用`execute()`方法,使用示例如下：
+这两个方法主要用来方便你在链式拼接的过程中，来完成更多自定义、灵活的操作。`match`意义和上面类似，值为true时才执行，`ICustomAction`是你自定义操作的函数式接口，执行时调用`execute()`方法,使用示例如下：
 
 ```java
 SqlInfo sqlInfo = ZealotKhala.start()
@@ -269,6 +353,19 @@ SqlInfo sqlInfo = ZealotKhala.start()
                 join.append("abc111");
                 params.add(5);
                 log.info("执行了自定义操作，可任意拼接字符串和有序参数...");
+            }
+        })
+        .end();
+```
+
+如果是Java8的话，可以将以上代码转成Lambda表达式，代码如下：
+
+```java
+SqlInfo sqlInfo = ZealotKhala.start()
+        .doAnything(true, (join, params) -> {
+                join.append("abc111");
+                params.add(5);
+                log.info("执行了自定义操作，可任意插入、拼接字符串和有序参数...");
             }
         })
         .end();

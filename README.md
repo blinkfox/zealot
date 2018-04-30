@@ -1,6 +1,6 @@
 # Zealot
 
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.2.0%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.2.0%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot)
 
 一个简单、强大的Java动态SQL和参数生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
@@ -16,12 +16,20 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅`52`k大小，集成和使用简单
-- 提供了纯`Java`代码或`XML`两种方式书写维护SQL
-- `Java`的方式采用流式API的方式书写动态SQL，易于书写阅读
+- 轻量级，jar包仅仅`74`k大小，简单、无副作用的集成和使用
+- 提供了纯`Java`代码和`XML`两种方式书写维护SQL
+- `Java`的方式采用流式API的方式书写动态SQL，易于书写和阅读
 - `XML`的方式让SQL和Java代码解耦和，易于维护
 - 具有动态性、可复用逻辑和可半调试性的优点
-- 具有可扩展性，可自定义标签和处理器来完成自定义逻辑的SQL和参数生成
+- 具有可扩展性，可自定义`XML`标签和处理器来完成自定义逻辑的SQL和参数生成
+
+## 1.3.0版本新增特性
+
+- 完善各种动态SQL操作符和XML标签的`与`、`或`、`非`的逻辑
+- 新增了Zealot配置和调用的更多重载方法
+- 新增了通过注解来配置自定义标签和其对应的Handler
+- 新增了扫描XML文件所在位置（可多个位置，用逗号隔开，目录或具体XML文件均可），默认扫描项目资源目录下`zealot`目录及子目录下的xml文件
+- 新增了`removeIfExist()`方法用来消除`where 1 = 1`等类似无用SQL片段的SQL
 
 ## 三、集成使用
 
@@ -37,13 +45,13 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0-SNAPSHOT</version>
 </dependency>
 ```
 
 ## 四、Java链式式之ZealotKhala
 
-在Java中书写中等长度的SQL，用`+`连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在`Zealot v1.0.4`版本中提供了一个额外高效的SQL字符串链式拼接工具Khala，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在`v1.1.0`版本中新增了`ZealotKhala`，`ZealotKhala`类也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
+在Java中书写中等长度的SQL，用`+`连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在`Zealot v1.0.4`版本中提供了一个额外高效的SQL字符串链式拼接工具`Khala`(**已被弃用**)，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在`v1.1.0`版本中新增了`ZealotKhala`，`ZealotKhala`类也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
 
 ```java
 public class ZealotKhalaTest {
@@ -64,6 +72,7 @@ public class ZealotKhalaTest {
                 .leftJoin("user_detail AS d").on("u.id = d.user_id")
                 .where("u.id != ''")
                 .andLike("u.name", userName)
+                // 该doAnything方法可以在拼接期间做任何代码插入和注入，如果是Java8的话，可以转为Lamda表达式
                 .doAnything(true, new ICustomAction() {
                     @Override
                     public void execute(final StringBuilder join, final List<Object> params) {
@@ -78,6 +87,7 @@ public class ZealotKhalaTest {
                 .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
                 .andIn("u.sex", sexs)
+                .andIsNotNull("u.state")
                 .orderBy("d.birthday").desc()
                 .end();
         String sql = sqlInfo.getSql();
@@ -87,10 +97,11 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
                 + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
                 + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
-                + "AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC", sql);
+                + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) AND u.state IS NOT NULL "
+                + "ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
-        log.info("testSql()方法生成的sql信息:" + sql + "\n参数为:" + Arrays.toString(arr));
+        log.info("-- testSql()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
     }
 
 }
@@ -99,8 +110,10 @@ public class ZealotKhalaTest {
 打印结果如下：
 
 ```sql
-testSql()方法生成的sql信息:SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC
-参数为:[%zhang%, 5, 21, 13, 1990-03-25, 2010-08-28, 1990-03-25, 2010-08-28, 0, 1]
+-- testSql()方法生成的sql信息:
+SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) AND u.state IS NOT NULL ORDER BY d.birthday DESC
+-- 参数为:
+[%zhang%, 5, 21, 13, 1990-03-25, 2010-08-28, 1990-03-25, 2010-08-28, 0, 1]
 ```
 
 ## 五、XML方式之Zealot
@@ -847,12 +860,30 @@ public void testParseTemplate2() {
 - isNotMatch(String match, Object paramObj)，是否不匹配，同`isMatch`相反，只有解析到的值是false时，才认为是false。
 - isTrue(String exp, Object paramObj)，是否为true，只有当解析值确实为true时，才为true。
 
+#### (4). 消除`1 = 1`等无用SQL
+
+在拼接动态SQL中避免不了会出现`1 = 1`等无用的子SQL片段，现在可以通过在生成完的SqlInfo对象中的`removeIfExist(subSql)`方法来消除它，其他类似的子SQL也都可以消除。使用示例如下：
+
+```java
+sqlInfo.removeIfExist(" 1 = 1 AND");
+
+// 或者
+sqlInfo.removeIfExist(" 1 <> 1");
+```
+
 ## 九、许可证
 
 Zealot类库遵守[Apache License 2.0][6] 许可证
 
 ## 十、版本更新记录
 
+- v1.3.0(2018-05-02)
+  - 新增完善各种动态SQL操作符和XML标签的`与`、`或`、`非`的逻辑
+  - 新增了根据自定义模式构建模糊匹配的likePattern标签，新增了isNull、isNotNull等情况
+  - 新增了消除`where 1 = 1`等场景的SQL
+  - 新增了Zealot调用的重载方法
+  - 新增了扫描XML路径来检测识别zealot xml（不配置扫描XML位置的话，默认扫描资源目录下`zealot/`目录中的xml文件）
+  - 新增了扫描Handler注解(`@Tagger`、`@Taggers`)的功能和快速配置
 - v1.2.1(2018-02-04)
   - 新增了通过ZealotConfig的已有实例来配置zealot，这样方便了从spring等已有实例中做配置
 - v1.2.0(2017-08-18)

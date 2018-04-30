@@ -19,6 +19,7 @@ public class ZealotKhalaTest {
                 .leftJoin("user_detail AS d").on("u.id = d.user_id")
                 .where("u.id != ''")
                 .andLike("u.name", userName, userName != null)
+                // 该doAnything方法可以在拼接期间做任何代码插入和注入，如果是Java8的话，可以转为Lamda表达式
                 .doAnything(true, new ICustomAction() {
                     @Override
                     public void execute(final StringBuilder join, final List<Object> params) {
@@ -33,6 +34,7 @@ public class ZealotKhalaTest {
                 .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
                 .andIn("u.sex", sexs)
+                .andIsNotNull("u.state")
                 .orderBy("d.birthday").desc()
                 .end();
         String sql = sqlInfo.getSql();
@@ -42,10 +44,11 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
                 + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
                 + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
-                + "AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC", sql);
+                + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) AND u.state IS NOT NULL "
+                + "ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
-        log.info("-- testSql()方法生成的sql信息:\n" + sql + "\n-- 参数为:" + Arrays.toString(arr));
+        log.info("-- testSql()方法生成的sql信息:\n" + sql + "\n-- 参数为:\n" + Arrays.toString(arr));
     }
 
 }
@@ -55,7 +58,7 @@ public class ZealotKhalaTest {
 
 ```sql
 -- testSql()方法生成的sql信息:
-SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) ORDER BY d.birthday DESC
+SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? AND d.birthday BETWEEN ? AND ? AND u.sex in (?, ?) AND u.state IS NOT NULL ORDER BY d.birthday DESC
 -- 参数为:
 [%zhang%, 5, 21, 13, 1990-03-25, 2010-08-28, 1990-03-25, 2010-08-28, 0, 1]
 ```

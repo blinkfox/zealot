@@ -89,3 +89,14 @@ public void testParseTemplate2() {
 - isMatch(String match, Object paramObj)，是否匹配，常用于标签中的match值的解析，即如果match不填写，或者内容为空，或者解析出为正确的值，都视为`true`。
 - isNotMatch(String match, Object paramObj)，是否不匹配，同`isMatch`相反，只有解析到的值是false时，才认为是false。
 - isTrue(String exp, Object paramObj)，是否为true，只有当解析值确实为true时，才为true。
+
+#### 消除`1 = 1`等无用SQL
+
+在拼接动态SQL中避免不了会出现`1 = 1`等无用的子SQL片段，现在可以通过在生成完的SqlInfo对象中的`removeIfExist(subSql)`方法来消除它，其他类似的子SQL也都可以消除。使用示例如下：
+
+```java
+sqlInfo.removeIfExist(" 1 = 1 AND");
+
+或者
+sqlInfo.removeIfExist(" 1 <> 1");
+```

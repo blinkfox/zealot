@@ -536,6 +536,7 @@ public class ZealotKhalaTest {
                 .andLessEqual("d.birthday", endBirthday)
                 .andBetween("d.birthday", startBirthday, endBirthday)
                 .andIn("u.sex", sexs)
+                .andIsNotNull("u.state")
                 .orderBy("d.birthday").desc()
                 .end();
         String sql = sqlInfo.getSql();
@@ -545,7 +546,8 @@ public class ZealotKhalaTest {
         assertEquals("SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u "
                 + "LEFT JOIN user_detail AS d ON u.id = d.user_id WHERE u.id != '' AND u.name LIKE ? "
                 + "abc111 AND u.age > ? AND u.age < ? AND d.birthday >= ? AND d.birthday <= ? "
-                + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) ORDER BY d.birthday DESC", sql);
+                + "AND d.birthday BETWEEN ? AND ? AND u.sex IN (?, ?) AND u.state IS NOT NULL "
+                + "ORDER BY d.birthday DESC", sql);
         assertArrayEquals(new Object[]{"%zhang%", 5, 21, 13, "1990-03-25", "2010-08-28",
                 "1990-03-25", "2010-08-28", 0, 1} ,arr);
     }
