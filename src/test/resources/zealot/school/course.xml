@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zealots nameSpace="myCourse">
 
-    <!-- 根据Id查询用户信息 -->
+    <!-- 根据Id查询课程信息 -->
     <zealot id="testTaggerHanderSql">
         <!-- helloTagger 的自定义标签在 com.blinkfox.zealot.test.handler.TaggerTestHandler 类中通过自定义注解来定义和实现的 -->
         <helloTagger />

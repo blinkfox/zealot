@@ -134,19 +134,23 @@ public class ZealotConfigManager {
     /**
      * 扫描 xml文件所在的文件位置 并识别配置加载到内存缓存中.
      * @param xmlLocations zealot的XML文件所在的位置
+     * @return ZealotConfigManager的全局唯一实例
      */
-    public void initLoadXmlLocations(String xmlLocations) {
+    public ZealotConfigManager initLoadXmlLocations(String xmlLocations) {
         this.xmlLocations = StringHelper.isBlank(this.xmlLocations) ? "zealot" : this.xmlLocations;
         XmlScanner.newInstance().scan(xmlLocations);
         this.cachingXmlAndEval();
+        return this;
     }
 
     /**
      * 扫描 handler文件所在的文件位置 并识别配置加载到内存缓存中.
      * @param handlerLocations zealot的自定义handler处理器所在的位置
+     * @return ZealotConfigManager的全局唯一实例
      */
-    public void initLoadHandlerLocations(String handlerLocations) {
+    public ZealotConfigManager initLoadHandlerLocations(String handlerLocations) {
         TaggerScanner.newInstance().scan(handlerLocations);
+        return this;
     }
 
     /**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 查询学生相关的SQL信息，命名空间nameSpace为zealots的根节点属性，各xml文件的nameSpace不能相同，如果不填nameSpace则需在ZealotConfig中配置与xml的nameSpace映射值. -->
+<!-- 查询老师相关的SQL信息，命名空间nameSpace为zealots的根节点属性，各xml文件的nameSpace不能相同，如果不填nameSpace则需在ZealotConfig中配置与xml的nameSpace映射值. -->
 <zealots nameSpace="myTeacher">
 
     <!-- 根据Id查询学生信息. -->

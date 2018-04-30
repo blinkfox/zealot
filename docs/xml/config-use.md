@@ -1,5 +1,3 @@
-对于很长的动态或统计性的SQL采用Java书写不仅冗长，且不易于调试和维护，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，更易于维护和阅读。使用xml方式需要经过一些配置，使系统能读取到xml中的SQL信息到缓存中，使动态拼接更高效。
-
 ### 创建Java配置类
 
 在你的Java web项目项目中，创建一个继承自`AbstractZealotConfig`的核心配置类，如以下示例：
@@ -12,20 +10,29 @@ import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类
- * Created by blinkfox on 2016/11/4.
+ * Created by blinkfox on 2018/05/01.
  */
 public class MyZealotConfig extends AbstractZealotConfig {
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configNormal(NormalConfig normalConfig) {
         // 1.1.5版本新增的方法
     }
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configXml(XmlContext ctx) {
 
     }
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configTagHandler() {
 
@@ -42,9 +49,11 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 > (3). `configTagHandler()`方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
-### web.xml读取配置
+> **注**: 以上三个方法自1.3.0版本之后，不再必须覆盖了，有了扫描和默认配置功能之后就可以按需覆盖了。
 
-然后，在你的`web.xml`中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
+### 启动加载配置
+
+接下来就是要在启动过程中加载配置类到内存中，如果你是Java web项目，则可以在`web.xml`文件中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
 
 ```xml
 <!-- zealot相关配置的配置 -->
@@ -52,6 +61,12 @@ public class MyZealotConfig extends AbstractZealotConfig {
    <!-- paramName必须为zealotConfigClass名称，param-value对应刚创建的Java配置的类路径 -->
    <param-name>zealotConfigClass</param-name>
    <param-value>com.blinkfox.config.MyZealotConfig</param-value>
+   <!-- zealotXmlLocations参数，表示zealot xml 文件所在的位置(可以是xml文件，也可以是目录)，如果是多个位置则用逗号(',')分割 -->
+   <param-name>zealotXmlLocations</param-name>
+   <param-value></param-value>
+   <!-- zealotHandlerLocations参数，表示zealot 自定义标签处理器所在的位置(只是目录),如果是多个位置则用逗号(',')分割. -->
+   <param-name>zealotHandlerLocations</param-name>
+   <param-value>com.blinkfox.zealot.test.handler</param-value>
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
@@ -71,7 +86,8 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<zealots>
+<!-- 命名空间nameSpace属性是1.3.0开始增加的属性，如果配置了就可以不用在ZealotConfig中配置指定了，便于和其他zealot xml文件区分开. -->
+<zealots nameSpace = "myUser">
 
     <!-- 根据Id查询用户信息 -->
     <zealot id="queryUserById">
@@ -134,6 +150,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
     @Override
     public void configXml(XmlContext ctx) {
+        // 注：如果在zealots根节点中指定了命名空间nameSpace属性的值，那么就可以不用在此方法中配置了，只需指定扫描XML的位置即可.
         ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");
     }
 
@@ -213,5 +230,14 @@ select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND 
 -- 生成sql的参数为:
 [%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
 ```
+
+### Zealot中其他调用方法
+
+以下四个调用方法中，除了`getSqlInfo(String nameSpace, String zealotId, Object paramObj)`方法外都是1.3.0版本新增的调用方法。
+
+- `getSqlInfo(String nameSpace, String zealotId)`: 根据命名空间和zealotId来获取SQL，由于没有参数，所以SQL必然是静态SQL才行
+- `getSqlInfo(String nameSpace, String zealotId, Object paramObj)`: 根据命名空间、zealotId和参数对象(JavaBean或者Map)来获取SQL
+- `getSqlInfoSimply(String nsAtZealotId)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，由于没有参数，所有SQL必然是静态SQL才行
+- `getSqlInfoSimply(String nsAtZealotId, Object paramObj)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，和参数对象(JavaBean或者Map)来获取SQL
 
   [3]: http://www.jfinal.com/

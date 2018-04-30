@@ -1,6 +1,6 @@
 # Zealot
 
-[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.2.0%7Cjar) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot)
+[![Build Status](https://secure.travis-ci.org/blinkfox/zealot.svg)](https://travis-ci.org/blinkfox/zealot) [![Javadocs](http://www.javadoc.io/badge/com.blinkfox/zealot.svg)](http://www.javadoc.io/doc/com.blinkfox/zealot) [![Maven Central](https://img.shields.io/maven-central/v/com.blinkfox/zealot.svg)](http://search.maven.org/#artifactdetails%7Ccom.blinkfox%7Czealot%7C1.2.0%7Cjar) [![codecov](https://codecov.io/gh/blinkfox/zealot/branch/master/graph/badge.svg)](https://codecov.io/gh/blinkfox/zealot)
 
 一个简单、强大的Java动态SQL和参数生成工具库。[文档地址](https://blinkfox.github.io/zealot/)
 
@@ -118,35 +118,214 @@ SELECT u.id, u.name, u.email, d.birthday, d.address FROM user AS u LEFT JOIN use
 
 ## 五、XML方式之Zealot
 
-对于很长的动态或统计性的SQL采用Java书写会不易于维护和调试，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，易于维护和阅读。
+对于很长的动态或统计性的SQL采用Java书写不仅冗长，且不易于调试和维护，因此更推荐你通过xml文件来书写sql，使得SQL和Java代码解耦，更易于维护和阅读。使用xml方式需要经过一些配置，使系统能读取到xml中的SQL信息到缓存中，使动态拼接更高效。
 
-### 配置使用
+### 1.3.0的新配置方式
 
-在你的`Java web`项目项目中，创建一个继承自`AbstractZealotConfig`的核心配置类，如以下示例：
+#### 1. 最简启动加载配置，只需指定需要扫描的XML文件位置即可
+
+自1.3.0开始，沿用了默认大于配置的方式，为了能够识别到Zealot XML文件的命名空间和路径，可以不需要开发者再在ZealotConfig文件中的`configXml()`方法中配置了，可以直接指定XML文件所在项目的资源目录或相对路径即可，且XML文件的`zealots`根节点需要添加该文件区别其他zealot xml文件的命名空间(nameSpace)。可以直接在你项目的初始化启动类或者方法里面做如下配置即可：
+
+```java
+// 在你的启动类或方法中加入该语句，来初始化加载zealot xml目录中的xml命名空间和其对应的位置
+// 如果参数 xmlLocations 值为空的话，则默认扫描你项目资源目录(及子目录)`zealot`下的所有Zealot XML SQL文件.
+ZealotConfigManager.getInstance().initLoadXmlLocations("myzealots/xml");
+```
+
+> **注**：参数`xmlLocations`，表示zealot的XML文件所在的位置，多个用逗号隔开,可以是目录也可以是具体的xml文件.
+
+如果采用这种扫描配置的方式，zealot中XML文件的`zealots`根节点中需要指定命名空间(nameSpace)属性，用来和其他zealot xml文件区分该来，同时方便zealot的调用，XML示例如下：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 查询老师相关的SQL信息，命名空间nameSpace为zealots的根节点属性，各xml文件的nameSpace不能相同，如果不填nameSpace则需在ZealotConfig中配置与xml的nameSpace映射值. -->
+<zealots nameSpace="myTeacher">
+
+    <!-- 根据Id查询学生信息. -->
+    <zealot id="queryTeacherById">
+        SELECT * FROM t_teacher AS t WHERE
+        <equal field="t.c_id" value="id"/>
+    </zealot>
+
+</zealots>
+```
+
+```java
+/**
+ * 测试从扫描的zealot xml文件中生成sql.
+ */
+@Test
+public void testQueryTeacherSql() {
+    SqlInfo sqlInfo = Zealot.getSqlInfo("myTeacher", "queryTeacherById",
+            ParamWrapper.newInstance("id", "123").toMap());
+    String expectedSql = "SELECT * FROM t_teacher AS t WHERE t.c_id = ?";
+
+    assertEquals(expectedSql, sqlInfo.getSql());
+    assertArrayEquals(new Object[]{"123"}, sqlInfo.getParamsArr());
+}
+```
+
+#### 2. 自定义标签注解扫描配置
+
+当你的系统中需要用到自定义标签时，对你的Handler的配置也不需要再在ZealotConfig文件中的`configTagHandler()`方法中配置了，可以直接指定各Handler类所在项目的资源目录或相对路径即可。同时在Handler中使用`@Tagger`和`@Taggers`注解来标注该标签处理器所对应的标签、前缀、操作符等，配置和Handler使用示例如下：
+
+```java
+// 在你的启动类或方法中加入该语句，来初始化加载zealot handler目录中的注解和标签处理器
+// 参数 handlerLocations 值不能为空，如果为空，也不会报错，不过不会产生任何作用而已.
+ZealotConfigManager.getInstance()
+        .initLoadXmlLocations("myzealots/xml, xml/zealots, abc/zealot-user.xml")
+        .initLoadHandlerLocations("com.blinkfox.zealot.test.handler, com.blinkfox.myProject.zealot.Hello.java");
+```
+
+> **注**：参数`handlerLocations`，表示zealot的XML文件所在的位置，多个用逗号隔开,可以是目录也可以是具体的xml文件.
+
+Handler和注解的示例如下：
+
+```java
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.annotation.Tagger;
+import com.blinkfox.zealot.core.IConditHandler;
+
+/**
+ * 测试Tagger注解的Handler.
+ *
+ * @author blinkfox on 2018/4/28.
+ */
+@Tagger(value = "helloTagger", prefix = "Hello", symbol = "Tagger")
+public class TaggerTestHandler implements IConditHandler {
+
+    /**
+     * 由于只是用来测试注解，所以这里只做简单的拼接.
+     * @param source 构建所需的资源对象
+     * @return sqlInfo
+     */
+    @Override
+    public SqlInfo buildSqlInfo(BuildSource source) {
+        source.getSqlInfo().getJoin().append(source.getPrefix())
+                .append(" ").append(source.getSuffix());
+        return source.getSqlInfo();
+    }
+
+}
+```
+
+```java
+import com.blinkfox.zealot.bean.BuildSource;
+import com.blinkfox.zealot.bean.SqlInfo;
+import com.blinkfox.zealot.config.annotation.Tagger;
+import com.blinkfox.zealot.config.annotation.Taggers;
+import com.blinkfox.zealot.core.IConditHandler;
+
+/**
+ * 测试'Taggers'注解的Handler.
+ * @see com.blinkfox.zealot.config.annotation.Taggers
+ *
+ * @author blinkfox on 2018/4/28.
+ */
+@Taggers({
+        @Tagger(value = "hello", prefix = "hello", symbol = "blinkfox"),
+        @Tagger(value = "hi", prefix = "hi", symbol = "blinkfox"),
+        @Tagger(value = "hw", prefix = "hello", symbol = "world")
+})
+public class TaggersTestHandler implements IConditHandler {
+
+    /**
+     * 由于这个类只是用来测试注解，所以这里只做简单的字符串拼接.
+     * @param source 构建所需的资源对象
+     * @return sqlInfo
+     */
+    @Override
+    public SqlInfo buildSqlInfo(BuildSource source) {
+        source.getSqlInfo().getJoin().append(source.getPrefix())
+                .append(" ").append(source.getSuffix());
+        return source.getSqlInfo();
+    }
+
+}
+```
+
+这样就可以在例的xml文件中使用自定义的标签了，xml中的使用示例如下：
+
+```xml
+<!-- 根据Id查询课程信息 -->
+<zealot id="testTaggerHanderSql">
+    <!-- helloTagger 的自定义标签在 com.blinkfox.zealot.test.handler.TaggerTestHandler 类中通过自定义注解来定义和实现的 -->
+    <helloTagger />
+
+    <!-- sayHello 等自定义标签在 com.blinkfox.zealot.test.handler.TaggersTestHandler 类中通过自定义注解来定义和实现的 -->
+    <hello />
+    <hi />
+    <hw />
+</zealot>
+```
+
+#### 3. 新老版本兼用的配置方式
+
+老版本的配置方式是采用Java配置的方式，需要新建一个`ZealotConfig`配置类（继承自`AbstractZealotConfig`），老版本通过Java启动类或方法加载配置的方式即为：
+
+```java
+// 直接指定类的class
+ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
+
+// 或者类的class全名
+ZealotConfigManager.getInstance().initLoad("com.blinkfox.config.MyZealotConfig");
+
+// 或者类的实例,这个实例就可以直接从Spring等容器中获取了，不一定是new出来的
+ZealotConfigManager.getInstance().initLoad(new MyZealotConfig());
+```
+
+新版本也完全兼容以前的版本，所以配置方式只需扩展两个参数即可，如下：
+
+```java
+ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class, "zealot/xml", "com.blinkfox.zealot.test.handler");
+
+// 或者
+ZealotConfigManager.getInstance().initLoad("com.blinkfox.config.MyZealotConfig", "zealot/xml", "com.blinkfox.zealot.test.handler");
+
+// 或者
+ZealotConfigManager.getInstance().initLoad(new MyZealotConfig(), "zealot/xml", "com.blinkfox.zealot.test.handler");
+```
+
+当然，不填写后面两个的扫描位置，继续再`MyZealotConfig`类中指定配置xml路径和handler对应的标签、class也完全是可以的。
+
+## 六、老的配置方式及使用
+
+### 1. 创建Java配置类
+
+在你的Java web项目项目中，创建一个继承自`AbstractZealotConfig`的核心配置类，如以下示例：
 
 ```java
 package com.blinkfox.config;
 
-import com.blinkfox.zealot.config.AbstractZealotConfig;
-import com.blinkfox.zealot.config.entity.NormalConfig;
-import com.blinkfox.zealot.config.entity.XmlContext;
+import XmlContext;
+import AbstractZealotConfig;
 
 /**
  * 我继承的zealotConfig配置类
- * Created by blinkfox on 2016/11/4.
+ * Created by blinkfox on 2018/05/01.
  */
 public class MyZealotConfig extends AbstractZealotConfig {
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configNormal(NormalConfig normalConfig) {
-
+        // 1.1.5版本新增的方法
     }
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configXml(XmlContext ctx) {
 
     }
 
+    /**
+     * 1.3.0版本之后，该方法可以不必再覆盖了，按需覆盖。
+     */
     @Override
     public void configTagHandler() {
 
@@ -157,13 +336,17 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
 > **代码解释**：
 
-> (1). `configNormal()`方法是`1.1.5`版本新增的实现,主要用来配置Zealot的通用配置信息，包括是否开启`debug`模式，加载完毕之后是否打印`banner`等；
+> (1). `configNormal()`方法是`1.1.5`版本新增的方法,主要用来配置Zealot的通用配置信息，包括是否开启`debug`模式，加载完毕之后是否打印`banner`等；
 
 > (2). `configXml()`方法主要配置你自己SQL所在XML文件的命名标识和对应的路径，这样好让zealot能够读取到你的XML配置的SQL文件；
 
 > (3). `configTagHandler()`方法主要是配置你自定义的标签和对应标签的处理类，当你需要自定义SQL标签时才配置。
 
-然后，在你的web.xml中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
+> **注**: 以上三个方法自1.3.0版本之后，不再必须覆盖了，有了扫描和默认配置功能之后就可以按需覆盖了。
+
+### 2. 初始化加载配置-web.xml或Java方式
+
+接下来就是要在启动过程中加载配置类到内存中，如果你是Java web项目，则可以在`web.xml`文件中来引入zealot，这样容器启动时才会去加载和缓存对应的xml文档，示例配置如下：
 
 ```xml
 <!-- zealot相关配置的配置 -->
@@ -171,6 +354,12 @@ public class MyZealotConfig extends AbstractZealotConfig {
    <!-- paramName必须为zealotConfigClass名称，param-value对应刚创建的Java配置的类路径 -->
    <param-name>zealotConfigClass</param-name>
    <param-value>com.blinkfox.config.MyZealotConfig</param-value>
+   <!-- zealotXmlLocations参数，表示zealot xml 文件所在的位置(可以是xml文件，也可以是目录)，如果是多个位置则用逗号(',')分割 -->
+   <param-name>zealotXmlLocations</param-name>
+   <param-value></param-value>
+   <!-- zealotHandlerLocations参数，表示zealot 自定义标签处理器所在的位置(只是目录),如果是多个位置则用逗号(',')分割. -->
+   <param-name>zealotHandlerLocations</param-name>
+   <param-value>com.blinkfox.zealot.test.handler</param-value>
 </context-param>
 <!-- listener-class必须配置，JavaEE容器启动时才会执行 -->
 <listener>
@@ -178,17 +367,20 @@ public class MyZealotConfig extends AbstractZealotConfig {
 </listener>
 ```
 
-如果你不是Java web项目，或者你就想通过Java代码来初始化加载zealot的配置信息，可以这样来做：
+!> **注**：如果你不是Java web项目，或者你就想通过Java代码来初始化加载zealot的配置信息，可以这样来做：
 
 ```java
 ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 ```
 
+### 3. 创建XML的SQL文件
+
 接下来，就开始创建我们业务中的SQL及存放的XML文件了，在你项目的资源文件目录中，不妨创建一个管理SQL的文件夹，我这里取名为`zealotxml`，然后在`zealotxml`文件夹下创建一个名为`zealot-user.xml`的XML文件，用来表示用户操作相关SQL的管理文件。在XML中你就可以创建自己的SQL啦，这里对`user`表的两种查询，示例如下：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<zealots>
+<!-- 命名空间nameSpace属性是1.3.0开始增加的属性，如果配置了就可以不用在ZealotConfig中配置指定了，便于和其他zealot xml文件区分开. -->
+<zealots nameSpace = "myUser">
 
     <!-- 根据Id查询用户信息 -->
     <zealot id="queryUserById">
@@ -204,7 +396,7 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
         <andBetween match="?startAge > 0 || ?endAge > 0" field="age" start="startAge" end="endAge"/>
         <andBetween match="?startBirthday != empty || ?endBirthday != empty" field="birthday" start="startBirthday" end="endBirthday"/>
         <andIn match="?sexs != empty" field="sex" value="sexs"/>
-        order by id desc
+        order by id desc 
     </zealot>
 
 </zealots>
@@ -223,6 +415,8 @@ ZealotConfigManager.getInstance().initLoad(MyZealotConfig.class);
 > (5). value、start、end则表示对应的参数。
 
 > (6). `?email != empty`前面的`?`表示属性的安全访问，即使email不存在的时候也不会抛出异常，仍会返回false。更详细的使用可以参考MVEL属性安全访问的表达式语法。
+
+### 4. 配置XML的命名空间
 
 回到你的Zealot核心配置类中，配置你Java代码中需要识别这个XML的标识和XML路径，我这里的示例如下：
 
@@ -249,6 +443,7 @@ public class MyZealotConfig extends AbstractZealotConfig {
 
     @Override
     public void configXml(XmlContext ctx) {
+        // 注：如果在zealots根节点中指定了命名空间nameSpace属性的值，那么就可以不用在此方法中配置了，只需指定扫描XML的位置即可.
         ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");
     }
 
@@ -263,6 +458,8 @@ public class MyZealotConfig extends AbstractZealotConfig {
 > **代码解释**：
 
 > (1). `ctx.add(USER_ZEALOT, "/zealotxml/zealot-user.xml");`代码中第一个参数`USER_ZEALOT`表示的是对XML做唯一标识的自定义静态常量，第二个参数就是你创建的对应的XML的资源路径。
+
+### 5. 调用并生成SQL
 
 最后，就是一个UserController的调用测试类，这里的目的用来调用执行，测试我们前面配置书写的SQL和参数，参考代码如下：
 
@@ -319,11 +516,26 @@ public class UserController extends Controller {
 
 > **生成SQL结果**：
 
-> ----生成sql的为:select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND ? AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc
+```sql
+--生成sql的为:
+select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND ? AND birthday BETWEEN ? AND ? AND sex in (?, ?) order by id desc
 
-> ----生成sql的参数为:[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
+-- 生成sql的参数为:
+[%张%, %san%, 23, 28, 1990-01-01 00:00:00, 1991-01-01 23:59:59, 0, 1]
+```
 
-## 六、Zealot SQL配置
+### Zealot中其他调用方法
+
+以下四个调用方法中，除了`getSqlInfo(String nameSpace, String zealotId, Object paramObj)`方法外都是1.3.0版本新增的调用方法。
+
+- `getSqlInfo(String nameSpace, String zealotId)`: 根据命名空间和zealotId来获取SQL，由于没有参数，所以SQL必然是静态SQL才行
+- `getSqlInfo(String nameSpace, String zealotId, Object paramObj)`: 根据命名空间、zealotId和参数对象(JavaBean或者Map)来获取SQL
+- `getSqlInfoSimply(String nsAtZealotId)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，由于没有参数，所有SQL必然是静态SQL才行
+- `getSqlInfoSimply(String nsAtZealotId, Object paramObj)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，和参数对象(JavaBean或者Map)来获取SQL
+
+  [3]: http://www.jfinal.com/
+
+## 七、Zealot SQL配置
 
 Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
 
@@ -518,7 +730,7 @@ choose标签主要用于解决"无数的"多分支条件选择逻辑，对应的
 SQL片段的生成结果：UPDATE t_student SET s.c_sex = 'male' , s.c_status = 'no' , s.c_age = '幼年' WHERE s.c_id = '123'
 ```
 
-## 五、自定义标签和处理器
+## 八、自定义标签和处理器
 
 从前面所知,条件标签是生成动态SQL和参数的核心，但是项目开发的过程中往往有更多多复杂的逻辑来生成某些SQL，甚至那些逻辑还要被多处使用到，默认的一些标签不能够满足开发需求，那么自定义自己的动态条件标签来实现就显得很重要了。所谓自定义标签和处理器就是设置自定义的标签名称、匹配条件、参数和数据库字段等,再通过自定义的处理器来控制生成SQL的逻辑，这样就可以达到生成我们需要的SQL的功能，这样的标签重大的意义在于能够最大化简化sql的书写和功能的复用。
 
@@ -692,7 +904,7 @@ public void queryUserIdEmail() {
 ----生成sql的参数为:[%san%]
 ```
 
-## 七、流程控制标签
+## 九、流程控制标签
 
 由于Zealot中SQL片段生成的标签大多是工具库预设或自定义的，但是在实现更为灵活的逻辑控制时就显得力不从心了，如果都通过自定义标签去实现更灵活多变的逻辑会显得很麻烦。因此，决定在1.0.6的版本中增加更为强大灵活的流程逻辑控制标签。自由的流程逻辑控制方式就意味着难以实现绑定变量参数的方式来生成SQL，而是即时生成替换变量值后的SQL。
 
@@ -766,7 +978,7 @@ foreach标签允许您在模板中迭代集合或数组。 注意：foreach的�
 @end{}
 ```
 
-## 八、更多功能
+## 十、更多功能
 
 Zealot中除了上面介绍的一些功能之外，还有其他额外的辅助、简化开发的功能，以下作简要介绍。
 
@@ -871,11 +1083,11 @@ sqlInfo.removeIfExist(" 1 = 1 AND");
 sqlInfo.removeIfExist(" 1 <> 1");
 ```
 
-## 九、许可证
+## 十一、许可证
 
 Zealot类库遵守[Apache License 2.0][6] 许可证
 
-## 十、版本更新记录
+## 十二、版本更新记录
 
 - v1.3.0(2018-05-02)
   - 新增完善各种动态SQL操作符和XML标签的`与`、`或`、`非`的逻辑
