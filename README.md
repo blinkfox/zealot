@@ -260,7 +260,18 @@ public class TaggersTestHandler implements IConditHandler {
 </zealot>
 ```
 
-#### 3. 新老版本兼用的配置方式
+#### 3. 其他配置
+
+Zealot的配置中，除了xml和Handler的配置外，还有一些其他普通配置项，主要有以下三种，在启动类或者方法中，通过Java的配置方式如下：
+
+```java
+NormalConfig.getInstance() // 获取普通配置的唯一实例
+        .setDebug(false)  // 设置是否开启debug模式，这样每次调用都会实时从最新的xml文件中获取sql，默认值为false.
+        .setPrintBanner(true) // 设置是否打印zealot的启动banner，默认为true.
+        .setPrintSqlInfo(true); // 设置是否打印zealot的sql日志，默认为true.
+```
+
+#### 4. 新老版本兼用的配置方式
 
 老版本的配置方式是采用Java配置的方式，需要新建一个`ZealotConfig`配置类（继承自`AbstractZealotConfig`），老版本通过Java启动类或方法加载配置的方式即为：
 
