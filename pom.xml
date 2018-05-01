@@ -4,8 +4,9 @@
 
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <packaging>jar</packaging>
     <version>1.3.0</version>
+    <packaging>jar</packaging>
+
     <name>zealot</name>
     <description>This is a SQL and parameters dynamically generated tool.</description>
     <url>https://blinkfox.github.io/zealot/</url>
@@ -16,12 +17,15 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <name>blinkfox</name>
             <email>chenjiayin1990@163.com</email>
+            <url>http://blinkfox.com/</url>
         </developer>
     </developers>
+
     <scm>
         <connection>scm:git@github.com:blinkfox/zealot.git</connection>
         <developerConnection>scm:git@github.com:blinkfox/zealot.git</developerConnection>
