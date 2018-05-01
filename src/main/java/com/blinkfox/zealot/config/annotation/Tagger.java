@@ -31,7 +31,7 @@ public @interface Tagger {
     String prefix() default "";
 
     /**
-     * SQL操作符，如: ' = ? ', ' >= ? ', ' IN '等.
+     * SQL操作符，如: ' = ? ', ' LIKE ? ', ' IN '等.
      *
      * @return 字符串值
      */

@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * " IS NULL "和" IS NOT NULL "动态sql片段生成的实现类.
- * <p>标签基础示例:'<isnull match="a.id != empty" field="a.name"></isnull>'</p>
+ * <p>标签基础示例:'[isnull match="a.id != empty" field="a.name" /]'</p>
  * @author blinkfox on 2018-4-23.
  */
 public class IsNullHandler implements IConditHandler {

@@ -48,6 +48,7 @@ public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
      * 构建Like模糊查询的sqlInfo信息.
      * @param fieldText 字段文本值
      * @param valueText 参数值
+     * @param patternText 模式字符串文本
      * @return 返回SqlInfo信息
      */
     public SqlInfo buildLikeSql(String fieldText, String valueText, String patternText) {
