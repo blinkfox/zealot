@@ -1,15 +1,15 @@
-Zealot的核心功能就在于它XML格式的SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
+Zealot的核心功能就在于它XML格式的SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`isNull`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
 
-Zealot中默认自带了以下几类条件标签，分别是：`equal`、`like`、`between`、`in`、`text`、`import`、`choose`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件、范围匹配条件及其他逻辑操作条件；某些条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形。各标签的属性和生成SQL的示例如下：
+Zealot中默认自带了以下几类条件标签，分别是：`equal`、`like`、`between`、`in`、`isNull`、`text`、`import`、`choose`等，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件、范围匹配条件及其他逻辑操作条件；某些条件标签又各自额外附带了两个连接前缀和否定情况，分别是：`AND`、`OR`、`NOT`，用于表示逻辑`与`、`或`、`非`的情形。各标签的属性和生成SQL的示例如下：
 
 ### equal
 
 #### 标签
 
 ```xml
-<equal match="" field="" value=""/>
-<andEqual match="" field="" value=""/>
-<orEqual match="" field="" value=""/>
+<equal match="" field="" value="" />
+<andEqual match="" field="" value="" />
+<orEqual match="" field="" value="" />
 ```
 
 #### 属性介绍
@@ -53,25 +53,33 @@ SQL片段的生成结果：AND email = ?
 #### 标签
 
 ```xml
-<like match="" field="" value=""/>
-<andLike match="" field="" value=""/>
-<orLike match="" field="" value=""/>
+<like match="" field="" value="" pattern="" />
+<andLike match="" field="" value="" pattern="" />
+<orLike match="" field="" value="" pattern="" />
+
+<!-- not like的 相关标签. -->
+<notLike match="" field="" value="" pattern="" />
+<andNotLike match="" field="" value="" pattern="" />
+<orNotLike match="" field="" value="" pattern="" />
 ```
 
 #### 属性介绍
 
-- **match**，同上。
-- **field**，同上。
-- **value**，同上。
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+- **value**，表示参数值，对应Java中的名称。条件必要（填）属性。pattern和value只能存在一个，value生成的SQL片段默认是两边模糊，即：`%%`。
+- **pattern**，表示like匹配的模式，如：`abc%`、`_bc`等。条件必要（填）属性。pattern和value只能存在一个，pattern用来指定自定义的匹配模式。
 
 #### 生成示例
 
 ```markup
-<andLike match="?email != empty" field="email" value="email"></andLike>
-
+<andLike match="?email != empty" field="email" value="email"/ >
 SQL片段的生成结果：AND email LIKE ?
-
 解释：如果email不等于空时，才生成此条SQL片段和参数
+
+<notLike field="email" value="%@gmail.com"/ >
+SQL片段的生成结果：email NOT LIKE '%@gmail.com'
+解释：匹配所有不是gmail的邮箱.
 ```
 
 ### between
@@ -79,15 +87,15 @@ SQL片段的生成结果：AND email LIKE ?
 #### 标签
 
 ```xml
-<between match="" field="" start="" end=""/>
-<andBetween match="" field="" start="" end=""/>
-<orBetween match="" field="" start="" end=""/>
+<between match="" field="" start="" end="" />
+<andBetween match="" field="" start="" end="" />
+<orBetween match="" field="" start="" end="" />
 ```
 
 #### 属性介绍
 
-- **match**，同上。
-- **field**，同上。
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
 - **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
 - **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
 
@@ -111,16 +119,21 @@ start为null,end为null，则不生成SQL片段
 #### 标签
 
 ```xml
-<in match="" field="" value=""/>
-<andIn match="" field="" value=""/>
-<orIn match="" field="" value=""/>
+<in match="" field="" value="" />
+<andIn match="" field="" value="" />
+<orIn match="" field="" value="" />
+
+<!-- not in 相关的标签. -->
+<in match="" field="" value="" />
+<andIn match="" field="" value="" />
+<orIn match="" field="" value="" />
 ```
 
 #### 属性介绍
 
-- **match**，同上。
-- **field**，同上。
-- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必要（填）属性。
 
 #### 使用生成示例
 
@@ -130,6 +143,36 @@ start为null,end为null，则不生成SQL片段
 SQL片段的生成结果：AND sex in (?, ?)
 
 解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
+```
+
+### is null
+
+#### 标签
+
+```xml
+<isNull match="" field="" />
+<andIsNull match="" field=""  />
+<orIsNull match="" field="" />
+
+<!-- IS NOT NULL 相关的标签. -->
+<isNotNull match="" field="" />
+<andIsNotNull match="" field="" />
+<orIsNotNull match="" field="" />
+```
+
+#### 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+
+#### 使用生成示例
+
+```markup
+<andIsNull match="?id != empty" field="s.n_age" />
+
+SQL片段的生成结果：AND s.n_age IS NULL
+
+解释：如果 id 不等于空时，才生成此条SQL片段和参数
 ```
 
 ### text
@@ -187,8 +230,8 @@ import标签主要用于在zealot标签中导入其它公共的zealot节点，�
 
 ```xml
 <zealot id="commonStuCondition">
-    <andMoreEqual match="?age > 0" field="s.n_age" value="age"/>
-    <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday"/>
+    <andMoreEqual match="?age > 0" field="s.n_age" value="age" />
+    <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday" />
 </zealot>
 
 <zealot id="queryStudents">

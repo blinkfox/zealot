@@ -533,23 +533,29 @@ select * from user where nickname LIKE ? AND email LIKE ? AND age BETWEEN ? AND 
 - `getSqlInfoSimply(String nsAtZealotId)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，由于没有参数，所有SQL必然是静态SQL才行
 - `getSqlInfoSimply(String nsAtZealotId, Object paramObj)`: 将命名空间和zealotId合并在一起，通过`@@`符号来分割，和参数对象(JavaBean或者Map)来获取SQL
 
-  [3]: http://www.jfinal.com/
-
 ## 七、Zealot SQL配置
 
-Zealot的核心功能就在于它XML格式的 SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
+Zealot的核心功能就在于它XML格式的SQL配置文件。配置文件也仅仅是一个普通的XML文件，在XML中只需要少许的配置就可以动态生成自己所需要的查询条件。在XML中`zealots`标签作为根标签，其中的`zealot`则是一个独立SQL的元素标签，在`zealot`标签中才包含`like`、`andLike`、`andBetween`、`andIn`、`isNull`、`text`、`import`、`choose`等条件标签,以下重点介绍各条件标签。
 
-Zealot中默认自带了以下几类条件标签，分别是：`equal`、`like`、`between`、`in`、`text`、`import`、`choose`，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件、范围匹配条件及其他逻辑操作条件；某些条件标签又各自额外附带了两个连接前缀，分别是：`and`和`or`，用于表示逻辑`与`和`或`的情形。各标签的属性和生成SQL的示例如下：
+Zealot中默认自带了以下几类条件标签，分别是：`equal`、`like`、`between`、`in`、`isNull`、`text`、`import`、`choose`等，分别对应着SQL查询中的等值匹配条件、模糊匹配条件、区间匹配条件、范围匹配条件及其他逻辑操作条件；某些条件标签又各自额外附带了两个连接前缀和否定情况，分别是：`AND`、`OR`、`NOT`，用于表示逻辑`与`、`或`、`非`的情形。各标签的属性和生成SQL的示例如下：
 
-### 1. equal、andEqual、orEqual 标签介绍
+### 1. equal
 
-#### (1). 属性介绍
+#### 标签
+
+```xml
+<equal match="" field="" value="" />
+<andEqual match="" field="" value="" />
+<orEqual match="" field="" value="" />
+```
+
+#### 属性介绍
 
 - **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。匹配规则使用`MVEL2`表达式，关于[MVEL的语法文档][4]参考这里。
 - **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
 - **value**，表示参数值，对应Java中的名称。必要（填）属性，值也是使用`MVEL2`做解析。
 
-#### (2). 生成示例
+#### 生成示例
 
 ```markup
 标签:<equal field="nickname" value="nickName"></equal>
@@ -561,51 +567,78 @@ SQL片段的生成结果：AND email = ?
 解释：如果email不等于空时，才生成此条SQL片段和参数
 ```
 
-#### (3). 与Equal类似的标签
+#### 与Equal类似的标签
 
-- moreThan 大于
-- andMoreThan 带and关键字的大于
-- orMoreThan 带or关键字的大于
-- lessThan 小于
-- andLessThan 带and关键字的小于
-- orLessThan 带or关键字的小于
-- moreEqual 大于等于
-- andMoreEqual 带and关键字的大于等于
-- orMoreEqual 带or关键字的大于等于
-- lessEqual 小于等于
-- andLessEqual 带and关键字的小于等于
-- orLessEqual 带or关键字的小于等于
+- `notEqual` 不等于
+- `andNotEqual` 带and关键字的不等于
+- `orNotEqual` 带or关键字的不等于
+- `moreThan` 大于
+- `andMoreThan` 带and关键字的大于
+- `orMoreThan` 带or关键字的大于
+- `lessThan` 小于
+- `andLessThan` 带and关键字的小于
+- `orLessThan` 带or关键字的小于
+- `moreEqual` 大于等于
+- `andMoreEqual` 带and关键字的大于等于
+- `orMoreEqual` 带or关键字的大于等于
+- `lessEqual` 小于等于
+- `andLessEqual` 带and关键字的小于等于
+- `orLessEqual` 带or关键字的小于等于
 
-### 2. like、andLike、orLike 标签介绍
+### 2. like
 
-#### (1). 属性介绍
+#### 标签
 
-- **match**，同上。
-- **field**，同上。
-- **value**，同上。
+```xml
+<like match="" field="" value="" pattern="" />
+<andLike match="" field="" value="" pattern="" />
+<orLike match="" field="" value="" pattern="" />
 
-#### (2). 生成示例
-
-```markup
-<andLike match="?email != empty" field="email" value="email"></andLike>
-
-SQL片段的生成结果：AND email LIKE ?
-
-解释：如果email不等于空时，才生成此条SQL片段和参数
+<!-- not like的 相关标签. -->
+<notLike match="" field="" value="" pattern="" />
+<andNotLike match="" field="" value="" pattern="" />
+<orNotLike match="" field="" value="" pattern="" />
 ```
 
-### 3. between、andBetween、orBetween 标签介绍
+#### 属性介绍
 
-#### (1). 属性介绍
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+- **value**，表示参数值，对应Java中的名称。条件必要（填）属性。pattern和value只能存在一个，value生成的SQL片段默认是两边模糊，即：`%%`。
+- **pattern**，表示like匹配的模式，如：`abc%`、`_bc`等。条件必要（填）属性。pattern和value只能存在一个，pattern用来指定自定义的匹配模式。
 
-- **match**，同上。
-- **field**，同上。
+#### 生成示例
+
+```markup
+<andLike match="?email != empty" field="email" value="email"/ >
+SQL片段的生成结果：AND email LIKE ?
+解释：如果email不等于空时，才生成此条SQL片段和参数
+
+<notLike field="email" value="%@gmail.com"/ >
+SQL片段的生成结果：email NOT LIKE '%@gmail.com'
+解释：匹配所有不是gmail的邮箱.
+```
+
+### 3. between
+
+#### 标签
+
+```xml
+<between match="" field="" start="" end="" />
+<andBetween match="" field="" start="" end="" />
+<orBetween match="" field="" start="" end="" />
+```
+
+#### 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
 - **start**，表示区间匹配条件的开始参数值，对应Java中的名称，条件必填。
 - **end**，表示区间匹配条件的结束参数值，对应Java中的名称，条件必填。
 
-> **注意**：Zealot中对start和end的空判断是检测是否是null,而不是空字符串，0等情况。所以，对start和end的空处理应该是null。
+!> **注意**：Zealot中对start和end的空判断是检测是否是null,而不是空字符串，0等情况。所以，对start和end的空处理应该是null。
 
-#### (2). 生成示例
+#### 生成示例
 
 ```markup
 <andBetween match="?startAge != null || ?endAge != null" field="age" start="startAge" end="endAge"></andBetween>
@@ -618,15 +651,28 @@ start为null,end为null，则不生成SQL片段
 **解释**：match标签是非必填的，区间查询中，靠start和end两种条件也可以组成一个简单的动态情形。如果start为空，end不为空，则是大于等于查询；如果start为空，end不为空，则是小于等于查询；如果start、end均不为空，则是区间查询；两者会均为空则不生产此条sql。
 ```
 
-### 4. in、andIn、orIn 标签介绍
+### 4. in
 
-#### (1). 属性介绍
+#### 标签
 
-- **match**，同上。
-- **field**，同上。
-- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
+```xml
+<in match="" field="" value="" />
+<andIn match="" field="" value="" />
+<orIn match="" field="" value="" />
 
-#### (2). 使用生成示例
+<!-- not in 相关的标签. -->
+<in match="" field="" value="" />
+<andIn match="" field="" value="" />
+<orIn match="" field="" value="" />
+```
+
+#### 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+- **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必要（填）属性。
+
+#### 使用生成示例
 
 ```markup
 <andIn match="?sexs != empty" field="sex" value="sexs"></andIn>
@@ -636,33 +682,73 @@ SQL片段的生成结果：AND sex in (?, ?)
 解释：如果sexs不等于空时，才生成此条SQL片段和参数(这里的sexs假设有两个值)
 ```
 
-### 5. text 标签介绍
+### 5. isNull
 
-text标签主要用于在标签内部自定义需要的文本和需要传递的各种参数，为SQL书写提供灵活性
+#### 标签
 
-#### (1). 属性介绍
+```xml
+<isNull match="" field="" />
+<andIsNull match="" field=""  />
+<orIsNull match="" field="" />
+
+<!-- IS NOT NULL 相关的标签. -->
+<isNotNull match="" field="" />
+<andIsNotNull match="" field="" />
+<orIsNotNull match="" field="" />
+```
+
+#### 属性介绍
+
+- **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
+- **field**，表示对应数据库的字段，可以是数据库的表达式、函数等。必要（填）属性。
+
+#### 使用生成示例
+
+```markup
+<andIsNull match="?id != empty" field="s.n_age" />
+
+SQL片段的生成结果：AND s.n_age IS NULL
+
+解释：如果 id 不等于空时，才生成此条SQL片段和参数
+```
+
+### 6. text
+
+text标签主要用于在标签内部自定义需要的文本和需要传递的各种参数，为SQL书写提供灵活性。
+
+#### 标签
+
+```xml
+<text match="" value="">
+    ...
+</text>
+```
+
+#### 属性介绍
 
 - **match**，同上。
 - **value**，表示参数的集合，值可以是数组，也可以是Collection集合，还可以是单个的值。必填
 
-#### (2). 使用生成示例
+#### 使用生成示例
 
-```markup
+```xml
 <text match="" value="{name1, name2, email}">
     and name in (?, ?)
     and email = ?
 </text>
+```
 
+```markup
 SQL片段的生成结果：and name in (?, ?) and email = ?
 
 解释：如果match为true、不填写或无match标签时，才生成此条SQL片段和自定义传递的参数，参数就是通过`name1`、`name2`和`email`组合成的数组或集合，或者直接传递集合或数组（此处组合而成的数组，如果是集合就把'{'换成'['即可）。
 ```
 
-### 6. import 介绍
+### 7. import
 
 import标签主要用于在zealot标签中导入其它公共的zealot节点，便于程序代码逻辑的复用。
 
-#### (1). 标签
+#### 标签
 
 ```xml
 <import zealotid="" />
@@ -670,19 +756,19 @@ import标签主要用于在zealot标签中导入其它公共的zealot节点，�
 <import match="" namespace="" zealotid="" value="" />
 ```
 
-#### (2). 属性介绍
+#### 属性介绍
 
 - **match**，表示匹配条件。非必要（填）属性，如果不写（填）此属性，则视为必然生成此条件SQL片段；否则匹配结果为true时才生成，匹配结果为false时，不生成。
 - **namespace**，表示需要引用导入的节点所在的xml文件的命名空间，非必填属性。如果如果不写（填）此属性，则视为仅在本xml文件中查找对应的zealotId的节点。
 - **zealotid**，表示要引用导入的zealot节点的ID，必填属性。
 - **value**，表示需要传入到要引用的zealot节点中的上下文参数值，非必填属性。如果不写（填）此属性，则传递最顶层的上下文参数。
 
-#### (3). 使用生成示例
+#### 使用生成示例
 
 ```xml
 <zealot id="commonStuCondition">
-    <andMoreEqual match="?age > 0" field="s.n_age" value="age"/>
-    <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday"/>
+    <andMoreEqual match="?age > 0" field="s.n_age" value="age" />
+    <andBetween match="(?startBirthday != null) || (?endBirthday != null)" field="s.d_birthday" start="startBirthday" end="endBirthday" />
 </zealot>
 
 <zealot id="queryStudents">
@@ -696,23 +782,23 @@ import标签主要用于在zealot标签中导入其它公共的zealot节点，�
 SQL片段的生成结果：AND s.n_age >= ? AND s.d_birthday BETWEEN ? AND ?
 ```
 
-### 7. choose 标签介绍
+### 8. choose
 
 choose标签主要用于解决"无数的"多分支条件选择逻辑，对应的即是Java中`if/else if/ ... /else if/else`这种逻辑。
 
-#### (1). 标签
+#### 标签
 
 ```xml
 <choose when="" then="" when2="" then2="" ... whenx="" thenx="" else="" />
 ```
 
-#### (2). 属性介绍
+#### 属性介绍
 
 - **when**，表示匹配条件，可以写无数个，对应于Java中的`if/else if`条件。必要（填）属性，如果不写（填）此属性，表示false，直接进入`else`的逻辑块中。
 - **then**，表示需要执行的逻辑，和`when`向对应，可以写无数个，内容是字符串或者zealot的字符串模版，必要（填）属性。如果如果不写（填）此属性，即使满足了对应的`when`条件，也不会做SQL的拼接操作。
 - **else**，表示所有when条件都不满足时才执行的逻辑，内容是字符串或者zealot的字符串模版，非必填属性。如果不写（填）此属性，则表示什么都不做（这样就无任何意义了）。
 
-#### (3). 使用生成示例
+#### 使用生成示例
 
 ```xml
 <zealot id="queryByChoose">
@@ -1150,7 +1236,6 @@ Zealot类库遵守[Apache License 2.0][6] 许可证
   - 完善文档注释
 - v1.0.0(2016-11-04)
   - 核心功能完成
-
 
   [1]: https://github.com/blinkfox/zealot
   [2]: http://v.youku.com/v_show/id_XMTM4MjgyNDgxMg
