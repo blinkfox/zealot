@@ -16,7 +16,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 
 ## 二、主要特性
 
-- 轻量级，jar包仅仅`74`k大小，简单、无副作用的集成和使用
+- 轻量级，jar包仅仅`72`k大小，简单、无副作用的集成和使用
 - 提供了纯`Java`代码和`XML`两种方式书写维护SQL
 - `Java`的方式采用流式API的方式书写动态SQL，易于书写和阅读
 - `XML`的方式让SQL和Java代码解耦和，易于维护
@@ -45,7 +45,7 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 <dependency>
     <groupId>com.blinkfox</groupId>
     <artifactId>zealot</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 

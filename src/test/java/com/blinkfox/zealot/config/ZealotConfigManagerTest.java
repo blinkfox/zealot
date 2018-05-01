@@ -5,6 +5,7 @@ import com.blinkfox.zealot.config.entity.XmlContext;
 
 import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class ZealotConfigManagerTest {
     public void initLoadXmlLocations() {
         ZealotConfigManager.getInstance().initLoadXmlLocations("zealot");
         Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlPathMap();
-        Assert.assertTrue(xmlMaps.size() == 2);
+        Assert.assertTrue(xmlMaps.size() >= 2);
     }
 
     /**
@@ -32,7 +33,7 @@ public class ZealotConfigManagerTest {
     public void initLoadHandlerLocations() {
         ZealotConfigManager.getInstance().initLoadHandlerLocations("com.blinkfox.zealot.test.handler");
         Map<String, TagHandler> tagHandlerMap = AbstractZealotConfig.getTagHandlerMap();
-        Assert.assertTrue(tagHandlerMap.size() == 46);
+        Assert.assertTrue(tagHandlerMap.size() >= 46);
     }
 
 }
