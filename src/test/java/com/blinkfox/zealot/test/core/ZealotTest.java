@@ -23,7 +23,7 @@ import org.junit.Test;
 
 /**
  * Zealot单元测试类.
- * Created by blinkfox on 2016/12/26.
+ * @author blinkfox on 2016/12/26.
  */
 public class ZealotTest {
 
@@ -54,7 +54,7 @@ public class ZealotTest {
     @Test
     public void testGetUserById() {
         // 构造查询的参数
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>(8);
         paramMap.put("id", "2");
         paramMap.put("age", 21);
         paramMap.put("name1", "张三");
@@ -84,7 +84,7 @@ public class ZealotTest {
     @Test
     public void testGetUsers() {
         // 构造查询的参数
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>(16);
         paramMap.put("nickName", "张");
         paramMap.put("state", 1);
         paramMap.put("startAge", 23);
@@ -118,7 +118,7 @@ public class ZealotTest {
     @Test
     public void testGetUsersByFlowTag() {
         // 构造查询的参数
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>(4);
         paramMap.put("nickName", "张");
         paramMap.put("email", "zhang");
 
@@ -145,7 +145,7 @@ public class ZealotTest {
     @Test
     public void testGetUsersByCustomTag() {
         // 构造查询的参数
-        Map<String, Object> user = new HashMap<String, Object>();
+        Map<String, Object> user = new HashMap<String, Object>(4);
         user.put("userId", 3);
         user.put("userEmail", "san");
 
@@ -171,7 +171,7 @@ public class ZealotTest {
     @Test
     public void testQueryStudents() {
         // 构造查询的参数
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>(8);
         paramMap.put("stuName", "张");
         paramMap.put("age", 19);
         paramMap.put("sexs", new Integer[]{0, 1});

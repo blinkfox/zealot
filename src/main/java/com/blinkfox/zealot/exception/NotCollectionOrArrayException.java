@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * 不是集合或者数组的自定义异常.
- * Created by blinkfox on 2017-04-01.
+ * @author blinkfox on 2017-04-01.
  */
 public class NotCollectionOrArrayException extends RuntimeException {
 

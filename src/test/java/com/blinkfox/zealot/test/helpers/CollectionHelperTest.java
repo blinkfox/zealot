@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * 集合工具类的单元测试类.
- * Created by blinkfox on 2017/4/29.
+ * @author blinkfox on 2017/4/29.
  */
 public class CollectionHelperTest {
 

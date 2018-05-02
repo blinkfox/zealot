@@ -23,7 +23,7 @@ import org.dom4j.Node;
 
 /**
  * Zealot主配置类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class AbstractZealotConfig {
 

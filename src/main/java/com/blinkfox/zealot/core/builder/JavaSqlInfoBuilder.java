@@ -6,7 +6,7 @@ import java.util.Collection;
 
 /**
  * 构建使用Java拼接sql片段的工具类.
- * Created by blinkfox on 2017-04-01.
+ * @author blinkfox on 2017-04-01.
  */
 public class JavaSqlInfoBuilder extends SqlInfoBuilder {
 

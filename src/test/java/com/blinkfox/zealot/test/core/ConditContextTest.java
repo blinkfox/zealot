@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * ConditContext测试类.
- * Created by blinkfox on 2017/4/24.
+ * @author blinkfox on 2017/4/24.
  */
 public class ConditContextTest {
 

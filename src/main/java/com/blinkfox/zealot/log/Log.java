@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 /**
  * 基于 JDK Logging API 的日志打印工具类.
- * Created by blinkfox on 2016/11/5.
+ * @author blinkfox on 2016/11/5.
  */
 public class Log {
 

@@ -2,7 +2,7 @@ package com.blinkfox.zealot.consts;
 
 /**
  * 常用的SQL关键字常量类.
- * Created by blinkfox on 2017/4/1.
+ * @author blinkfox on 2017/4/1.
  */
 public final class SqlKeyConst {
 

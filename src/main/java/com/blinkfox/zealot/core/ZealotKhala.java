@@ -16,7 +16,7 @@ import java.util.Collections;
 
 /**
  * 构造Zealot的Java链式SQL和参数的类.
- * Created by blinkfox on 2017-03-31.
+ * @author blinkfox on 2017-03-31.
  */
 public final class ZealotKhala {
 

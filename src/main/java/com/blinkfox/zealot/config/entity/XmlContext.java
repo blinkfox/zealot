@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 枚举单例的XML文件对应的Document配置的上下文.
- * Created by blinkfox on 2016-11-01.
+ * @author blinkfox on 2016-11-01.
  */
 public enum XmlContext {
 

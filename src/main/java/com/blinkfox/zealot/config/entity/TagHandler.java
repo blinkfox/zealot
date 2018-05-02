@@ -5,7 +5,7 @@ import com.blinkfox.zealot.core.IConditHandler;
 
 /**
  * 标签对应的动态sql生成的处理类.
- * Created by blinkfox on 2016-11-01.
+ * @author blinkfox on 2016-11-01.
  */
 public class TagHandler {
 

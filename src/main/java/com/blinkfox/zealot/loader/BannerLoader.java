@@ -4,7 +4,7 @@ import com.blinkfox.zealot.log.Log;
 
 /**
  * 加载 zealot banner 加载器类.
- * Created by blinkfox on 2017/4/21.
+ * @author blinkfox on 2017/4/21.
  */
 public class BannerLoader {
     

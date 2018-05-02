@@ -14,7 +14,7 @@ import org.dom4j.Node;
 /**
  * 普通查询动态sql生成的实现类.
  * <p>如：等值、大于、小于、大于等于、小于等于 查询.</p>
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class NormalHandler implements IConditHandler {
 

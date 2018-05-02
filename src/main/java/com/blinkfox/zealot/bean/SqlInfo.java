@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 构造sql查询信息的拼接和参数对象.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class SqlInfo {
 

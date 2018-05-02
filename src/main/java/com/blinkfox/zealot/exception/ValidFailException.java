@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * 校验不通过时的异常.
- * Created by blinkfox on 2018-04-22.
+ * @author blinkfox on 2018-04-22.
  */
 public class ValidFailException extends RuntimeException {
 

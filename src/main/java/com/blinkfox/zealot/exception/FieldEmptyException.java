@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * 字段为空的异常.
- * Created by blinkfox on 2016/11/7.
+ * @author blinkfox on 2016/11/7.
  */
 public class FieldEmptyException extends RuntimeException {
 

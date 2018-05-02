@@ -16,7 +16,7 @@ import org.dom4j.Node;
 
 /**
  * 任意文本SQL及参数的处理器.
- * Created by blinkfox on 2017/4/15.
+ * @author blinkfox on 2017/4/15.
  */
 public class TextHandler implements IConditHandler {
 

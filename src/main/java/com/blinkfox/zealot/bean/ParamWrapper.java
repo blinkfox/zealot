@@ -25,7 +25,7 @@ public final class ParamWrapper {
      * @return ParamWrapper实例
      */
     public static ParamWrapper newInstance() {
-        return new ParamWrapper(new HashMap<String, Object>());
+        return new ParamWrapper(new HashMap<String, Object>(16));
     }
 
     /**
@@ -44,7 +44,7 @@ public final class ParamWrapper {
      * @return ParamWrapper实例
      */
     public static ParamWrapper newInstance(String key, Object value) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>(16);
         paramMap.put(key, value);
         return new ParamWrapper(paramMap);
     }

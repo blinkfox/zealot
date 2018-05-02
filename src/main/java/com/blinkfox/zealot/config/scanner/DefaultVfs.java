@@ -36,6 +36,9 @@ public class DefaultVfs {
 
     /** for循环最大执行时限. */
     private static final long MAX_LIMIT = 3000;
+    
+    /** 文件协议标识符. */
+    private static final String FILE_PROTOCOL = "file";
 
     /** The magic header that indicates a JAR (ZIP) file. */
     private static final byte[] JAR_MAGIC = { 'P', 'K', 3, 4 };
@@ -136,7 +139,7 @@ public class DefaultVfs {
     }
 
     private List<String> getUrls(URL url, List<String> children, FileNotFoundException e) throws IOException {
-        if ("file".equals(url.getProtocol())) {
+        if (FILE_PROTOCOL.equals(url.getProtocol())) {
             File file = new File(url.getFile());
             if (file.isDirectory()) {
                 children = Arrays.asList(file.list());

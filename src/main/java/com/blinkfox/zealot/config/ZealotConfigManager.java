@@ -22,7 +22,7 @@ import org.dom4j.Node;
 
 /**
  * Zealot配置缓存管理器，用于加载Zealot Config配置信息到缓存中
- * Created by blinkfox on 2016/12/26.
+ * @author blinkfox on 2016/12/26.
  */
 public class ZealotConfigManager {
     
@@ -242,7 +242,7 @@ public class ZealotConfigManager {
      * 测试第一次MVEL表达式的计算,会缓存MVEL相关准备工作，加快后续的MVEL执行.
      */
     private void testFirstEvaluate() {
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<String, Object>(4);
         context.put("foo", "hello");
         ParseHelper.parseTemplate("@if{?foo != empty}Hello World!@end{}", context);
         ParseHelper.parseExpressWithException("foo != empty", context);

@@ -5,7 +5,6 @@ import com.blinkfox.zealot.config.entity.XmlContext;
 
 import java.util.Map;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 

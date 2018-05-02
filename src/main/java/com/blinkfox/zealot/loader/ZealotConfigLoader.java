@@ -8,7 +8,7 @@ import javax.servlet.ServletContextListener;
 
 /**
  * Zealot配置的servlet监听器的初始化加载类
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class ZealotConfigLoader implements ServletContextListener {
 

@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * 解析表达式异常.
- * Created by blinkfox on 2017-03-30.
+ * @author blinkfox on 2017-03-30.
  */
 public class ParseExpressionException extends RuntimeException {
 

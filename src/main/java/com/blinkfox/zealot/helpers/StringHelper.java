@@ -5,9 +5,12 @@ import java.util.regex.Pattern;
 
 /**
  * 字符串工具类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class StringHelper {
+    
+    /** 替换空格、换行符、制表符等为一个空格的预编译正则表达式模式. */
+    private static final Pattern BLANK_PATTERN = Pattern.compile("\\|\t|\r|\n");
 
     /** XML文件扩展名. */
     private static final String XML_EXT = ".xml";
@@ -31,8 +34,7 @@ public final class StringHelper {
      * @return 替换后的字符串
      */
     public static String replaceBlank(String str) {
-        Pattern p = Pattern.compile("\\|\t|\r|\n");
-        Matcher m = p.matcher(str);
+        Matcher m = BLANK_PATTERN.matcher(str);
         return m.replaceAll("").replaceAll("\\s{2,}", " ").trim();
     }
 

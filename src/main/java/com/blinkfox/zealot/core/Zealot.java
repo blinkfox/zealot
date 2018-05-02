@@ -18,9 +18,12 @@ import org.dom4j.Node;
 
 /**
  * Zealot的核心解析和生成调用类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class Zealot {
+    
+    /** nsAtZealotId参数拆分成数组后的长度. */
+    private static final int LEN = 2;
 
     /**
      * 私有构造方法.
@@ -48,7 +51,7 @@ public final class Zealot {
      */
     public static SqlInfo getSqlInfoSimply(String nsAtZealotId, Object paramObj) {
         String[] arr = nsAtZealotId.split(ZealotConst.SP_AT);
-        if (arr.length != 2) {
+        if (arr.length != LEN) {
             throw new  ValidFailException("nsAtZealotId参数的值必须是xml文件中的 nameSpace + '@@' + zealotId 节点的值，"
                     + "如:'student@@queryStudentById'.其中student为nameSpace, queryStudentById为XML文件中SQL的zealotId.");
         }

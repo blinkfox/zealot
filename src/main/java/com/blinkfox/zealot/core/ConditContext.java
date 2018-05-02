@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * 构建动态条件查询的协调类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class ConditContext {
 

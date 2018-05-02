@@ -6,7 +6,7 @@ import java.util.Collection;
 
 /**
  * 集合操作相关的工具类.
- * Created by blinkfox on 2017-04-01.
+ * @author blinkfox on 2017-04-01.
  */
 public final class CollectionHelper {
 

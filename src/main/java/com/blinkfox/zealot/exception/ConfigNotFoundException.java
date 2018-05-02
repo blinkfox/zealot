@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * zealot配置未找到的异常.
- * Created by blinkfox on 2016/11/7.
+ * @author blinkfox on 2016/11/7.
  */
 public class ConfigNotFoundException extends RuntimeException {
 

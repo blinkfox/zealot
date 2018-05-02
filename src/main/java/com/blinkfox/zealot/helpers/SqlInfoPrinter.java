@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /**
  * 打印SqlInfo信息的工具类.
- * Created by blinkfox on 2017/07/24.
+ * @author blinkfox on 2017/07/24.
  */
 public class SqlInfoPrinter {
 

@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * ZealotKhala的单元测试类.
  * 下面的拼接程序不一定是正确可执行的SQL，仅仅用来测试程序.
- * Created by blinkfox on 2017-03-31.
+ * @author blinkfox on 2017-03-31.
  */
 public class ZealotKhalaTest {
     
@@ -33,7 +33,7 @@ public class ZealotKhalaTest {
      */
     @BeforeClass
     public static void init() {
-        context = new HashMap<String, Object>();
+        context = new HashMap<String, Object>(32);
         context.put("id", "3");
         context.put("name", "zhagnsan");
         context.put("myEmail", "zhagnsan@163.com");

@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * in查询动态sql生成的实现类.
- * Created by blinkfox on 2016/10/31.
+ * @author blinkfox on 2016/10/31.
  */
 public class InHandler implements IConditHandler {
 

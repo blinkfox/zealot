@@ -6,7 +6,7 @@ import org.dom4j.Node;
 
 /**
  * 构建动态sql和参数相关的封装实体类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class BuildSource {
 

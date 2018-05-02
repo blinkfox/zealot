@@ -5,7 +5,7 @@ import com.blinkfox.zealot.bean.SqlInfo;
 
 /**
  * 构建动态条件sql和参数的抽象接口.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public interface IConditHandler {
 

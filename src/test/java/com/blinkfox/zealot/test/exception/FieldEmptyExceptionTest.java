@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * FieldEmptyException单元测试类.
- * Created by blinkfox on 2017/4/29.
+ * @author blinkfox on 2017/4/29.
  */
 public class FieldEmptyExceptionTest {
 

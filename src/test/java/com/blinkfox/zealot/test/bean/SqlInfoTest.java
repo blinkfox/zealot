@@ -7,13 +7,12 @@ import com.blinkfox.zealot.bean.SqlInfo;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 /**
  * SqlInfo的单元测试类.
- * Created by blinkfox on 2017/4/24.
+ * @author blinkfox on 2017/4/24.
  */
 public class SqlInfoTest {
 

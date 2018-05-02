@@ -15,11 +15,14 @@ import org.dom4j.io.SAXReader;
 
 /**
  * xml和xml节点相关的工具类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class XmlNodeHelper {
 
     private static final Log log = Log.get(ZealotConfigManager.class);
+    
+    /** zealot xml文件中的根节点名称. */
+    private static final String ROOT_NAME = "zealots";
 
     /**
      * 私有构造方法.
@@ -72,7 +75,7 @@ public final class XmlNodeHelper {
 
         // 获取XML文件的根节点，判断其根节点是否为'zealots'，如果是则获取其属性nameSpace的值.
         Node root = doc.getRootElement();
-        if (root != null && "zealots".equals(root.getName())) {
+        if (root != null && ROOT_NAME.equals(root.getName())) {
             String nameSpace = getNodeText(root.selectSingleNode(ZealotConst.ATTR_NAMESPACE));
             if (StringHelper.isBlank(nameSpace)) {
                 log.warn("zealot xml文件:'" + xmlPath + "'的根节点nameSpace命名空间属性为配置，请配置，否则将被忽略!");

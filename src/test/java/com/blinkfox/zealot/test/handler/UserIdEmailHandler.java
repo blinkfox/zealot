@@ -14,7 +14,7 @@ import org.dom4j.Node;
 
 /**
  * 用户ID、email的自定义标签处理器.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class UserIdEmailHandler implements IConditHandler {
 

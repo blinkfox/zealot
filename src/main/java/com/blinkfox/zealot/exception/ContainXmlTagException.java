@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * 包含了xml标签的异常.
- * Created by blinkfox on 2017/4/16.
+ * @author blinkfox on 2017/4/16.
  */
 public class ContainXmlTagException extends RuntimeException {
 

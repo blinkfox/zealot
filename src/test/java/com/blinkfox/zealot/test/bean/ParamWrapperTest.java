@@ -25,7 +25,7 @@ public class ParamWrapperTest {
      */
     @BeforeClass
     public static void init() {
-        paramMap = new HashMap<String, Object>();
+        paramMap = new HashMap<String, Object>(8);
         paramMap.put("name", "韩梅梅");
         paramMap.put("sex", "女");
         paramMap.put("age", 27);

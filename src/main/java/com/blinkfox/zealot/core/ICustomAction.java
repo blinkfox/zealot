@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * 执行自定义任意操作的接口.
- * Created by blinkfox on 2017/4/15.
+ * @author blinkfox on 2017/4/15.
  */
 public interface ICustomAction {
 

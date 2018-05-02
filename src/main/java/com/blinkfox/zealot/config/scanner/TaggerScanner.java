@@ -56,6 +56,7 @@ public final class TaggerScanner implements Scanner {
      *
      * @param handlerLocations handler所在的位置
      */
+    @Override
     public void scan(String handlerLocations) {
         if (StringHelper.isBlank(handlerLocations)) {
             return;
@@ -160,6 +161,7 @@ public final class TaggerScanner implements Scanner {
 
         // 如果存在,就获取包下的所有文件,包括目录,筛选出目录和.class文件.
         File[] dirfiles = dir.listFiles(new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return (file.isDirectory()) || StringHelper.isClassFile(file.getName());
             }
@@ -185,7 +187,7 @@ public final class TaggerScanner implements Scanner {
      * 通过识别jar的形式将其下的所有class添加到classSet集合中.
      * @param classLoader 类加载器
      * @param url URL实例
-     * @param packageName 报名
+     * @param packageName 包名
      * @param packageDirName 包路径名
      */
     private void addClassByJar(ClassLoader classLoader, URL url, String packageName, String packageDirName) {
@@ -228,6 +230,7 @@ public final class TaggerScanner implements Scanner {
      * 将扫描到的所有class进行再解析，如果其含有{@link com.blinkfox.zealot.config.annotation.Tagger}和
      * {@link com.blinkfox.zealot.config.annotation.Taggers}注解，则将其进行解析添加到tagHandlerMap中.
      */
+    @SuppressWarnings("unchecked")
     private void addTagHanderInMap() {
         // 循环遍历所有class，如果其不是IConditHandler.class的实现类，则表明其是正确的class，继续下次循环.
         for (Class<?> cls: classSet) {
@@ -263,7 +266,7 @@ public final class TaggerScanner implements Scanner {
         }
 
         // 循环判断其接口是否含有'IConditHandler'接口.
-        for (Class cls: classes) {
+        for (Class<?> cls: classes) {
             if (IConditHandler.class.isAssignableFrom(cls)) {
                 return true;
             }

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * xml和xml节点相关工具类的单元测试类.
- * Created by blinkfox on 2017/7/23.
+ * @author blinkfox on 2017/7/23.
  */
 public class XmlNodeHelperTest {
 

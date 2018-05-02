@@ -2,7 +2,7 @@ package com.blinkfox.zealot.exception;
 
 /**
  * Zealot xml 文件配置异常.
- * Created by blinkfox on 2016/11/7.
+ * @author blinkfox on 2016/11/7.
  */
 public class NodeNotFoundException extends RuntimeException {
 

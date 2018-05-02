@@ -13,7 +13,7 @@ import org.dom4j.Node;
 
 /**
  * like查询动态sql生成的实现类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public class LikeHandler implements IConditHandler {
 

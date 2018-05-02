@@ -10,7 +10,7 @@ import java.util.Collection;
 
 /**
  * 构建使用xml拼接sql片段的工具类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class XmlSqlInfoBuilder extends SqlInfoBuilder {
     

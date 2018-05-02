@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * 输入输出相关的工具类.
- * Created by blinkfox on 2017/4/21.
+ * @author blinkfox on 2017/4/21.
  */
 public final class IoHelper {
 

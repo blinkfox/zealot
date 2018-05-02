@@ -2,7 +2,7 @@ package com.blinkfox.zealot.config.entity;
 
 /**
  * 普通配置信息的实体类.
- * Created by blinkfox on 2017/07/24.
+ * @author blinkfox on 2017/07/24.
  */
 public class NormalConfig {
 

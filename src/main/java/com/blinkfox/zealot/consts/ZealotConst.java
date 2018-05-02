@@ -2,7 +2,7 @@ package com.blinkfox.zealot.consts;
 
 /**
  * 常量类.
- * Created by blinkfox on 2016/10/30.
+ * @author blinkfox on 2016/10/30.
  */
 public final class ZealotConst {
 

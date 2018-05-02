@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 构建拼接sql语句片段和参数的类.
- * Created by blinkfox on 2017-03-31.
+ * @author blinkfox on 2017-03-31.
  */
 public class SqlInfoBuilder {
 
@@ -110,13 +110,13 @@ public class SqlInfoBuilder {
      */
     public SqlInfo buildBetweenSql(String fieldText, Object startValue, Object endValue) {
         /* 根据开始文本和结束文本判断执行是大于、小于还是区间的查询sql和参数的生成 */
-        if (startValue != null && endValue == null) { // 开始不为空，结束为空的情况
+        if (startValue != null && endValue == null) {
             join.append(prefix).append(fieldText).append(ZealotConst.GTE_SUFFIX);
             params.add(startValue);
-        } else if (startValue == null && endValue != null) { // 开始为空，结束不为空的情况
+        } else if (startValue == null && endValue != null) {
             join.append(prefix).append(fieldText).append(ZealotConst.LTE_SUFFIX);
             params.add(endValue);
-        } else { // 开始、结束均不为空的情况
+        } else {
             join.append(prefix).append(fieldText).append(ZealotConst.BT_AND_SUFFIX);
             params.add(startValue);
             params.add(endValue);

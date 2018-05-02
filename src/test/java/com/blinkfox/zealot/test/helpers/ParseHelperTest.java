@@ -14,7 +14,7 @@ import org.junit.Test;
 
 /**
  * ParseHelper的单元测试类.
- * Created by blinkfox on 2017/4/29.
+ * @author blinkfox on 2017/4/29.
  */
 public class ParseHelperTest {
 
@@ -27,7 +27,7 @@ public class ParseHelperTest {
      */
     @BeforeClass
     public static void init() {
-        context = new HashMap<String, Object>();
+        context = new HashMap<String, Object>(2);
         context.put("hello", "world");
     }
 
@@ -73,7 +73,7 @@ public class ParseHelperTest {
     @Test
     public void testParseWithMvel() {
         // 构造查询的参数
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<String, Object>(4);
         context.put("foo", "Hello");
         context.put("bar", "World");
         String result = (String) ParseHelper.parseExpressWithException("foo + bar", context);
@@ -115,7 +115,7 @@ public class ParseHelperTest {
     @Test
     public void testParseTemplate2() {
         // 构造查询的参数
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<String, Object>(2);
         context.put("foo", "Hello");
         String result = ParseHelper.parseTemplate("@if{?foo != empty}@{foo} World!@end{}", context);
         log.info("testParseTemplate 结果:{}" + result);

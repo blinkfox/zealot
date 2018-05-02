@@ -14,7 +14,7 @@ import org.dom4j.Node;
 /**
  * 引用import标签对应的动态sql生成处理器的实现类.
  * <p>引用标签的主要内容：`[import match="" namespace="" zealotid="" value="" /]`</p>
- * Created by blinkfox on 2017/8/15.
+ * @author blinkfox on 2017/8/15.
  */
 public class ImportHandler implements IConditHandler {
     /**
