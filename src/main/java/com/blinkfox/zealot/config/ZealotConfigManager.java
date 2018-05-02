@@ -137,6 +137,7 @@ public class ZealotConfigManager {
      * @return ZealotConfigManager的全局唯一实例
      */
     public ZealotConfigManager initLoadXmlLocations(String xmlLocations) {
+        this.xmlLocations = xmlLocations;
         this.xmlLocations = StringHelper.isBlank(this.xmlLocations) ? "zealot" : this.xmlLocations;
         XmlScanner.newInstance().scan(xmlLocations);
         this.cachingXmlAndEval();
@@ -149,6 +150,7 @@ public class ZealotConfigManager {
      * @return ZealotConfigManager的全局唯一实例
      */
     public ZealotConfigManager initLoadHandlerLocations(String handlerLocations) {
+        this.handlerLocations = handlerLocations;
         TaggerScanner.newInstance().scan(handlerLocations);
         return this;
     }
