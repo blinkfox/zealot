@@ -53,6 +53,22 @@ public class ZealotConfigManager {
     }
 
     /**
+     * 获取配置的zealot的XML文件所在的位置字符串.
+     * @return xmlLocations
+     */
+    public String getXmlLocations() {
+        return xmlLocations;
+    }
+
+    /**
+     * 获取配置的zealot的自定义handler处理器所在的位置字符串.
+     * @return handlerLocations
+     */
+    public String getHandlerLocations() {
+        return handlerLocations;
+    }
+
+    /**
      * 初始化加载Zealot的配置信息到缓存中.
      *
      * @param configClass 系统中Zealot的class路径
@@ -137,9 +153,8 @@ public class ZealotConfigManager {
      * @return ZealotConfigManager的全局唯一实例
      */
     public ZealotConfigManager initLoadXmlLocations(String xmlLocations) {
-        this.xmlLocations = xmlLocations;
-        this.xmlLocations = StringHelper.isBlank(this.xmlLocations) ? "zealot" : this.xmlLocations;
-        XmlScanner.newInstance().scan(xmlLocations);
+        this.xmlLocations = StringHelper.isBlank(xmlLocations) ? "zealot" : xmlLocations;
+        XmlScanner.newInstance().scan(this.xmlLocations);
         this.cachingXmlAndEval();
         return this;
     }

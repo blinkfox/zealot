@@ -15,22 +15,25 @@ import org.junit.Test;
  */
 public class ZealotConfigManagerTest {
 
+    private static final String XML_LOCATIONS = "zealot";
+
+    private static final String HANDLER_LOCATIONS = "com.blinkfox.zealot.test.handler";
+
     /**
      * 测试扫描和配置xml文件.
      */
     @Test
-    public void initLoadXmlLocations() {
-        ZealotConfigManager.getInstance().initLoadXmlLocations("zealot");
+    public void initLoadLocations() {
+        ZealotConfigManager zealotConfigManager = ZealotConfigManager.getInstance()
+                .initLoadXmlLocations(XML_LOCATIONS)
+                .initLoadHandlerLocations(HANDLER_LOCATIONS);
+
+        Assert.assertEquals(XML_LOCATIONS, zealotConfigManager.getXmlLocations());
+        Assert.assertEquals(HANDLER_LOCATIONS, zealotConfigManager.getHandlerLocations());
+
         Map<String, String> xmlMaps = XmlContext.INSTANCE.getXmlPathMap();
         Assert.assertTrue(xmlMaps.size() >= 2);
-    }
 
-    /**
-     * 测试扫描和配置handler文件.
-     */
-    @Test
-    public void initLoadHandlerLocations() {
-        ZealotConfigManager.getInstance().initLoadHandlerLocations("com.blinkfox.zealot.test.handler");
         Map<String, TagHandler> tagHandlerMap = AbstractZealotConfig.getTagHandlerMap();
         Assert.assertTrue(tagHandlerMap.size() >= 46);
     }
