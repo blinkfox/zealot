@@ -49,6 +49,17 @@ SQL对开发人员来说是核心的资产之一，在开发中经常需要书�
 </dependency>
 ```
 
+### 3. SpringBoot
+
+如果你的项目是`SpringBoot2.x`，那么可以直接引入Zealot的[Starter](https://github.com/blinkfox/zealot-spring-boot-starter)，且几乎不需要做任何其他方面的配置即可使用，这里是[zealot-spring-boot-starter](https://github.com/blinkfox/zealot-spring-boot-starter)的引入及使用方式说明。
+
+```xml
+<dependency>
+    <groupId>com.blinkfox</groupId>
+    <artifactId>zealot-spring-boot-starter</artifactId>
+</dependency>
+```
+
 ## 四、Java链式式之ZealotKhala
 
 在Java中书写中等长度的SQL，用`+`连接的字符串尤其是动态字符串，会导致SQL的可读性极差且拼接性能较低，在`Zealot v1.0.4`版本中提供了一个额外高效的SQL字符串链式拼接工具`Khala`(**已被弃用**)，但Khala只提供拼接字符串的功能，并不具有返回动态SQL和参数的特性，便决定在`v1.1.0`版本中新增了`ZealotKhala`，`ZealotKhala`类也采用流式API的方式可以书写出更流畅的动态SQL，且会得到动态SQL的有序参数。其使用示例如下：
